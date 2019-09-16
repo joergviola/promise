@@ -65,7 +65,7 @@ class CreateRoles extends Migration
             $table->dropColumn('role_id');
         });
         Schema::dropIfExists('right');
-        Schema::dropIfExists('roles');
+        Schema::dropIfExists('role');
         Schema::dropIfExists('client');
     }
 

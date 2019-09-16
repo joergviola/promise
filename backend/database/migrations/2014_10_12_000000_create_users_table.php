@@ -14,7 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->bigIncrements('id')->comment('Unique id of the item.');
+            $table->increments('id')->comment('Unique id of the item.');
             $table->string('name')->comment('Free text name of the user.');;
             $table->string('email')->unique()->comment('E-Mail of the user, also used for sign-in.');
             $table->timestamp('email_verified_at')->nullable()->comment('Timestamp of email verification.');;

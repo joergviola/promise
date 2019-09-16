@@ -15,7 +15,7 @@ class StandardTable
             $def($table);
             $table->foreign('client_id')->references('id')->on('client');
         });
-        DB::statement("ALTER TABLE $name comment '$comment'");
+        DB::statement("ALTER TABLE `$name` comment '$comment'");
     }
 
 }

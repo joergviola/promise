@@ -32,8 +32,9 @@ class API {
         $q = self::join($q, $query, $type);
         $q = self::where($q, $query);
         $q = self::order($q, $query);
-        $q->where($type.'.client_id', $user->client_id);
-//        \Log::debug('API query SQL', ['query'=>$q->toSQL()]);
+        if ($type!='client')
+            $q->where($type.'.client_id', $user->client_id);
+        \Log::debug('API query SQL', ['query'=>$q->toSQL()]);
         $result = $q->get();
         if (isset($query['with'])) {
             foreach ($query['with'] as $field => $with) {
@@ -80,27 +81,20 @@ class API {
         }
         foreach ($crit as $op => $value) {
             switch ($op) {
-                case '=':
-                case '>=':
-                case '<=':
-                case '>':
-                case '<':
-                case '<>':
-                    if ($or) {
-                        $q->orWhere($field, $value);
-                    } else {
-                        $q->where($field, $value);
-                    }
-                    break;
                 case 'in':
                     if ($or) {
-                        $q->orWhere($field, $value);
+                        $q->orWhereIn($field, $value);
                     } else {
                         $q->whereIn($field, $value);
                     }
                     break;
                 default:
-                    throw new \Exception("Unknown operator '$op'");
+                    if ($or) {
+                        $q->orWhere($field, $op, $value);
+                    } else {
+                        $q->where($field, $op, $value);
+                    }
+                    break;
             }
         }
     }
