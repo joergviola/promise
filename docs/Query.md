@@ -25,7 +25,7 @@ Queries consist of nested AND and OR clauses, eg:
 {
     and: {
         field-name: value,
-        field-name: {operator: op, value: val},
+        field-name: {op: value},
         field-name: value,
         or: {
             field-name: value,

@@ -94,9 +94,9 @@ export default {
     }
   },
   created() {
-    this.loading = true
     const id = this.$route.params.id
     if (id != 'new') {
+      this.loading = true
       api.find('project', {
         and: [{ id: this.$route.params.id }]
       }).then(items => {

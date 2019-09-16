@@ -41,7 +41,7 @@
 
       <el-table-column width="120px" align="center" label="Customer">
         <template slot-scope="scope">
-          <span>{{ scope.row.customer_id }}</span>
+          <span>{{ scope.row.customer.name }}</span>
         </template>
       </el-table-column>
 
@@ -105,7 +105,10 @@ export default {
   methods: {
     async getList() {
       this.listLoading = true
-      const items = await api.find('project', { and: [{ state: 'LEAD' }] })
+      const items = await api.find('project', {
+        and: [{ state: 'LEAD' }],
+        with: {customer: {one:'client', 'this': 'customer_id'}}
+      })
       this.list = items.map(v => {
         this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
         v.originalTitle = v.title //  will be used when user click the cancel botton
