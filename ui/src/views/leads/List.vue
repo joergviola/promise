@@ -24,18 +24,13 @@
       <el-table-column min-width="300px" label="Title">
         <template slot-scope="{row}">
           <template v-if="row.edit">
-            <el-input v-model="row.name" class="edit-input" size="small" />
-            <el-button
-              class="cancel-btn"
-              size="small"
-              icon="el-icon-refresh"
-              type="warning"
-              @click="cancelEdit(row)"
-            >
-              cancel
-            </el-button>
+              <el-input v-model="row.name" class="edit-input" size="small" />
+              <div v-if="row.edit" class="cancel-btn">
+                  <i class="el-icon-refresh" @click="cancelEdit(row)"></i>
+                  <i class="el-icon-circle-check-outline" @click="confirmEdit(row)"></i>
+              </div>
           </template>
-          <span v-else>{{ row.name }}</span>
+          <span v-else @click="row.edit=!row.edit">{{ row.name }}</span>
         </template>
       </el-table-column>
 
@@ -45,28 +40,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="Actions" width="180" fixed="right">
+      <el-table-column align="center" label="Actions" width="80" fixed="right">
         <template slot-scope="{row}">
-          <el-button
-            v-if="row.edit"
-            type="success"
-            size="small"
-            icon="el-icon-circle-check-outline"
-            @click="confirmEdit(row)"
-          />
-          <el-button
-            v-else
-            type="primary"
-            size="small"
-            icon="el-icon-edit"
-            @click="row.edit=!row.edit"
-          />
-          <el-button
-            type="primary"
-            size="small"
-            icon="el-icon-circle-check-outline"
-            @click="$router.push('/leads/lead/'+row.id)"
-          />
+            <i class="el-icon-more-outline" @click="$router.push('/leads/lead/'+row.id)"></i>
         </template>
       </el-table-column>
     </el-table>
@@ -111,22 +87,23 @@ export default {
       })
       this.list = items.map(v => {
         this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html
-        v.originalTitle = v.title //  will be used when user click the cancel botton
+        v.originalName = v.name //  will be used when user click the cancel botton
         return v
       })
       this.listLoading = false
     },
     cancelEdit(row) {
-      row.title = row.originalTitle
+      row.name = row.originalName
       row.edit = false
       this.$message({
-        message: 'The title has been restored to the original value',
+        message: 'The name has been restored to the original value',
         type: 'warning'
       })
     },
-    confirmEdit(row) {
+    async confirmEdit(row) {
       row.edit = false
-      row.originalTitle = row.title
+      row.originalName = row.name
+      await api.update('project', row.id, {name: row.name})
       this.$message({
         message: 'The title has been edited',
         type: 'success'
@@ -136,7 +113,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped type="sass">
 .edit-input {
   padding-right: 100px;
 }
@@ -144,5 +121,12 @@ export default {
   position: absolute;
   right: 15px;
   top: 10px;
+}
+i {
+    cursor: pointer;
+}
+i:hover {
+    background-color: #4e555b;
+    color: white;
 }
 </style>
