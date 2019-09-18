@@ -28,11 +28,13 @@ class Base extends Migration
             $table->decimal('pricePerHour');
             $table->unsignedInteger('percentBuffer');
             $table->integer('customer_id')->unsigned();
+            $table->integer('contact_id')->unsigned();
             $table->integer('planned')->unsigned()->nullable();
             $table->integer('used')->unsigned()->nullable();
             $table->boolean('template')->default(false);
 
             $table->foreign('customer_id')->references('id')->on('customer');
+            $table->foreign('contact_id')->references('id')->on('users');
         });
 
         StandardTable::create('accounting', 'Project quote or invoice.', function (Blueprint $table) {
@@ -105,6 +107,8 @@ class Base extends Migration
         });
         Schema::table('users', function (Blueprint $table) {
             $table->integer('customer_id')->unsigned()->nullable();
+            $table->text('address')->nullable();
+            $table->string('phone')->nullable();
 
             $table->foreign('customer_id')->references('id')->on('customer');
         });
@@ -115,6 +119,8 @@ class Base extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->dropForeign('users_customer_id_foreign');
             $table->dropColumn('customer_id');
+            $table->dropColumn('address');
+            $table->dropColumn('phone');
         });
         Schema::dropIfExists('allocation');
         Schema::dropIfExists('action');

@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name')->comment('Free text name of the user.');;
             $table->string('email')->unique()->comment('E-Mail of the user, also used for sign-in.');
             $table->timestamp('email_verified_at')->nullable()->comment('Timestamp of email verification.');;
-            $table->string('password')->comment('Password of the user.');
+            $table->string('password')->nullable()->comment('Password of the user.');
             $table->rememberToken();
             $table->timestamps();
         });

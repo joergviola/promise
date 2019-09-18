@@ -44,7 +44,7 @@ class CreateRoles extends Migration
 
         Schema::table('users', function (Blueprint $table) {
             $table->integer('client_id')->unsigned()->comment('Client of the user.');
-            $table->integer('role_id')->unsigned()->comment('Role of the user.');
+            $table->integer('role_id')->nullable()->unsigned()->comment('Role of the user.');
 
             $table->foreign('client_id')->references('id')->on('client');
             $table->foreign('role_id')->references('id')->on('role');

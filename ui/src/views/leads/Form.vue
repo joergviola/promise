@@ -18,12 +18,25 @@
       <div class="createPost-main-container">
 
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="Name:">
               <el-input v-model="item.name" label="Name:" type="text" />
             </el-form-item>
+            <el-form-item label="Summary:">
+              <el-input v-model="item.description" :rows="1" type="textarea" autosize placeholder="Please enter the content" />
+            </el-form-item>
+            <el-form-item label="Price:">
+              <el-input v-model="item.pricePerHour" type="number">
+                <template slot="append">€ / hour</template>
+              </el-input>
+            </el-form-item>
+            <el-form-item label="Buffer:">
+              <el-input v-model="item.percentBuffer" type="number">
+                <template slot="append">%</template>
+              </el-input>
+            </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="Customer:">
               <el-select v-model="customer" value-key="id" filterable default-first-option remote placeholder="Search customer">
                 <el-option key="create" label="Create..." :value="{}" />
@@ -31,26 +44,36 @@
               </el-select>
             </el-form-item>
             <el-form-item v-if="!customer.id" label="New Customer Name:">
-              <el-input v-model="customer.name" label="Name:" type="text" />
+              <el-input v-model="customer.name" type="text" />
+            </el-form-item>
+            <el-form-item v-if="!customer.id" label="E-Mail:">
+              <el-input v-model="customer.email" type="email" />
+            </el-form-item>
+            <el-form-item v-if="!customer.id" label="Phone:">
+              <el-input v-model="customer.phone" type="phone" />
+            </el-form-item>
+            <el-form-item v-if="!customer.id" label="Address:">
+              <el-input v-model="customer.address" :rows="1" type="textarea" autosize/>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-form-item label="Summary:">
-          <el-input v-model="item.description" :rows="1" type="textarea" autosize placeholder="Please enter the content" />
-        </el-form-item>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="Price:">
-              <el-input v-model="item.pricePerHour" type="number">
-                <template slot="append">€ / hour</template>
-              </el-input>
+          <el-col :span="8">
+            <el-form-item label="Contact:">
+              <el-select v-model="contact" value-key="id" filterable default-first-option remote placeholder="Search contact">
+                <el-option key="create" label="Create..." :value="{}" />
+                <el-option v-for="o in contacts" :key="o.id" :label="o.name" :value="o" />
+              </el-select>
             </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="Buffer:">
-              <el-input v-model="item.percentBuffer" type="number">
-                <template slot="append">%</template>
-              </el-input>
+            <el-form-item v-if="!contact.id" label="New Contact Name:">
+              <el-input v-model="contact.name" type="text" />
+            </el-form-item>
+            <el-form-item v-if="!contact.id" label="E-Mail:">
+              <el-input v-model="contact.email" type="email" />
+            </el-form-item>
+            <el-form-item v-if="!contact.id" label="Phone:">
+              <el-input v-model="contact.phone" type="phone" />
+            </el-form-item>
+            <el-form-item v-if="!contact.id" label="Address:">
+              <el-input v-model="contact.address" :rows="1" type="textarea" autosize/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -89,6 +112,8 @@ export default {
       },
       customer: {name:''},
       customers: [],
+      contact: {name:'', password:'none'},
+      contacts: [],
       loading: false,
       userListOptions: [],
       rules: {
@@ -99,9 +124,13 @@ export default {
     }
   },
   watch: {
-    customer() {
+    async customer() {
       this.item.customer_id = this.customer.id
-    }
+      this.contacts = await api.find('users', {and:{customer_id:this.customer.id}})
+    },
+    contact() {
+      this.item.contact_id = this.contact.id
+    },
   },
   async created() {
     const id = this.$route.params.id
@@ -110,16 +139,19 @@ export default {
       const items = await api.find('project', {
         and: [{ id: this.$route.params.id }],
         with: {
-          customer: {one: 'customer', 'this': 'customer_id'}
+          customer: {one: 'customer', 'this': 'customer_id'},
+          contact: {one: 'users', 'this': 'contact_id'}
         }
       })
-      console.log('LOADED', items)
       this.item = items[0]
       this.customer = this.item.customer
       delete this.item.customer
+      this.contact = this.item.contact
+      delete this.item.contact
       this.loading = false
     }
     this.customers = await api.find('customer', {and:{}})
+    this.contacts = await api.find('users', {and:{customer_id:this.customer.id}})
   },
   methods: {
     save() {
@@ -132,6 +164,12 @@ export default {
               const {id} = await api.create('customer', this.customer)
               this.customer.id = id
               this.item.customer_id = id
+            }
+            this.contact.customer_id = this.customer.id
+            if (!this.contact.id) {
+              const {id} = await api.create('users', this.contact)
+              this.contact.id = id
+              this.item.contact_id = id
             }
             const item = this.item.id
                     ? await api.update('project', this.item.id, this.item)
