@@ -8,7 +8,6 @@
         </el-button>
       </el-col>
       <el-col :span="12" type="flex" align="right">
-
         <el-button class="filter-item pull-right" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="$router.push('/leads/lead/new')">
           Add
         </el-button>
@@ -26,8 +25,8 @@
           <template v-if="row.edit">
               <el-input v-model="row.name" class="edit-input" size="small" />
               <div v-if="row.edit" class="cancel-btn">
-                  <i class="el-icon-refresh" @click="cancelEdit(row)"></i>
-                  <i class="el-icon-circle-check-outline" @click="confirmEdit(row)"></i>
+                  <i class="el-icon-close" @click="cancelEdit(row)"></i>
+                  <i class="el-icon-check" @click="confirmEdit(row)"></i>
               </div>
           </template>
           <span v-else @click="row.edit=!row.edit">{{ row.name }}</span>
@@ -83,7 +82,7 @@ export default {
       this.listLoading = true
       const items = await api.find('project', {
         and: [{ state: 'LEAD' }],
-        with: {customer: {one:'client', 'this': 'customer_id'}}
+        with: {customer: {one:'customer', 'this': 'customer_id'}}
       })
       this.list = items.map(v => {
         this.$set(v, 'edit', false) // https://vuejs.org/v2/guide/reactivity.html

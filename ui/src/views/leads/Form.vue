@@ -25,9 +25,13 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="Customer:">
-              <el-select v-model="item.customer_id" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="Search customer">
-                <el-option v-for="(o,index) in userListOptions" :key="o+index" :label="o.name" :value="o.id" />
+              <el-select v-model="customer" value-key="id" filterable default-first-option remote placeholder="Search customer">
+                <el-option key="create" label="Create..." :value="{}" />
+                <el-option v-for="o in customers" :key="o.id" :label="o.name" :value="o" />
               </el-select>
+            </el-form-item>
+            <el-form-item v-if="!customer.id" label="New Customer Name:">
+              <el-input v-model="customer.name" label="Name:" type="text" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -83,7 +87,8 @@ export default {
         pricePerHour: 790 / 8,
         percentBuffer: 15
       },
-      customer: {},
+      customer: {name:''},
+      customers: [],
       loading: false,
       userListOptions: [],
       rules: {
@@ -93,64 +98,59 @@ export default {
       }
     }
   },
-  created() {
+  watch: {
+    customer() {
+      this.item.customer_id = this.customer.id
+    }
+  },
+  async created() {
     const id = this.$route.params.id
     if (id != 'new') {
       this.loading = true
-      api.find('project', {
-        and: [{ id: this.$route.params.id }]
-      }).then(items => {
-        console.log('LOADED', items)
-        this.item = items[0]
-        this.loading = false
+      const items = await api.find('project', {
+        and: [{ id: this.$route.params.id }],
+        with: {
+          customer: {one: 'customer', 'this': 'customer_id'}
+        }
       })
+      console.log('LOADED', items)
+      this.item = items[0]
+      this.customer = this.item.customer
+      delete this.item.customer
+      this.loading = false
     }
+    this.customers = await api.find('customer', {and:{}})
   },
   methods: {
-    fetchData(id) {
-      fetchArticle(id).then(response => {
-        this.postForm = response.data
-
-        // just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
-
-        // set tagsview title
-        this.setTagsViewTitle()
-
-        // set page title
-        this.setPageTitle()
-      }).catch(err => {
-        console.log(err)
-      })
-    },
     save() {
       console.log('Saving', this.item)
-      this.$refs.postForm.validate(valid => {
+      this.$refs.postForm.validate(async valid => {
         if (valid) {
           this.loading = true
-          const done = this.item.id
-            ? api.update('project', this.item.id, this.item)
-            : api.create('project', this.item)
-          done
-            .then(item => {
-              this.$notify({
-                title: 'Success',
-                message: 'Lead has been saved',
-                type: 'success',
-                duration: 2000
-              })
-              this.loading = false
+          try {
+            if (!this.customer.id) {
+              const {id} = await api.create('customer', this.customer)
+              this.customer.id = id
+              this.item.customer_id = id
+            }
+            const item = this.item.id
+                    ? await api.update('project', this.item.id, this.item)
+                    : await api.create('project', this.item)
+            this.$notify({
+              title: 'Success',
+              message: 'Lead has been saved',
+              type: 'success',
+              duration: 2000
             })
-            .catch(error => {
-              this.$notify({
-                title: 'Error',
-                message: error.message,
-                type: 'error',
-                duration: 5000
-              })
-              this.loading = false
+          } catch (error) {
+            this.$notify({
+              title: 'Error',
+              message: error.message,
+              type: 'error',
+              duration: 5000
             })
+          }
+          this.loading = false
         } else {
           console.log('error submit!!')
           return false

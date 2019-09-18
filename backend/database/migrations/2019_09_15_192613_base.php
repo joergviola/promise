@@ -11,6 +11,14 @@ class Base extends Migration
 
     public function up()
     {
+        StandardTable::create('customer', 'Customer', function (Blueprint $table) {
+            $table->string('name');
+            $table->text('address')->nullable();
+            $table->string('website')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+        });
+
         StandardTable::create('project', 'Project.', function (Blueprint $table) {
             $table->string('name');
             $table->text('description')->nullable();
@@ -24,7 +32,7 @@ class Base extends Migration
             $table->integer('used')->unsigned()->nullable();
             $table->boolean('template')->default(false);
 
-            $table->foreign('customer_id')->references('id')->on('client');
+            $table->foreign('customer_id')->references('id')->on('customer');
         });
 
         StandardTable::create('accounting', 'Project quote or invoice.', function (Blueprint $table) {
@@ -95,15 +103,25 @@ class Base extends Migration
             $table->foreign('project_id')->references('id')->on('project');
             $table->foreign('user_id')->references('id')->on('users');
         });
+        Schema::table('users', function (Blueprint $table) {
+            $table->integer('customer_id')->unsigned()->nullable();
+
+            $table->foreign('customer_id')->references('id')->on('customer');
+        });
     }
 
     public function down()
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropForeign('users_customer_id_foreign');
+            $table->dropColumn('customer_id');
+        });
         Schema::dropIfExists('allocation');
         Schema::dropIfExists('action');
         Schema::dropIfExists('task');
         Schema::dropIfExists('position');
         Schema::dropIfExists('accounting');
         Schema::dropIfExists('project');
+        Schema::dropIfExists('customer');
     }
 }
