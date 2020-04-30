@@ -7,6 +7,7 @@ Applate is a modern Application template that provides
 
 ## Backend
 
+1. [Requirements](Requirements.md)
 1. [Installation](Installation.md)
 1. [Authentication](Authentication.md)
 1. [Users, Roles & Rights](Users.md)
@@ -22,3 +23,19 @@ Applate is a modern Application template that provides
 1. [JavaScript API](api-js.md)
 1. [Vue Template](vue-template.md)
 1. [Vue Components](components.md)
+
+## Release Notes
+
+### 0.2 12/31/2019
+
+- _meta and graph updates
+- empty withs now returned as []
+- query delete
+- better default field names for with
+- rights returned on login
+- login event
+
+
+### 0.1 10/08/2019
+
+- Initial release

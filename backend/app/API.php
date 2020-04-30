@@ -32,18 +32,50 @@ class API {
         $q = self::join($q, $query, $type);
         $q = self::where($q, $query);
         $q = self::order($q, $query);
-        if ($type!='client')
-            $q->where($type.'.client_id', $user->client_id);
-        \Log::debug('API query SQL', ['query'=>$q->toSQL()]);
+        $q->where($type.'.client_id', $user->client_id);
+        $q = self::page($q, $query);
+//        \Log::debug('API query SQL', ['query'=>$q->toSQL()]);
         $result = $q->get();
         if (isset($query['with'])) {
             foreach ($query['with'] as $field => $with) {
-                self::with($result, $field, $with);
+                self::with($type, $result, $field, $with);
             }
         }
         event(new ApiAfterReadEvent($user, $type, $result));
 
+        $result = self::count($result, $query, $type, $user);
+
         return $result;
+    }
+
+    private static function count($result, $query, $type, $user) {
+        if (isset($query['page'])) {
+            if (isset($query['page']['count']) && $query['page']['count']) {
+                $q = self::provider($type);
+                $q = self::join($q, $query, $type);
+                $q = self::where($q, $query);
+                $q = self::order($q, $query);
+                $q->where($type.'.client_id', $user->client_id);
+                $count = $q->count();
+                $result = [
+                    'count' => $count,
+                    'result' => $result
+                ];
+            }
+        }
+        return $result;
+    }
+
+    private static function page($q, $query) {
+        if (isset($query['page'])) {
+            if (isset($query['page']['skip'])) {
+                $q = $q->skip($query['page']['skip']);
+            }
+            if (isset($query['page']['take'])) {
+                $q = $q->take($query['page']['take']);
+            }
+        }
+        return $q;
     }
 
     private static function order($q, $query) {
@@ -81,16 +113,22 @@ class API {
         }
         foreach ($crit as $op => $value) {
             switch ($op) {
-                case 'in':
+                case '=':
+                case '>=':
+                case '<=':
+                case '>':
+                case '<':
+                case '<>':
+                case 'like':
                     if ($or) {
-                        $q->orWhereIn($field, $value);
+                        $q->orWhere($field, $op, $value);
                     } else {
-                        $q->whereIn($field, $value);
+                        $q->where($field, $op, $value);
                     }
                     break;
                 default:
                     if ($or) {
-                        $q->orWhere($field, $op, $value);
+                        $q->orWhereIn($field, $value);
                     } else {
                         $q->where($field, $op, $value);
                     }
@@ -134,17 +172,18 @@ class API {
     }
 
 
-    private static function with($result, $field, $with) {
+    private static function with($thisType, $result, $field, $with) {
         if (isset($with['one'])) {
             $type = $with['one'];
             $isOne = true;
+            $thisField = @$with['this'] ?: $type.'_id';
+            $thatField = @$with['that'] ?: 'id';
         } else {
             $type = $with['many'];
             $isOne = false;
+            $thisField = @$with['this'] ?: 'id';
+            $thatField = @$with['that'] ?: $thisType.'_id';
         }
-
-        $thisField = @$with['this'] ?: 'id';
-        $thatField = @$with['that'] ?: 'id';
 
         $ids = [];
         foreach ($result as &$item) {
@@ -161,8 +200,13 @@ class API {
             if ($isOne) {
                 $item->$field = @$ref[0];
             } else {
-                $item->$field = $ref;
+                $item->$field = $ref ?: [];
             }
+            if (!isset($item->_meta)) {
+                $item->_meta = new \stdClass();
+            }
+            $item->_meta->$field = $with;
+            $item->_meta->$field['ignore'] = true;
         }
     }
 
@@ -179,16 +223,79 @@ class API {
         return $item;
     }
 
+    /**
+     * Removes all _meta attributes (and _meta itself) from data, preparing it for insert or update.
+     * Stores content from all _meta attributes in the data attributes of each _meta field and
+     * returns this _meta content.
+     */
+    private static function extractMeta(&$data) {
+        if (!isset($data['_meta'])) return null;
+        $meta = $data['_meta'];
+        unset($data['_meta']);
+        foreach($meta as $field => &$info) {
+            $info['data'] = $data[$field];
+            unset($data[$field]);
+        }
+        return $meta;
+    }
+
+    /**
+     * If there is meta data, for each un-ignored many relation, sync the referenced type items with
+     * the given ones (in _meta.data) by deleting, updating and creating accordingly.
+     */
+    private static function handleMeta($thisType, $id, $meta) {
+        if ($meta==null) return;
+        foreach($meta as $field => $info) {
+            // info now contains the meta info (like 'with') and the data attribute
+            if (isset($info['ignore']) && $info['ignore']==true) continue;
+            // to one is currently not handled.
+            if (isset($info['one'])) continue;
+
+            $type = $info['many'];
+            $thisField = @$info['this'] ?: 'id';
+            $thatField = @$info['that'] ?: $thisType.'_id';
+
+            $ids = [];
+            $update = [];
+            $create = [];
+            foreach($info['data'] as &$item) {
+                $item[$thatField] = $id;
+                if (isset($item['id'])) {
+                    $ids[] = $item['id'];
+                    $update[$item['id']] = $item;
+                } else {
+                    $create[] = $item;
+                }
+            }
+            $oldItems = self::query($type, ['and' => [$thatField => $id]]);
+            $delete = [];
+            foreach($oldItems as $item) {
+                if (!in_array($item->id, $ids)) $delete[] = $item->id;
+            }
+            // \Log::debug('HANDLEMETA', [$field, $info, $ids, $delete]);
+            self::bulkDelete($type, $delete);
+
+            self::bulkUpdate($type, $update);
+
+            self::bulkCreate($type, $create);
+        }
+    }
+
+    private static function createOne($user, $type, $data) {
+        $data['client_id'] = $user->client_id;
+        event(new ApiBeforeCreateEvent($user, $type, $data));
+        $meta = self::extractMeta($data);
+        $id = self::provider($type)->insertGetId($data);
+        event(new ApiAfterCreateEvent($user, $type, $id, $data, $meta));
+        self::handleMeta($type, $id, $meta);
+        return $id;
+    }
+
     public static function create($type, $data) {
         \Log::debug('API create', ['type' => $type, 'data'=>json_encode($data)]);
         $user = self::can($type, 'C');
-        $data['client_id'] = $user->client_id;
         return DB::transaction(function() use ($user, $type, $data) {
-            event(new ApiBeforeCreateEvent($user, $type, $data));
-            $id = self::provider($type)
-                ->insertGetId($data);
-            event(new ApiAfterCreateEvent($user, $type, $id, $data));
-            return $id;
+            return self::createOne($user, $type, $data);
         });
     }
 
@@ -198,28 +305,29 @@ class API {
         return DB::transaction(function() use ($user, $type, $items) {
             $ids = [];
             foreach ($items as $data) {
-                event(new ApiBeforeCreateEvent($user, $type, $data));
-                $data['client_id'] = $user->client_id;
-                $id = self::provider($type)
-                    ->insertGetId($data);
-                $ids[] = $id;
-                event(new ApiAfterCreateEvent($user, $type, $id, $data));
+                $ids[] = self::createOne($user, $type, $data);
             }
             return $ids;
         });
+    }
+
+    private static function updateOne($user, $type, $id, $data) {
+        event(new ApiBeforeUpdateEvent($user, $type, $id, $data));
+        $meta = self::extractMeta($data);
+        $count = self::provider($type)
+            ->where('id', $id)
+            ->where('client_id', $user->client_id)
+            ->update($data);
+        event(new ApiAfterUpdateEvent($user, $type, $id, $count, $data, $meta));
+        self::handleMeta($type, $id, $meta);
+        return $count;
     }
 
     public static function update($type, $id, $data) {
         \Log::debug('API update', ['type' => $type, 'id'=>$id, 'data'=>json_encode($data)]);
         $user = self::can($type, 'U');
         return DB::transaction(function() use ($type, $id, $data, $user) {
-            event(new ApiBeforeUpdateEvent($user, $type, $id, $data));
-            $count = self::provider($type)
-                ->where('id', $id)
-                ->where('client_id', $user->client_id)
-                ->update($data);
-            event(new ApiAfterUpdateEvent($user, $type, $id, $count));
-            return $count;
+            return self::updateOne($user, $type, $id, $data);
         });
     }
 
@@ -229,28 +337,45 @@ class API {
         return DB::transaction(function() use ($type, $data, $user) {
             $count = 0;
             foreach ($data as $id => $item) {
-                event(new ApiBeforeUpdateEvent($user, $type, $id, $item));
-                $count += self::provider($type)
-                    ->where('id', $id)
-                    ->where('client_id', $user->client_id)
-                    ->update($item);
-                event(new ApiAfterUpdateEvent($user, $type, $id, $count));
+                $count += self::updateOne($user, $type, $id, $item);
             }
             return $count;
         });
+    }
+
+    public static function bulkUpdateOrCreate($type, $keyColumn, $data) {
+            \Log::debug('API bulk update or create', ['type' => $type, 'keyColumn'=>$keyColumn]);
+            $user = self::can($type, 'U');
+            self::can($type, 'C');
+            return DB::transaction(function() use ($type, $keyColumn, $data, $user) {
+                    $total = 0;
+                    foreach ($data as $item) {
+                            $key = $item[$keyColumn];
+            //                event(new ApiBeforeUpdateEvent($user, $type, $key, $item));
+                            $count = self::provider($type)
+                                    ->updateOrInsert(['client_id' => $user->client_id, $keyColumn => $key], $item);
+                $total += $count;
+//                event(new ApiAfterUpdateEvent($user, $type, $key, $count));
+            }
+            return ['count' => $total];
+        });
+    }
+
+    private static function deleteOne($user, $type, $id) {
+        event(new ApiBeforeDeleteEvent($user, $type, $id));
+        $count = self::provider($type)
+            ->where('id', $id)
+            ->where('client_id', $user->client_id)
+            ->delete();
+        event(new ApiAfterDeleteEvent($user, $type, $id, $count));
+        return $count;
     }
 
     public static function delete($type, $id) {
         \Log::debug('API delete', ['type' => $type, 'id'=>$id]);
         $user = self::can($type, 'D');
         return DB::transaction(function() use ($type, $id, $user) {
-            event(new ApiBeforeDeleteEvent($user, $type, $id));
-            $count = self::provider($type)
-                ->where('id', $id)
-                ->where('client_id', $user->client_id)
-                ->delete();
-            event(new ApiAfterDeleteEvent($user, $type, $id, $count));
-            return $count;
+            return self::deleteOne($user, $type, $id);
         });
     }
 
@@ -260,14 +385,21 @@ class API {
         return DB::transaction(function() use ($type, $ids, $user) {
             $count = 0;
             foreach ($ids as $id) {
-                event(new ApiBeforeDeleteEvent($user, $type, $id));
-                $count += self::provider($type)
-                    ->where('id', $id)
-                    ->where('client_id', $user->client_id)
-                    ->delete();
-                event(new ApiAfterDeleteEvent($user, $type, $id, $count));
+                $count += self::deleteOne($user, $type, $id);
             }
             return $count;
+        });
+    }
+
+    public static function deleteQuery($type, $query) {
+        \Log::debug('API query delete', ['type' => $type, 'query'=>$query]);
+        $user = self::can($type, 'D');
+        return DB::transaction(function() use ($type, $user, $query) {
+            $q = self::provider($type)->where('client_id', $user->client_id);
+            foreach($query as $field => $value) {
+                $q = $q->where($field, $value);
+            }
+            return $q->delete();
         });
     }
 

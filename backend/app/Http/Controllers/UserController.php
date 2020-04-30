@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\API;
 use App\User;
+use App\Events\ApiAfterLoginEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +28,9 @@ class UserController extends Controller
         }
         $user = Auth::user();
         $user->token = $user->createToken('Personal')->accessToken;
-        \Log::info('Login attempt successful', $credentials);
+        $user->rights = API::query('right', ['and' => ['role_id' => $user->role_id ]]);
+        event(new ApiAfterLoginEvent($user));
+        \Log::info('Login attempt successful', [$user->email]);
         if ($request->isJson()) {
             return response()->json($user);
         } else {

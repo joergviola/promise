@@ -1,7 +1,5 @@
 # Query API
 
-_This is work in progress!_
-
 Applate provides an API for querying for data.  
 This is done via this endpoint:
 
@@ -84,6 +82,37 @@ In each result item, a `target-field`is added, holding
 a full item of ``type``, the `id` of which is read 
 from ``from``.
 
+## Paging
+
+To receive only one page of a long result, specify it in the query:
+````
+{
+    page: {
+        skip: 10,
+        take: 10,
+        count: true
+    }
+}               
+````
+
+|Parameter|Description|default|
+|---|---|---|
+|skip|how many records to skip before first one|nothing skipped|
+|take|how many records to return|not limited|
+|count|whether to count the whole result|false|
+
+If `count` is set to `true`, the result returned is of the special form
+
+````
+{
+    count: 534,
+    result: [
+      ...
+    ]
+}               
+````
+
+
 ## Order
 
 You may specify to order by field:
@@ -97,6 +126,14 @@ You may specify to order by field:
     }
 }               
 ````
+
+## The `_meta`
+
+Each object queried with a `with` clause is delivered with an `_meta` attribute that contains the `with` clause, along with a `ignore=true` entry. 
+
+This ensures that, sending this exact object to an update action (see [RESTful API](REST.md)), the corresponding object attribute will not be stored into the database (preventing 'unknown column' errors).
+
+For `many` relations, you may set `ignore=false` to sync the relation to the database.
 
 ## Example
 
