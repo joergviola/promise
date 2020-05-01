@@ -113,22 +113,16 @@ class API {
         }
         foreach ($crit as $op => $value) {
             switch ($op) {
-                case '=':
-                case '>=':
-                case '<=':
-                case '>':
-                case '<':
-                case '<>':
-                case 'like':
+                case 'in':
                     if ($or) {
-                        $q->orWhere($field, $op, $value);
+                        $q->orWhereIn($field, $value);
                     } else {
-                        $q->where($field, $op, $value);
+                        $q->whereIn($field, $value);
                     }
                     break;
                 default:
                     if ($or) {
-                        $q->orWhereIn($field, $value);
+                        $q->orWhere($field, $op, $value);
                     } else {
                         $q->where($field, $op, $value);
                     }

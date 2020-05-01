@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "database": "promise",
+            "dialect": "MySQL",
+            "name": "promise",
+            "password": "promise",
+            "port": 3306,
+            "server": "localhost",
+            "username": "promise"
+        }
+    ]
+}
