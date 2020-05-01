@@ -32,6 +32,8 @@ if (process.env.NODE_ENV === 'production') {
   mockXHR()
 }
 import locale from 'element-ui/lib/locale/lang/en'
+import _ from 'lodash'
+Vue.prototype._ = _
 
 Vue.use(Element, {
   locale,
