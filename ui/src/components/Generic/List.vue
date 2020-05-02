@@ -12,18 +12,31 @@
 
       <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label">
         <template slot-scope="{row}">
-          <el-input v-if="col.editable" class="no-border" v-model="row[col.name]" @blur="save(row, col.name)" :placeholder="col.placeholder"/>
+          <el-input v-if="col.editable && !col.type" class="no-border" v-model="row[col.name]" @blur="save(row, col.name)" :placeholder="col.placeholder" />
           <span v-if="!col.editable">{{_.get(row, col.name)}}</span>
+          <el-select v-if="col.type=='select'" class="no-border" v-model="row[col.name]" @blur="save(row, col.name)"  :placeholder="col.placeholder">
+            <el-option v-for="(o, i) in col.options" :key="i" :label="col.display ? _.get(o, col.display) : o" :value="col.id ? _.get(o, col.id) : o" />
+          </el-select>
+          <el-date-picker
+            :placeholder="col.placeholder"
+            class="no-border"
+            v-if="col.type=='date'"
+            v-model="row[col.name]"
+            :type="col.type"
+            value-format="yyyy-MM-dd"
+            @blur="save(row, col.name)"
+          />
+
         </template>
       </el-table-column>
 
       <el-table-column align="right" label="Actions" fixed="right">
         <template slot-scope="{row}">
           <el-button v-if="row.id && detail" class="filter-item pull-right" type="primary" icon="el-icon-edit" @click="$router.push(detail+'/'+row.id)">
-            Edit
           </el-button>
-          <el-button v-if="!row.id" class="filter-item pull-right" type="primary" icon="el-icon-edit" @click="create(row)">
-            Add
+          <el-button v-if="row.id" class="filter-item pull-right" type="danger" icon="el-icon-remove" @click="remove(row)">
+          </el-button>
+          <el-button v-if="!row.id" class="filter-item pull-right" type="primary" icon="el-icon-plus" @click="create(row)">
           </el-button>
         </template>
       </el-table-column>

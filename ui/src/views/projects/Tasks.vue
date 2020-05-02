@@ -1,18 +1,5 @@
 <template>
   <div>
-    <el-row type="flex" class="row-bg" justify="end">
-      <el-col :span="10">
-        <el-form size="mini">
-          <el-form-item label="Estimation for">
-            <el-select v-model="offer">
-              <el-option key="none" label="None" :value="null" />
-              <el-option v-for="(o, i) in offers" :key="i" :label="o.name" :value="o.id" />
-            </el-select>
-          </el-form-item>
-        </el-form>
-      </el-col>
-    </el-row>
-
     <generic-list
       type="task"
       detail="/leads/lead"
@@ -34,21 +21,23 @@ export default {
   props: ['id'],
   data() {
     return {
-      offer: null,
-      offers: [],
+      allocations: [],
       template: { project_id: this.id, state: 'NEW', type: "DEV", supplier: 'S'  },
-      w: {  },
       type: 'task',
-      columns: [
+    }
+  },
+  computed: {
+    columns() {
+      return [
         { name: 'name', label: 'Name', editable: true, placeholder: "New Task..." },
-        { name: 'position', label: 'Position', editable: true, placeholder: "Position" },
-        { name: 'planned', label: 'Effort', editable: false, placeholder: "Hours" },
+        { name: 'user_id', label: 'Responsible', editable: true, type: 'select', options: this.allocations, display: 'user.name', id: 'user.id', placeholder: 'New member...' },
       ]
     }
   },
   async created() {
-    this.offers = await api.find('accounting', {
-      and: {project_id: this.id, state: 'NEW'}
+    this.allocations = await api.find('allocation', {
+      and: { project_id: this.id },
+      with: { user: { one: 'users', this: 'user_id' }}
     })
   }
 }

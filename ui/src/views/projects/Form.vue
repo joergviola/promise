@@ -12,10 +12,10 @@
         <project-board :id="$route.params.id" />
       </el-tab-pane>
       <el-tab-pane key="4" label="Team" name="4">
-        <project-offers :id="$route.params.id" />
+        <project-team :id="$route.params.id" />
       </el-tab-pane>
       <el-tab-pane key="5" label="State" name="5">
-        <project-offers :id="$route.params.id" />
+
       </el-tab-pane>
     </el-tabs>
 
@@ -27,11 +27,11 @@
 import ProjectDetails from './Details'
 import ProjectTasks from './Tasks'
 import ProjectBoard from './Board'
-import ProjectOffers from './Offers'
+import ProjectTeam from './Team'
 
 export default {
   name: 'ProjectForm',
-  components: { ProjectDetails, ProjectBoard, ProjectTasks, ProjectOffers },
+  components: { ProjectDetails, ProjectBoard, ProjectTasks, ProjectTeam },
   props: {},
   data() {
     return {

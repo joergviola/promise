@@ -44,6 +44,26 @@ export default {
           duration: 5000
         })
       }
+    },
+    async remove(row) {
+      try {
+        try {
+          await this.$confirm('Are you sure?', 'Warning', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning'
+          })
+          await api.delete(this.type, row.id)
+          this.getList()
+        } catch (cancel) {}
+      } catch (error) {
+        this.$notify({
+          title: 'Error',
+          message: error.message,
+          type: 'error',
+          duration: 5000
+        })
+      }
     }
   },
 }
