@@ -168,7 +168,7 @@ export const asyncRoutes = [
     name: 'Projects',
     meta: {
       title: 'Projects',
-      icon: 'table'
+      icon: 'education'
     },
     redirect: '/projects/all',
     children: [
@@ -185,6 +185,13 @@ export const asyncRoutes = [
         name: 'Project',
         meta: { title: 'Project' }
       },
+      {
+        path: 'project/:id/task/:tid',
+        component: () => import('@/views/task/Form'),
+        hidden: true,
+        name: 'Task',
+        meta: { title: 'Task' }
+      }
     ]
   },
   // 404 page must be placed at the end !!!

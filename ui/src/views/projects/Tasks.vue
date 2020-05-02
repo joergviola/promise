@@ -2,7 +2,7 @@
   <div>
     <generic-list
       type="task"
-      detail="/leads/lead"
+      :detail="'/projects/project/'+id+'/task'"
       :columns="columns"
       :with="w"
       :template="template"
@@ -31,6 +31,7 @@ export default {
       return [
         { name: 'name', label: 'Name', editable: true, placeholder: "New Task..." },
         { name: 'user_id', label: 'Responsible', editable: true, type: 'select', options: this.allocations, display: 'user.name', id: 'user.id', placeholder: 'New member...' },
+        { name: 'due_at', label: 'Due', type: 'date', editable: true },
       ]
     }
   },
