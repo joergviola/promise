@@ -24,7 +24,7 @@ class Base extends Migration
             $table->text('description')->nullable();
             $table->string('state'); // NEW, ESTIMATED, QUOTED, REJECTED, ACCEPTED, STARTED, CLOSED
             $table->string('source');
-            $table->string('lost_reason');
+            $table->string('lost_reason')->nullable();
             $table->string('effort_unit');
             $table->date('created_at')->nullable();
             $table->date('approved_at')->nullable(); // REJECTED OR ACCEPTED
@@ -96,7 +96,7 @@ class Base extends Migration
             $table->decimal('used')->nullable();
             $table->boolean('purchased')->default(false);
             $table->decimal('price')->nullable();
-            $table->string('supplier');
+            $table->string('supplier')->nullable();
 
             $table->foreign('project_id')->references('id')->on('project');
             $table->foreign('user_id')->references('id')->on('users');

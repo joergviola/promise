@@ -9,7 +9,7 @@
         <lead-tasks :id="$route.params.id" />
       </el-tab-pane>
       <el-tab-pane key="3" label="Offers" name="3">
-
+        <lead-offers :id="$route.params.id" />
       </el-tab-pane>
     </el-tabs>
 
@@ -21,10 +21,11 @@
 
 import LeadDetails from './Details'
 import LeadTasks from './Tasks'
+import LeadOffers from './Offers'
 
 export default {
   name: 'LeadForm',
-  components: { LeadDetails, LeadTasks },
+  components: { LeadDetails, LeadTasks, LeadOffers },
   props: {},
   data() {
     return {

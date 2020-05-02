@@ -1,19 +1,37 @@
 <template>
-  <el-row type="flex" justify="space-around"  :gutter="40">
-    <el-col :xs="24" :md="8">
-      <el-form ref="postForm" v-loading="loading" :rules="rules" :model="item" label-position="left" label-width="120px" >
-        <el-form-item v-for="(field,i) in fields" :key="i" :label="field.label">
-          <el-input v-model="item[field.name]" type="text" />
-        </el-form-item>
+  <div>
+    <el-row type="flex" justify="space-around" gutter="40">
+      <el-col :xs="24" :md="12">
+        <el-form ref="postForm" v-loading="loading" :model="item" label-position="left" label-width="120px" >
+          <el-form-item v-for="(field,i) in fields" :key="i" :label="field.label">
+            <el-input v-if="!field.type" :disabled="field.disabled" v-model="item[field.name]" type="text" >
+              <template v-if="field.postfix" slot="append">{{field.postfix}}</template>
+            </el-input>
+            <el-select v-if="field.type=='select'" v-model="item.source" >
+                <el-option v-for="(o, i) in field.options" :key="i" :label="o" :value="o" />
+              </el-select>
+          </el-form-item>
+
+        </el-form>
+      </el-col>
+      <el-col v-if="image" :xs="24" :md="12">
+        <img width="100%" :src="image">
+      </el-col>
+    </el-row>
+    <el-row type="flex" >
+      <el-col :span="24">
+        <el-button type="secondary" @click="$router.go(-1)">
+          Cancel
+        </el-button>
+        <el-button v-for="(button, i) in buttons" :key="i" v-loading="loading" type="danger" @click="click(button)">
+          {{button.label}}
+        </el-button>
         <el-button v-loading="loading" type="primary" @click="save">
           Save
         </el-button>
-      </el-form>
-    </el-col>
-    <el-col v-if="image" :xs="24" :md="16">
-      <img width="50%" :src="image">
-    </el-col>
-  </el-row>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
@@ -22,7 +40,7 @@ import api from '../../api'
 
 export default {
   name: 'GenericDetails',
-  props: ['type', 'id', 'fields', 'with', 'template', 'image'],
+  props: ['type', 'id', 'fields', 'buttons', 'with', 'template', 'image'],
   data() {
     return {
       item: this.template || {},
@@ -38,9 +56,14 @@ export default {
       })
       this.item = items[0]
       this.loading = false
+      this.$emit('update', this.item)
     }
   },
   methods: {
+    async click(button) {
+      button.action(this.item)
+      if (button.andSave) this.save()
+    },
     async save() {
       console.log('Saving', this.item)
       this.loading = true
@@ -66,6 +89,7 @@ export default {
         })
       }
       this.loading = false
+      this.$emit('update', this.item)
     },
   }
 }

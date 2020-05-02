@@ -18,12 +18,12 @@ export default {
   props: ['id'],
   data() {
     return {
-      template: { project_id: this.id, state: 'NEW'  },
+      template: { project_id: this.id, state: 'NEW', type: "DEV", supplier: 'S'  },
       w: { },
       type: 'task',
       columns: [
         { name: 'name', label: 'Name', editable: true, placeholder: "New Task..." },
-        { name: 'planned', label: 'Effort', editable: true, placeholder: "Hours" },
+        { name: 'planned', label: 'Effort', editable: false, placeholder: "Hours" },
       ]
     }
   }

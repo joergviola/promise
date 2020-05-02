@@ -8,15 +8,23 @@
           <el-form-item label="Summary:">
             <el-input v-model="item.description" :rows="1" type="textarea" autosize placeholder="Please enter the content" />
           </el-form-item>
-          <el-form-item label="Price:">
-            <el-input v-model="item.pricePerHour" type="number">
-              <template slot="append">€ / hour</template>
-            </el-input>
+          <el-form-item label="Source:">
+            <el-select v-model="item.source" >
+              <el-option key="web" label="Web" value="web" />
+              <el-option key="phone" label="Phone" value="phone" />
+              <el-option key="chat" label="Chat" value="chat" />
+              <el-option key="unknown" label="???" value="unknown" />
+            </el-select>
           </el-form-item>
-          <el-form-item label="Buffer:">
-            <el-input v-model="item.percentBuffer" type="number">
-              <template slot="append">%</template>
-            </el-input>
+          <el-form-item label="Effort unit:">
+            <el-select v-model="item.effort_unit" >
+              <el-option key="hour" label="Hour" value="hour" />
+              <el-option key="points" label="Points" value="points" />
+              <el-option key="euro" label="Euro" value="euro" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Lost reason:">
+            <el-input v-model="item.lost_reason" type="text" />
           </el-form-item>
           <el-form-item label="Customer:">
             <el-select v-model="customer" value-key="id" filterable default-first-option remote placeholder="Search customer">
@@ -89,8 +97,6 @@ export default {
       item: {
         state: 'LEAD',
         template: false,
-        pricePerHour: 790 / 8,
-        percentBuffer: 15
       },
       customer: {name:''},
       customers: [],
@@ -101,8 +107,6 @@ export default {
       errGif: errGif,
       rules: {
         name: [{ validator: validateRequire }],
-        pricePerHour: [{ validator: validateRequire }],
-        percentBuffer: [{ validator: validateRequire }]
       }
     }
   },
