@@ -22,7 +22,7 @@ class Base extends Migration
         StandardTable::create('project', 'Project.', function (Blueprint $table) {
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('state'); // NEW, ESTIMATED, QUOTED, REJECTED, ACCEPTED, STARTED, CLOSED
+            $table->string('state'); // LEAD, ESTIMATED, QUOTED, REJECTED, ACCEPTED, STARTED, CLOSED
             $table->string('source');
             $table->string('lost_reason')->nullable();
             $table->string('effort_unit');

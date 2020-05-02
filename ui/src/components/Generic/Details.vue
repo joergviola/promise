@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row type="flex" justify="space-around" gutter="40">
+    <el-row type="flex" justify="space-around" :gutter="40">
       <el-col :xs="24" :md="12">
         <el-form ref="postForm" v-loading="loading" :model="item" label-position="left" label-width="120px" >
           <el-form-item v-for="(field,i) in fields" :key="i" :label="field.label">
@@ -8,8 +8,14 @@
               <template v-if="field.postfix" slot="append">{{field.postfix}}</template>
             </el-input>
             <el-select v-if="field.type=='select'" v-model="item[field.name]" >
-                <el-option v-for="(o, i) in field.options" :key="i" :label="o" :value="o" />
-              </el-select>
+              <el-option v-for="(o, i) in field.options" :key="i" :label="o" :value="o" />
+            </el-select>
+            <el-date-picker
+              v-if="field.type=='date'"
+              v-model="item[field.name]"
+              :type="field.type"
+              value-format="yyyy-MM-dd"
+            />
           </el-form-item>
 
         </el-form>

@@ -163,6 +163,31 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/projects',
+    component: Layout,
+    name: 'Projects',
+    meta: {
+      title: 'Projects',
+      icon: 'table'
+    },
+    redirect: '/projects/all',
+    children: [
+      {
+        path: 'all',
+        component: () => import('@/views/projects/List'),
+        name: 'All',
+        meta: { title: 'Projects' }
+      },
+      {
+        path: 'project/:id',
+        component: () => import('@/views/projects/Form'),
+        hidden: true,
+        name: 'Project',
+        meta: { title: 'Project' }
+      },
+    ]
+  },
+  {
     path: '/permission',
     component: Layout,
     redirect: '/permission/page',

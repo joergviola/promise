@@ -62,7 +62,13 @@
           <el-form-item v-if="!contact.id" label="Address:">
             <el-input v-model="contact.address" :rows="1" type="textarea" autosize/>
           </el-form-item>
-          <el-button v-loading="loading" type="primary" @click="save">
+          <el-button v-loading="loading" type="success" @click="save('ACCEPTED')">
+            Accepted
+          </el-button>
+          <el-button v-loading="loading" type="danger" @click="save('REJECTED')">
+            Rejected
+          </el-button>
+          <el-button v-loading="loading" type="secondary" @click="save">
             Save
           </el-button>
         </el-form>
@@ -141,7 +147,11 @@ export default {
     this.contacts = await api.find('users', {and:{customer_id:this.customer.id}})
   },
   methods: {
-    save() {
+    save(state = null) {
+      if (state) {
+        this.item.state = state
+        this.item.approved_at = api.datetime()
+      }
       console.log('Saving', this.item)
       this.$refs.postForm.validate(async valid => {
         if (valid) {

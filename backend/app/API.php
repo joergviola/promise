@@ -227,7 +227,7 @@ class API {
         $meta = $data['_meta'];
         unset($data['_meta']);
         foreach($meta as $field => &$info) {
-            $info['data'] = $data[$field];
+            $info['data'] = @$data[$field];
             unset($data[$field]);
         }
         return $meta;
