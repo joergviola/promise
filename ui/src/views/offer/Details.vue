@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <generic-details type="accounting" :id="id" :fields="fields" :buttons="buttons" :image="image" @update="i => item=i"/>
+    <generic-details type="accounting" :id="oid" :fields="fields" :buttons="buttons" :template="template" :image="image" @update="i => item=i"/>
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import image from '@/assets/images/undraw_discount_d4bd.svg'
 
 export default {
   name: 'OfferDetails',
-  props: ['id'],
+  props: ['id', 'oid'],
   components: { GenericDetails },
   computed: {
     buttons() {
@@ -31,6 +31,7 @@ export default {
     return {
       item: null,
       image: image,
+      template: { project_id: this.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: 10 },
       fields: [
         { name: 'name', label: 'Name' },
         { name: 'price', disabled: true, label: 'Price', postfix: 'EUR' },

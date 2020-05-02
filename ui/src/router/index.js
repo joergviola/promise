@@ -154,7 +154,7 @@ export const asyncRoutes = [
         meta: { title: 'Lead' }
       },
       {
-        path: 'offer/:id',
+        path: 'lead/:id/offer/:oid',
         component: () => import('@/views/offer/Form'),
         hidden: true,
         name: 'Offer',

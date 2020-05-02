@@ -19,7 +19,7 @@
 
       <el-table-column align="right" label="Actions" fixed="right">
         <template slot-scope="{row}">
-          <el-button v-if="row.id" class="filter-item pull-right" type="primary" icon="el-icon-edit" @click="$router.push(detail+'/'+row.id)">
+          <el-button v-if="row.id && detail" class="filter-item pull-right" type="primary" icon="el-icon-edit" @click="$router.push(detail+'/'+row.id)">
             Edit
           </el-button>
           <el-button v-if="!row.id" class="filter-item pull-right" type="primary" icon="el-icon-edit" @click="create(row)">

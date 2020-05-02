@@ -59,6 +59,7 @@ class Base extends Migration
         });
 
         StandardTable::create('position', 'Project quote or invoice position.', function (Blueprint $table) {
+            $table->integer('no')->unsigned()->nullable();
             $table->text('comment')->nullable();
             $table->integer('accounting_id')->unsigned();
             $table->decimal('planned')->nullable();

@@ -1,11 +1,11 @@
 <template>
   <generic-list
     type="accounting"
-    detail="/leads/offer"
+    :detail="id+'/offer'"
     :columns="columns"
     :with="w"
     :template="template"
-    createBy="row"
+    createBy="button"
   />
 </template>
 
@@ -18,7 +18,7 @@ export default {
   props: ['id'],
   data() {
     return {
-      template: { project_id: this.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: 10 },
+      template: { project_id: this.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: "10" },
       w: { },
       type: 'accounting',
       columns: [

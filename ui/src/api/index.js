@@ -130,6 +130,10 @@ const theAPI = {
   },
   getDocs: function(type, id) {
     return call('GET', '/' + type + '/' + id + '/documents')
+  },
+  datetime: function(value = null) {
+    if (!value) value = new Date()
+    return value.toISOString().slice(0, 19).replace('T', ' ')
   }
 }
 
