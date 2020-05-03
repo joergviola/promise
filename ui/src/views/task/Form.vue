@@ -10,7 +10,6 @@
       </el-tab-pane>
     </el-tabs>
 
-
   </div>
 </template>
 
@@ -25,7 +24,7 @@ export default {
   props: {},
   data() {
     return {
-      activeTab: '1',
+      activeTab: '1'
     }
   },
 }

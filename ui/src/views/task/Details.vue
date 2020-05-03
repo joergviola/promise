@@ -7,7 +7,7 @@
 <script>
 
 import GenericDetails from '@/components/Generic/Details'
-import image from '@/assets/images/undraw_discount_d4bd.svg'
+import image from '@/assets/images/undraw_task_31wc.svg'
 
 export default {
   name: 'OfferDetails',

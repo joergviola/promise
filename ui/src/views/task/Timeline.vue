@@ -1,39 +1,24 @@
 <template>
   <el-timeline>
-    <el-timeline-item v-for="(t,i) in open" :key="i" timestamp="You, Now" placement="top">
+    <el-timeline-item timestamp="You, Now" placement="top">
       <el-card>
         <el-form>
           <el-form-item>
-            <el-input v-model="t.name" type="text" placeholder="New Task..."/>
+            <el-input v-model="action.comment" :rows="1" type="textarea" autosize placeholder="What did you do...?" />
           </el-form-item>
           <el-form-item>
-            <el-input v-model="t.description" :rows="1" type="textarea" autosize placeholder="Notes..." />
+            <el-input v-model="duration" type="text" placeholder="hh:mm [hh:mm]" />
           </el-form-item>
           <el-form-item>
-            <el-date-picker
-              v-model="t.due_at"
-              type="date"
-              placeholder="Due"
-              value-format="yyyy-MM-dd"
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button v-loading="loading" type="primary" @click="save(t)">
+            <el-button v-loading="loading" type="primary" @click="save">
               Save
-            </el-button>
-            <el-button v-loading="loading" type="danger" @click="close(t)">
-              Done
             </el-button>
           </el-form-item>
         </el-form>
       </el-card>
     </el-timeline-item>
-    <el-timeline-item v-for="(t,i) in closed" :key="i" :timestamp="(t.finished?t.finished.name:'') + ', ' + t.finished_at" placement="top">
-      <el-card>
-        <h4>{{t.name}}</h4>
-        <p>{{t.description}}</p>
-        <p>{{t.due_at}}</p>
-      </el-card>
+    <el-timeline-item v-for="(a,i) in actions" :key="i" :timestamp="a.user.name + ', ' + a.to + ', ' + a.used + ' hours'" placement="top">
+      <p>{{a.comment}}</p>
     </el-timeline-item>
   </el-timeline>
 </template>
@@ -41,15 +26,17 @@
 <script>
 import api from '@/api'
 import { mapGetters } from 'vuex'
+import moment from 'moment'
 
 export default {
   name: 'LeadTimeline',
-  props: ['id'],
+  props: ['id', 'tid'],
   data() {
     return {
-      template: {project_id: this.id, type: 'SALES', state: 'APPROVED', supplier: 'S'},
-      open: [],
-      closed: [],
+      template: { project_id: this.id, task_id: this.tid },
+      action: {},
+      actions: [],
+      duration: "",
       loading: null
     }
   },
@@ -63,39 +50,49 @@ export default {
   },
   methods: {
     async reload() {
-      const tasks = await api.find('task', {
+      this.actions = await api.find('action', {
         and: {
-          project_id: this.id,
-          type: 'SALES'
+          task_id: this.tid
         },
         with: {
-          finished: { one: 'users', this: 'finished_by' }
+          user: { one: 'users', this: 'user_id' }
         },
         order: {
-          finished_at: 'DESC'
+          to: 'DESC'
         }
       })
-      this.closed = tasks.filter(t => t.state === 'CLOSED')
-      this.open = tasks.filter(t => t.state !== 'CLOSED')
-      if (this.open.length === 0) {
-        this.open.push(this.template)
+      this.action = Object.assign({}, this.template)
+    },
+    prepare(action) {
+      const fromTo = this.duration.split(' ')
+
+      let to = moment()
+      let duration = moment.duration(fromTo[0]).asHours()
+      if (fromTo[0].indexOf(':') === -1) duration = parseInt(fromTo[0])
+      let from = to.clone().subtract(duration, 'hours')
+
+      if (fromTo.length === 2) {
+        from = moment(fromTo[0], 'H:m')
+        to = moment(fromTo[1], 'H:m')
+        duration = moment.duration(to.diff(from)).asHours()
       }
+
+      action.to = to.format('YYYY-MM-DD HH:mm:ss')
+      action.from = from.format('YYYY-MM-DD HH:mm:ss')
+      action.used = duration
+      action.user_id = this.user.id
     },
-    close(task) {
-      task.state = 'CLOSED'
-      task.finished_at = api.datetime(new Date())
-      task.finished_by = this.user.id
-      this.save(task)
-    },
-    async save(task) {
-      console.log('Saving', task)
+    async save() {
+      console.log('Saving', this.action)
       this.loading = true
       try {
-        if (task.id) {
-          await api.update('task', task.id, task)
+        if (this.action.id) {
+          await api.update('action', this.action.id, this.action)
         } else {
-          const result = await api.create('task', task)
-          task.id = result.id
+          this.prepare(this.action)
+
+          const result = await api.create('action', this.action)
+          this.action.id = result.id
         }
         this.reload()
       } catch (error) {
@@ -107,7 +104,7 @@ export default {
         })
       }
       this.loading = false
-    },
+    }
   }
 
 }
