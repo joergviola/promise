@@ -63,7 +63,7 @@ export default {
       })
       this.item = items[0]
       this.loading = false
-      this.$emit('update', this.item)
+      this.$emit('update', Object.assign({}, this.item))
     }
   },
   methods: {
@@ -81,12 +81,6 @@ export default {
           const result = await api.create(this.type, this.item)
           this.item.id = result.id
         }
-        this.$notify({
-          title: 'Success',
-          message: 'Data has been saved',
-          type: 'success',
-          duration: 2000
-        })
       } catch (error) {
         this.$notify({
           title: 'Error',
@@ -96,7 +90,7 @@ export default {
         })
       }
       this.loading = false
-      this.$emit('update', this.item)
+      this.$emit('update', Object.assign({}, this.item))
     },
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <generic-details type="task" :id="tid" :fields="fields" :buttons="buttons" :template="template" :image="image" @update="i => item=i"/>
+    <generic-details type="task" :id="tid" :fields="fields" :buttons="buttons" :template="template" :image="image" @update="update"/>
   </div>
 </template>
 
@@ -26,7 +26,6 @@ export default {
       }
       if (!this.item) return []
       const valid = workflow[this.item.state]
-      console.log(valid)
       return this.allButtons.filter(b => valid.indexOf(b.label)!=-1)
     }
   },
@@ -51,6 +50,12 @@ export default {
         {label: 'Tested', action: item => item.state='TESTED', andSave: true },
         {label: 'Closed', action: item => item.state='CLOSED', andSave: true }
       ]
+    }
+  },
+  methods: {
+    update(item) {
+      this.item = item
+      this.$emit('update', item)
     }
   }
 }

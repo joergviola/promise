@@ -1,6 +1,6 @@
 <template>
   <el-timeline>
-    <el-timeline-item timestamp="You, Now" placement="top">
+    <el-timeline-item v-if="task.state != 'NEW'" timestamp="You, Now" placement="top">
       <el-card>
         <el-form>
           <el-form-item>
@@ -29,11 +29,11 @@ import { mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
-  name: 'LeadTimeline',
-  props: ['id', 'tid'],
+  name: 'TaskTimeline',
+  props: ['id', 'task'],
   data() {
     return {
-      template: { project_id: this.id, task_id: this.tid },
+      template: { project_id: this.id, task_id: this.task.id },
       action: {},
       actions: [],
       duration: "",
@@ -50,17 +50,25 @@ export default {
   },
   methods: {
     async reload() {
-      this.actions = await api.find('action', {
+      const tasks = await api.find('task', {
         and: {
-          task_id: this.tid
+          id: this.task.id
         },
         with: {
-          user: { one: 'users', this: 'user_id' }
-        },
-        order: {
-          to: 'DESC'
+          actions: {
+            many: 'action',
+            query: {
+              with: {
+                user: { one: 'users', this: 'user_id' }
+              },
+              order: {
+                to: 'DESC'
+              }
+            }
+          }
         }
       })
+      this.actions = tasks[0].actions
       this.action = Object.assign({}, this.template)
     },
     prepare(action) {
