@@ -23,9 +23,9 @@ class Base extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('state'); // LEAD, ESTIMATED, QUOTED, REJECTED, ACCEPTED, STARTED, CLOSED
-            $table->string('source');
+            $table->string('source'->nullable());
             $table->string('lost_reason')->nullable();
-            $table->string('effort_unit');
+            $table->string('effort_unit')->nullable();
             $table->date('created_at')->nullable();
             $table->date('approved_at')->nullable(); // REJECTED OR ACCEPTED
             $table->date('starts_at')->nullable();

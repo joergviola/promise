@@ -1,30 +1,48 @@
 <template>
   <div class="dashboard-container">
-    <component :is="currentRole" />
+    <h2>Welcome, {{user.name}}</h2>
+    <generic-list
+      type="task"
+      :columns="columns"
+      :with="w"
+      :query="query"
+      create-by="row"
+    />
+<button @click="test">Test</button>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import adminDashboard from './admin'
-import editorDashboard from './editor'
+import GenericList from '@/components/Generic/List'
 
 export default {
   name: 'Dashboard',
-  components: { adminDashboard, editorDashboard },
-  data() {
-    return {
-      currentRole: 'adminDashboard'
-    }
-  },
+  components: { GenericList },
   computed: {
     ...mapGetters([
-      'roles'
+      'user'
     ])
   },
-  created() {
-    if (!this.roles.includes('admin')) {
-      this.currentRole = 'editorDashboard'
+  data() {
+    console.log('XXX', 'data', this.user)
+    return {
+      query: { user_id: 1 },
+      w: {
+        project: { one: 'project' }
+      },
+      type: 'task',
+      columns: [
+        { name: 'name', label: 'Name', editable: true, placeholder: "New Task..." },
+        { name: 'project.name', label: 'Project' },
+        { name: 'planned', label: 'Planned' },
+        { name: 'used', label: 'Used' },
+      ]
+    }
+  },
+  methods: {
+    test() {
+      console.log('XXX', this.user)
     }
   }
 }
