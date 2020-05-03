@@ -22,8 +22,10 @@ export default {
       type: 'project',
       columns: [
         { name: 'name', label: 'Name', editable: true },
-        { name: 'customer.name', label: 'Customer', editable: false },
-        { name: 'state', label: 'State', editable: true },
+        { name: 'customer.name', label: 'Customer' },
+        { name: 'state', label: 'State' },
+        { name: 'planned', label: 'Planned' },
+        { name: 'used', label: 'Used' },
       ]
     }
   }

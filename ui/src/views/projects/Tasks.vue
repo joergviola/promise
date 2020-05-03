@@ -6,6 +6,7 @@
       :columns="columns"
       :with="w"
       :template="template"
+      :query="query"
       createBy="row"
     />
   </div>
@@ -23,6 +24,7 @@ export default {
     return {
       allocations: [],
       template: { project_id: this.id, state: 'NEW', type: "DEV", supplier: 'S'  },
+      query: { project_id: this.id, type: "DEV"  },
       type: 'task',
     }
   },
@@ -32,6 +34,9 @@ export default {
         { name: 'name', label: 'Name', editable: true, placeholder: "New Task..." },
         { name: 'user_id', label: 'Responsible', editable: true, type: 'select', options: this.allocations, display: 'user.name', id: 'user.id', placeholder: 'New member...' },
         { name: 'due_at', label: 'Due', type: 'date', editable: true },
+        { name: 'state', label: 'State' },
+        { name: 'planned', label: 'Planned' },
+        { name: 'used', label: 'Used' },
       ]
     }
   },

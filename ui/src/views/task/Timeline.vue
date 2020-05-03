@@ -33,7 +33,6 @@ export default {
   props: ['id', 'task'],
   data() {
     return {
-      template: { project_id: this.id, task_id: this.task.id },
       action: {},
       actions: [],
       duration: "",
@@ -69,7 +68,7 @@ export default {
         }
       })
       this.actions = tasks[0].actions
-      this.action = Object.assign({}, this.template)
+      this.action =  { project_id: this.id, task_id: this.task.id }
     },
     prepare(action) {
       const fromTo = this.duration.split(' ')

@@ -50,7 +50,7 @@ import list from '@/mixins/list'
 export default {
   name: 'GenericList',
   mixins: [list],
-  props: ['type', 'detail', 'columns', 'with', 'template', 'createBy'],
+  props: ['type', 'detail', 'columns', 'with', 'query', 'template', 'createBy'],
   data() {
     return {
     }

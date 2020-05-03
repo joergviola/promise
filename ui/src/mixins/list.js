@@ -15,7 +15,7 @@ export default {
     async getList() {
       this.loading = true
       this.list = await api.find(this.type, {
-        and: this.template,
+        and: this.query || this.template,
         with: this.with
       })
       if (this.createBy !== 'button') {
