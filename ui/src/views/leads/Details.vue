@@ -68,7 +68,7 @@
           <el-button v-loading="loading" type="danger" @click="save('REJECTED')">
             Rejected
           </el-button>
-          <el-button v-loading="loading" type="secondary" @click="save">
+          <el-button v-loading="loading" type="secondary" @click="save()">
             Save
           </el-button>
         </el-form>
