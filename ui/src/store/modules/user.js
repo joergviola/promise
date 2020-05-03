@@ -52,7 +52,7 @@ const actions = {
       const data = {
         roles: ['admin'],
         name: user.name,
-        avatar: 'huhu',
+        avatar: user.avatar,
         introduction: '...'
       }
 

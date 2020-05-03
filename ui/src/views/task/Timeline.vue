@@ -1,12 +1,12 @@
 <template>
   <el-timeline>
-    <el-timeline-item v-if="task.state != 'NEW'" timestamp="You, Now" placement="top">
+    <el-timeline-item timestamp="You, Now" placement="top">
       <el-card>
         <el-form>
           <el-form-item>
             <el-input v-model="action.comment" :rows="1" type="textarea" autosize placeholder="What did you do...?" />
           </el-form-item>
-          <el-form-item>
+          <el-form-item  v-if="task.state != 'NEW'">
             <el-input v-model="duration" type="text" placeholder="hh:mm [hh:mm]" />
           </el-form-item>
           <el-form-item>
