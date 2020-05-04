@@ -1,129 +1,74 @@
 <template>
-    <el-row :gutter="40">
-      <el-col :xs="24" :md="8">
-        <el-form ref="postForm" v-loading="loading" :rules="rules" :model="item" label-position="left" label-width="120px" >
-          <el-form-item label="Name:">
-            <el-input v-model="item.name" type="text" />
-          </el-form-item>
-          <el-form-item label="Summary:">
-            <el-input v-model="item.description" :rows="1" type="textarea" autosize placeholder="Please enter the content" />
-          </el-form-item>
-          <el-form-item label="Source:">
-            <el-select v-model="item.source" >
-              <el-option key="web" label="Web" value="web" />
-              <el-option key="phone" label="Phone" value="phone" />
-              <el-option key="chat" label="Chat" value="chat" />
-              <el-option key="unknown" label="???" value="unknown" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="Effort unit:">
-            <el-select v-model="item.effort_unit" >
-              <el-option key="hour" label="Hour" value="hour" />
-              <el-option key="points" label="Points" value="points" />
-              <el-option key="euro" label="Euro" value="euro" />
-            </el-select>
-          </el-form-item>
-          <el-form-item label="Lost reason:">
-            <el-input v-model="item.lost_reason" type="text" />
-          </el-form-item>
-          <el-form-item label="Customer:">
-            <el-select v-model="customer" value-key="id" filterable default-first-option remote placeholder="Search customer">
-              <el-option key="create" label="Create..." :value="{}" />
-              <el-option v-for="o in customers" :key="o.id" :label="o.name" :value="o" />
-            </el-select>
-          </el-form-item>
-          <el-form-item v-if="!customer.id" label="New Customer Name:">
-            <el-input v-model="customer.name" type="text" />
-          </el-form-item>
-          <el-form-item v-if="!customer.id" label="E-Mail:">
-            <el-input v-model="customer.email" type="email" />
-          </el-form-item>
-          <el-form-item v-if="!customer.id" label="Phone:">
-            <el-input v-model="customer.phone" type="phone" />
-          </el-form-item>
-          <el-form-item v-if="!customer.id" label="Address:">
-            <el-input v-model="customer.address" :rows="1" type="textarea" autosize/>
-          </el-form-item>
-          <el-form-item label="Contact:">
-            <el-select v-model="contact" value-key="id" filterable default-first-option remote placeholder="Search contact">
-              <el-option key="create" label="Create..." :value="{}" />
-              <el-option v-for="o in contacts" :key="o.id" :label="o.name" :value="o" />
-            </el-select>
-          </el-form-item>
-          <el-form-item v-if="!contact.id" label="New Contact Name:">
-            <el-input v-model="contact.name" type="text" />
-          </el-form-item>
-          <el-form-item v-if="!contact.id" label="E-Mail:">
-            <el-input v-model="contact.email" type="email" />
-          </el-form-item>
-          <el-form-item v-if="!contact.id" label="Phone:">
-            <el-input v-model="contact.phone" type="phone" />
-          </el-form-item>
-          <el-form-item v-if="!contact.id" label="Address:">
-            <el-input v-model="contact.address" :rows="1" type="textarea" autosize/>
-          </el-form-item>
-          <el-button v-loading="loading" type="success" @click="save('ACCEPTED')">
-            Accepted
-          </el-button>
-          <el-button v-loading="loading" type="danger" @click="save('REJECTED')">
-            Rejected
-          </el-button>
-          <el-button v-loading="loading" type="secondary" @click="save()">
-            Save
-          </el-button>
-        </el-form>
-      </el-col>
-      <el-col :xs="24" :md="16">
-        <img class="hidden" :src="errGif">
-      </el-col>
-    </el-row>
+  <el-row :gutter="40">
+    <el-col :xs="24" :md="8">
+      <el-form ref="postForm" v-loading="loading" :model="item" label-position="left" label-width="120px" >
+        <el-form-item label="Name:">
+          <el-input v-model="item.name" type="text" />
+        </el-form-item>
+        <el-form-item label="Summary:">
+          <el-input v-model="item.description" :rows="1" type="textarea" autosize placeholder="Please enter the content" />
+        </el-form-item>
+        <el-form-item label="Source:">
+          <el-select v-model="item.source" >
+            <el-option key="web" label="Web" value="web" />
+            <el-option key="phone" label="Phone" value="phone" />
+            <el-option key="chat" label="Chat" value="chat" />
+            <el-option key="unknown" label="???" value="unknown" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Effort unit:">
+          <el-select v-model="item.effort_unit" >
+            <el-option key="hour" label="Hour" value="hour" />
+            <el-option key="points" label="Points" value="points" />
+            <el-option key="euro" label="Euro" value="euro" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="Lost reason:">
+          <el-input v-model="item.lost_reason" type="text" />
+        </el-form-item>
+        <el-form-item label="Customer:">
+          <to-one v-model="item.customer_id" type="customer" display="name" @input="id => contactQuery={customer_id: id}" link="/customer" />
+        </el-form-item>
+        <el-form-item label="Contact:">
+          <to-one v-model="item.contact_id" type="users" display="name" :query="contactQuery"  link="/contact" />
+        </el-form-item>
+        <el-button v-loading="loading" type="success" @click="save('ACCEPTED')">
+          Accepted
+        </el-button>
+        <el-button v-loading="loading" type="danger" @click="save('REJECTED')">
+          Rejected
+        </el-button>
+        <el-button v-loading="loading" type="secondary" @click="save()">
+          Save
+        </el-button>
+      </el-form>
+    </el-col>
+    <el-col :xs="24" :md="16">
+      <img class="hidden" :src="errGif">
+    </el-col>
+  </el-row>
 </template>
 
 <script>
 
+import ToOne from '@/components/Generic/ToOne'
 import errGif from '@/assets/401_images/401.gif'
-import api from '../../api'
+import api from '@/api'
 
 export default {
   name: 'LeadDetails',
+  components: { ToOne },
   props: {},
   data() {
-    const validateRequire = (rule, value, callback) => {
-      if (value === '') {
-        this.$message({
-          message: rule.field + '为必传项',
-          type: 'error'
-        })
-        callback(new Error(rule.field + '为必传项'))
-      } else {
-        callback()
-      }
-    }
     return {
       item: {
         state: 'LEAD',
         template: false,
       },
-      customer: {name:''},
-      customers: [],
-      contact: {name:'', password:'none'},
-      contacts: [],
       loading: false,
-      userListOptions: [],
+      contactQuery: {},
       errGif: errGif,
-      rules: {
-        name: [{ validator: validateRequire }],
-      }
     }
-  },
-  watch: {
-    async customer() {
-      this.item.customer_id = this.customer.id
-      this.contacts = await api.find('users', {and:{customer_id:this.customer.id}})
-    },
-    contact() {
-      this.item.contact_id = this.contact.id
-    },
   },
   async created() {
     const id = this.$route.params.id
@@ -137,60 +82,40 @@ export default {
         }
       })
       this.item = items[0]
-      this.customer = this.item.customer
-      delete this.item.customer
-      this.contact = this.item.contact
-      delete this.item.contact
+      this.contactQuery = {customer_id: this.item.customer_id}
       this.loading = false
     }
-    this.customers = await api.find('customer', {and:{}})
-    this.contacts = await api.find('users', {and:{customer_id:this.customer.id}})
   },
   methods: {
-    save(state = null) {
+    async save(state = null) {
       if (state) {
         this.item.state = state
         this.item.approved_at = api.datetime()
       }
       console.log('Saving', this.item)
-      this.$refs.postForm.validate(async valid => {
-        if (valid) {
-          this.loading = true
-          try {
-            if (!this.customer.id) {
-              const {id} = await api.create('customer', this.customer)
-              this.customer.id = id
-              this.item.customer_id = id
-            }
-            this.contact.customer_id = this.customer.id
-            if (!this.contact.id) {
-              const {id} = await api.create('users', this.contact)
-              this.contact.id = id
-              this.item.contact_id = id
-            }
-            const item = this.item.id
-                    ? await api.update('project', this.item.id, this.item)
-                    : await api.create('project', this.item)
-            this.$notify({
-              title: 'Success',
-              message: 'Lead has been saved',
-              type: 'success',
-              duration: 2000
-            })
-          } catch (error) {
-            this.$notify({
-              title: 'Error',
-              message: error.message,
-              type: 'error',
-              duration: 5000
-            })
-          }
-          this.loading = false
-        } else {
-          console.log('error submit!!')
-          return false
+      this.loading = true
+      try {
+        if (typeof this.item.customer_id === 'string') {
+          const { id } = await api.create('customer', { name: this.item.customer_id })
+          this.item.customer_id = id
         }
-      })
+        if (typeof this.item.contact_id === 'string') {
+          const { id } = await api.create('users', { name: this.item.contact_id })
+          this.item.contact_id = id
+        }
+        this.item.id
+          ? await api.update('project', this.item.id, this.item)
+          : await api.create('project', this.item)
+      } catch (error) {
+        console.log(error)
+        this.$notify({
+          title: 'Error',
+          message: error.message,
+          type: 'error',
+          duration: 5000
+        })
+      }
+      this.loading = false
     },
   }
 }

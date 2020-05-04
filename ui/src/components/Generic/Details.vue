@@ -3,22 +3,7 @@
     <el-row type="flex" justify="space-around" :gutter="40">
       <el-col :xs="24" :md="12">
         <el-form ref="postForm" v-loading="loading" :model="item" label-position="left" label-width="120px" >
-          <el-form-item v-for="(field,i) in fields" :key="i" :label="field.label">
-            <el-input v-if="!field.type" :disabled="field.disabled" v-model="item[field.name]" type="text" >
-              <template v-if="field.postfix" slot="append">{{field.postfix}}</template>
-            </el-input>
-            <el-input v-if="field.type=='textarea'" v-model="item[field.name]" :rows="1" type="textarea" autosize :placeholder="field.placeholder" />
-            <el-select v-if="field.type=='select'" v-model="item[field.name]" >
-              <el-option v-for="(o, i) in field.options" :key="i" :label="o" :value="o" />
-            </el-select>
-            <el-date-picker
-              v-if="field.type=='date'"
-              v-model="item[field.name]"
-              :type="field.type"
-              value-format="yyyy-MM-dd"
-            />
-          </el-form-item>
-
+          <fields :item="item" :fields="fields" />
         </el-form>
       </el-col>
       <el-col v-if="image" :xs="24" :md="12">
@@ -42,11 +27,12 @@
 </template>
 
 <script>
-
+import Fields from './Fields'
 import api from '../../api'
 
 export default {
   name: 'GenericDetails',
+  components: { Fields },
   props: ['type', 'id', 'fields', 'buttons', 'with', 'template', 'image'],
   data() {
     return {
