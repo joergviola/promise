@@ -47,7 +47,7 @@ export default {
   props: ['id'],
   data() {
     return {
-      template: {project_id: this.id, type: 'SALES', state: 'APPROVED', supplier: 'S'},
+      template: {project_id: this.id, type: 'SALES', state: 'APPROVED'},
       open: [],
       closed: [],
       loading: null
@@ -94,6 +94,7 @@ export default {
         if (task.id) {
           await api.update('task', task.id, task)
         } else {
+          task.user_id = this.user.id
           const result = await api.create('task', task)
           task.id = result.id
         }

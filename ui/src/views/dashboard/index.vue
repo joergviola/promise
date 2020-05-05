@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-container">
+  <div class="components-container">
     <h2>Welcome, {{user.name}}</h2>
     <generic-list
       type="task"
@@ -27,7 +27,7 @@ export default {
   data() {
     console.log('XXX', 'data', this.user)
     return {
-      query: { user_id: 1 },
+      query: { user_id: 1, state: 'APPROVED' },
       w: {
         project: { one: 'project' }
       },
