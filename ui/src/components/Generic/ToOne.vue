@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-select v-loading="loading" v-model="value" value-key="id" allow-create filterable default-first-option placeholder="Search..." @change="i => $emit('input', i)">
+    <el-select v-loading="loading" :value="value" value-key="id" allow-create filterable default-first-option placeholder="Search..." @change="i => $emit('input', i)">
       <el-option v-for="i in items" :key="i.id" :label="i[display]" :value="i.id" />
       <template slot="append">...</template>
     </el-select>
@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     async load() {
-      console.log("XXX", this.query)
       this.loading = true
       this.items = await api.find(this.type, {
         and: this.query || {}

@@ -1,6 +1,6 @@
 <template>
   <el-timeline>
-    <el-timeline-item v-for="(t,i) in open" :key="i" timestamp="You, Now" placement="top">
+    <el-timeline-item v-for="(t,i) in open" :key="'open-'+i" timestamp="You, Now" placement="top">
       <el-card>
         <el-form>
           <el-form-item>
