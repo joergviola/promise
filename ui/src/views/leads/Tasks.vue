@@ -36,7 +36,7 @@ export default {
     return {
       offer: null,
       offers: [],
-      template: { project_id: this.id, state: 'NEW', type: "DEV", supplier: 'S'  },
+      template: { project_id: this.id, state: 'NEW', type: 'DEV' },
       w: {  },
       type: 'task',
       columns: [

@@ -23,7 +23,7 @@ class Base extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('state'); // LEAD, ESTIMATED, QUOTED, REJECTED, ACCEPTED, STARTED, CLOSED
-            $table->string('source'->nullable());
+            $table->string('source')->nullable();
             $table->string('lost_reason')->nullable();
             $table->string('effort_unit')->nullable();
             $table->date('created_at')->nullable();
@@ -174,6 +174,7 @@ class Base extends Migration
         Schema::dropIfExists('estimation');
         Schema::dropIfExists('task');
         Schema::dropIfExists('position');
+        Schema::dropIfExists('payment');
         Schema::dropIfExists('accounting');
         Schema::dropIfExists('project');
         Schema::dropIfExists('customer');

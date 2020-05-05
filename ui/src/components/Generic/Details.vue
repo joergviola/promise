@@ -57,16 +57,20 @@ export default {
       button.action(this.item)
       if (button.andSave) this.save()
     },
+    async createNewToOnes() {
+      const newToOnes = this.fields
+        .filter(f => f.type === 'to-one' && typeof this.item[f.name] === 'string')
+      // Don't use foreach here - async!
+      for (let i = 0; i < newToOnes.length; i++) {
+        const f = newToOnes[i]
+        const { id } = await api.create(f.ref, { name: this.item[f.name] })
+        this.item[f.name] = id
+      }
+    },
     async save() {
-      console.log('Saving', this.item)
       this.loading = true
       try {
-        this.fields
-          .filter(f => f.type === 'to-one' && typeof this.item[f.name] === 'string')
-          .forEach(async f => {
-            const { id } = await api.create(f.ref, { name: this.item[f.name] })
-            this.item[f.name] = id
-          })
+        await this.createNewToOnes()
         if (this.item.id) {
           await api.update(this.type, this.item.id, this.item)
         } else {
