@@ -24,8 +24,7 @@ export default {
         { name: 'name', label: 'Name', editable: true },
         { name: 'customer.name', label: 'Customer' },
         { name: 'state', label: 'State' },
-        { name: 'planned', label: 'Planned' },
-        { name: 'used', label: 'Used' },
+        { name: 'used', budget: 'planned', label: 'Progress', type: 'progress' },
       ]
     }
   }

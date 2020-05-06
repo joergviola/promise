@@ -18,11 +18,11 @@ export default {
   data() {
     return {
       template: {  },
-      w: { },
+      w: { customer: { one: 'customer' } },
       type: 'users',
       columns: [
         { name: 'name', label: 'Name', editable: true },
-        { name: 'email', label: 'email', editable: true },
+        { name: 'email', label: 'E-mail', editable: true },
       ]
     }
   }

@@ -23,7 +23,6 @@
         :query="field.query"
         @input="id => field.input ? field.input(id) : null"
       />
-
     </el-form-item>
   </div>
 </template>

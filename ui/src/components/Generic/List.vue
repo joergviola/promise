@@ -13,7 +13,7 @@
       <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label">
         <template slot-scope="{row}">
           <el-input v-if="col.editable && !col.type" class="no-border" v-model="row[col.name]" @blur="save(row, col.name)" :placeholder="col.placeholder" />
-          <span v-if="!col.editable">{{typeof col.name === 'string' ? _.get(row, col.name) : col.name(row) }}</span>
+          <span v-if="!col.editable && !col.type">{{typeof col.name === 'string' ? _.get(row, col.name) : col.name(row) }}</span>
           <el-select v-if="col.type=='select'" class="no-border" v-model="row[col.name]" @blur="save(row, col.name)"  :placeholder="col.placeholder">
             <el-option v-for="(o, i) in col.options" :key="i" :label="col.display ? _.get(o, col.display) : o" :value="col.id ? _.get(o, col.id) : o" />
           </el-select>
@@ -26,6 +26,20 @@
             value-format="yyyy-MM-dd"
             @blur="save(row, col.name)"
           />
+          <el-tooltip
+            v-if="col.type=='progress'"
+            class="item"
+            effect="dark"
+            :content="`${row[col.name]} of ${row[col.budget]}`"
+            placement="top-start"
+          >
+            <el-progress
+              :text-inside="true"
+              :stroke-width="24"
+              :percentage="progressValue(row[col.name], row[col.budget])"
+              :status="progressStatus(row[col.name], row[col.budget])"
+            />
+          </el-tooltip>
 
         </template>
       </el-table-column>
@@ -53,8 +67,23 @@ export default {
   data() {
     return {
     }
+  },
+  methods: {
+    progressValue(value, budget) {
+      if (!value) return 0
+      if (!budget) return 100
+      const progress = value / budget
+      return Math.round(100.0 * progress)
+    },
+    progressStatus(value, budget) {
+      if (!value) return 'success'
+      if (!budget) return 'exception'
+      const progress = value / budget
+      if (progress <= 0.8) return 'success'
+      if (progress <= 1.0) return 'warning'
+      return 'exception'
+    }
   }
-
 }
 </script>
 

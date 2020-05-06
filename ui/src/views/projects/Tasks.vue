@@ -35,8 +35,7 @@ export default {
         { name: 'user_id', label: 'Responsible', editable: true, type: 'select', options: this.allocations, display: 'user.name', id: 'user.id', placeholder: 'New member...' },
         { name: 'due_at', label: 'Due', type: 'date', editable: true },
         { name: 'state', label: 'State' },
-        { name: 'planned', label: 'Planned' },
-        { name: 'used', label: 'Used' },
+        { name: 'used', budget: 'planned', label: 'Progress', type: 'progress' },
       ]
     }
   },

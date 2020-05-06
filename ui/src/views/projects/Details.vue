@@ -20,7 +20,7 @@ export default {
       template: { project_id: this.id,  },
       fields: [
         { name: 'name', label: 'Name' },
-        { name: 'description', label: 'Description' },
+        { name: 'description', type: 'textarea', label: 'Description' },
         { name: 'starts_at', type: 'date', label: 'Starts' },
         { name: 'ends_at', type: 'date', label: 'Ends' },
         { name: 'planned', label: 'Planned', disabled: true, postfix: this.item?this.item.effort_unit:'' },
