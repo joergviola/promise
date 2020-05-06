@@ -5,6 +5,7 @@
     :columns="columns"
     :with="w"
     :template="template"
+    :query="query"
     createBy="button"
   />
 </template>
@@ -19,6 +20,7 @@ export default {
   data() {
     return {
       template: { project_id: this.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: "10" },
+      query: { project_id: this.id, type: 'QUOTE' },
       w: { },
       type: 'accounting',
       columns: [

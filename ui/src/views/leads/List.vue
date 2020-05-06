@@ -18,11 +18,26 @@ export default {
   data() {
     return {
       template: { state: 'LEAD' },
-      w: { customer: { one: 'customer', 'this': 'customer_id' }},
+      w: {
+        customer: { one: 'customer', 'this': 'customer_id' },
+        last_offer: {
+          one: 'accounting',
+          this: 'id',
+          that: 'project_id',
+          query: {
+            and: { type: 'QUOTE' },
+            page: {
+              skip: 0,
+              take: 1
+            }
+          }
+        },
+      },
       type: 'project',
       columns: [
         { name: 'name', label: 'Name', editable: true },
         { name: 'customer.name', label: 'Customer', editable: false },
+        { name: 'last_offer.price', label: 'Last Offer', editable: false },
         { name: 'state', label: 'State', editable: true },
       ]
     }

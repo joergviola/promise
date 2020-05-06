@@ -13,7 +13,7 @@
       <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label">
         <template slot-scope="{row}">
           <el-input v-if="col.editable && !col.type" class="no-border" v-model="row[col.name]" @blur="save(row, col.name)" :placeholder="col.placeholder" />
-          <span v-if="!col.editable">{{_.get(row, col.name)}}</span>
+          <span v-if="!col.editable">{{typeof col.name === 'string' ? _.get(row, col.name) : col.name(row) }}</span>
           <el-select v-if="col.type=='select'" class="no-border" v-model="row[col.name]" @blur="save(row, col.name)"  :placeholder="col.placeholder">
             <el-option v-for="(o, i) in col.options" :key="i" :label="col.display ? _.get(o, col.display) : o" :value="col.id ? _.get(o, col.id) : o" />
           </el-select>

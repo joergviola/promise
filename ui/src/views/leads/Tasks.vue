@@ -1,12 +1,5 @@
 <template>
   <div>
-    <el-row>
-      <el-col :span="24">
-        <el-button class="filter-item pull-right" :disabled="selectedTasks.length==0" type="primary" @click="remove(row)">
-          New offer
-        </el-button>
-      </el-col>
-    </el-row>
 
     <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">>
       <el-table-column type="selection" />
@@ -19,7 +12,9 @@
 
       <el-table-column label="Position">
         <template slot-scope="{row}">
-          <el-input class="no-border" v-model="row.position" @blur="save(row, 'position')" />
+          <el-select class="no-border" v-model="row.position" @change="save(row, 'position')" >
+            <el-option v-for="(name, i) in positionNames" :value="name" :key="i" :label="name" />
+          </el-select>
         </template>
       </el-table-column>
 
@@ -28,12 +23,6 @@
       <el-table-column label="Estimation" >
         <template slot-scope="{row}">
           <el-input v-if="row.id" class="no-border" v-model="row.estimation.planned" @blur="saveEstimation(row, 'planned')" placeholder="Your estimation..." />
-        </template>
-      </el-table-column>
-
-      <el-table-column label="Risk">
-        <template slot-scope="{row}">
-          <el-input v-if="row.id" class="no-border" v-model="row.estimation.risk" @blur="saveEstimation(row, 'risk')" placeholder="Risk" />
         </template>
       </el-table-column>
 
@@ -91,6 +80,7 @@ export default {
       },
       loading: false,
       list: [],
+      positionNames: [],
       selectedTasks: [],
     }
   },
@@ -118,7 +108,20 @@ export default {
     handleSelectionChange(val) {
       this.selectedTasks = val.map(v => v.id);
     }
-
+  },
+  async created() {
+    const offers = await api.find('accounting', {
+      and: { project_id: this.id },
+      with: { positions: {many: 'position' } }
+    })
+    this.positionNames = []
+    offers.forEach(offer => {
+      offer.positions.forEach(pos => {
+        if (this.positionNames.indexOf(pos.name) === -1) {
+          this.positionNames.push(pos.name)
+        }
+      })
+    })
   }
 }
 </script>

@@ -100,11 +100,13 @@ class Base extends Migration
             $table->decimal('price')->nullable();
             $table->string('supplier')->nullable();
             $table->string('position')->nullable(); // String reference to offer position
+            $table->integer('position_id')->unsigned()->nullable(); // Accounting position that has been ACCEPTED
 
             $table->foreign('project_id')->references('id')->on('project');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('approved_by')->references('id')->on('users');
             $table->foreign('finished_by')->references('id')->on('users');
+            $table->foreign('position_id')->references('id')->on('position');
             $table->foreign('parent_id')->references('id')->on('task');
         });
 

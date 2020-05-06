@@ -10,6 +10,7 @@
 
 <script>
 import GenericList from '@/components/Generic/List'
+import api from '@/api'
 
 export default {
   name: 'OfferPositionList',
@@ -21,13 +22,15 @@ export default {
       w: { },
       type: 'position',
       columns: [
-        { name: 'comment', label: 'Comment', editable: true, placeholder: "New Position..." },
+        { name: 'no', label: 'No', editable: true},
+        { name: 'name', label: 'Name', editable: true, placeholder: "New Position..." },
+        { name: 'comment', label: 'Comment', editable: true },
         { name: 'planned', label: 'Effort', editable: false },
         { name: 'price', label: 'Price', editable: false },
-      ]
+      ],
+      planned: {}
     }
   }
-
 }
 </script>
 

@@ -31,13 +31,13 @@ export default {
     return {
       item: null,
       image: image,
-      template: { project_id: this.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: 10 },
+      template: { project_id: this.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: 0 },
       fields: [
         { name: 'name', label: 'Name' },
         { name: 'price', disabled: true, label: 'Price', postfix: 'EUR' },
         { name: 'pricePerUnit', label: 'Rate', postfix: '/ h' },
         { name: 'percentBuffer', label: 'Buffer', postfix: '%' },
-        { name: 'rounding', label: 'Rounding', type: 'select', options: ['0','1','10','100','1000' ] },
+        { name: 'rounding', label: 'Rounding', type: 'select', options: ['0','1','2','3','-1', '-2' ] },
         { name: 'state', disabled: true, label: 'State' },
       ],
       allButtons: [
