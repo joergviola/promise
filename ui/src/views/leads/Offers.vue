@@ -1,7 +1,7 @@
 <template>
   <generic-list
     type="accounting"
-    :detail="id+'/offer'"
+    :detail="'offer'"
     :columns="columns"
     :with="w"
     :template="template"

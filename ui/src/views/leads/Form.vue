@@ -1,17 +1,16 @@
 <template>
   <div class="components-container">
-
     <el-tabs v-model="activeTab">
       <el-tab-pane key="1" label="Details" name="1">
-        <lead-details />
+        <lead-details/>
       </el-tab-pane>
-      <el-tab-pane key="2" label="Timeline" name="2">
+      <el-tab-pane lazy key="2" label="Timeline" name="2">
         <lead-timeline :id="$route.params.id" />
       </el-tab-pane>
-      <el-tab-pane key="3" label="Tasks" name="3">
+      <el-tab-pane lazy key="3" label="Tasks" name="3">
         <lead-tasks :id="$route.params.id" />
       </el-tab-pane>
-      <el-tab-pane key="4" label="Offers" name="4">
+      <el-tab-pane lazy key="4" label="Offers" name="4">
         <lead-offers :id="$route.params.id" />
       </el-tab-pane>
     </el-tabs>

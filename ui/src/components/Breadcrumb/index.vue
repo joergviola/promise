@@ -2,7 +2,7 @@
   <el-breadcrumb class="app-breadcrumb" separator="/">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">
-        <span v-if="item.redirect==='noRedirect'||index==levelList.length-1" class="no-redirect">{{ item.name }}</span>
+        <span v-if="item.redirect==='noRedirect'||index==levelList.length-1" class="no-redirect">{{ item.meta.title }}</span>
         <a v-else @click.prevent="handleLink(item)">{{ item.meta.title }}</a>
       </el-breadcrumb-item>
     </transition-group>
@@ -52,8 +52,10 @@ export default {
       return toPath(params)
     },
     handleLink(item) {
-      const { redirect, path } = item
+      let { redirect, path } = item
       if (redirect) {
+        // This is preliminary: relative Links always assumed relative to parent...
+        if (!redirect.startsWith('/')) redirect = '../../' + redirect
         this.$router.push(redirect)
         return
       }
@@ -70,8 +72,12 @@ export default {
   line-height: 50px;
   margin-left: 8px;
 
-  .no-redirect {
+  a {
     color: #97a8be;
+  }
+
+  .no-redirect {
+    font-weight: bold;
     cursor: text;
   }
 }

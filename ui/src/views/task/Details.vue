@@ -52,6 +52,12 @@ export default {
       ]
     }
   },
+  watch: {
+    item() {
+      this.$route.matched[2].meta.title = this.item.name
+      this.$emit('update', this.item)
+    }
+  },
   methods: {
     update(item) {
       this.item = item

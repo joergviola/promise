@@ -35,6 +35,12 @@ export default {
       ]
     }
   },
+  watch: {
+    item() {
+      this.$route.matched[1].meta.title = this.item.name
+      this.$emit('update', this.item)
+    }
+  },
   computed: {
     buttons() {
       const workflow = {
@@ -45,7 +51,6 @@ export default {
       }
       if (!this.item) return []
       const valid = workflow[this.item.state]
-      console.log(valid)
       return this.allButtons.filter(b => valid.indexOf(b.label)!=-1)
     }
   },

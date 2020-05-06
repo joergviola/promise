@@ -2,7 +2,7 @@
   <div class="app-container">
     <div v-if="createBy=='button'" class="filter-container">
       <el-col :span="24" type="flex" align="right">
-        <el-button class="filter-item pull-right" style="margin-right: 10px;" type="primary" icon="el-icon-edit" @click="$router.push(detail + '/new')">
+        <el-button class="filter-item pull-right" style="margin-right: 10px;" type="primary" icon="el-icon-edit" @click="$router.push(detail + '/new/detail')">
           Add
         </el-button>
       </el-col>
@@ -32,8 +32,7 @@
 
       <el-table-column align="right" label="Actions" fixed="right">
         <template slot-scope="{row}">
-          <el-button v-if="row.id && detail" class="filter-item pull-right" type="primary" icon="el-icon-edit" @click="$router.push(detail+'/'+row.id)">
-          </el-button>
+          <el-button v-if="row.id && detail" class="filter-item pull-right" type="primary" icon="el-icon-edit" @click="$router.push(`${detail}/${row.id}/detail`)" />
           <el-button v-if="row.id" class="filter-item pull-right" type="danger" icon="el-icon-remove" @click="remove(row)">
           </el-button>
           <el-button v-if="!row.id" class="filter-item pull-right" type="primary" icon="el-icon-plus" @click="create(row)">

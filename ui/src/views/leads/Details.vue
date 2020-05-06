@@ -30,6 +30,12 @@ export default {
       ]
     }
   },
+  watch: {
+    item() {
+      this.$route.matched[1].meta.title = this.item.name
+      this.$emit('update', this.item)
+    }
+  },
   computed: {
     fields() {
       return [

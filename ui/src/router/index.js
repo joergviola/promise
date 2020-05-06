@@ -144,22 +144,33 @@ export const asyncRoutes = [
         path: 'all',
         component: () => import('@/views/leads/List'),
         name: 'All',
-        meta: { title: 'Leads' }
+        hidden: true,
+        meta: { title: 'All' }
       },
       {
         path: 'lead/:id',
-        component: () => import('@/views/leads/Form'),
+        component: () => import('@/views/leads/Layout'),
         hidden: true,
         name: 'Lead',
-        meta: { title: 'Lead' }
+        meta: { title: 'Lead' },
+        redirect: 'detail',
+        children: [
+          {
+            path: 'detail',
+            component: () => import('@/views/leads/Form'),
+            hidden: true,
+            name: 'Detail',
+            meta: { title: 'Detail', breadcrumb: false },
+          },
+          {
+            path: 'offer/:oid/detail',
+            component: () => import('@/views/offer/Form'),
+            hidden: true,
+            name: 'Offer',
+            meta: { title: 'Offer' }
+          }
+            ]
       },
-      {
-        path: 'lead/:id/offer/:oid',
-        component: () => import('@/views/offer/Form'),
-        hidden: true,
-        name: 'Offer',
-        meta: { title: 'Offer' }
-      }
     ]
   },
   {
@@ -176,26 +187,37 @@ export const asyncRoutes = [
         path: 'all',
         component: () => import('@/views/projects/List'),
         name: 'All',
-        meta: { title: 'Projects' }
+        hidden: true,
+        meta: { title: 'All' }
       },
       {
         path: 'project/:id',
-        component: () => import('@/views/projects/Form'),
+        component: () => import('@/views/projects/Layout'),
         hidden: true,
         name: 'Project',
-        meta: { title: 'Project' }
-      },
-      {
-        path: 'project/:id/task/:tid',
-        component: () => import('@/views/task/Form'),
-        hidden: true,
-        name: 'Task',
-        meta: { title: 'Task' }
+        meta: { title: 'Project' },
+        redirect: 'detail',
+        children: [
+          {
+            path: 'detail',
+            component: () => import('@/views/projects/Form'),
+            hidden: true,
+            name: 'Detail',
+            meta: { title: 'Detail', breadcrumb: false },
+          },
+          {
+            path: 'task/:tid/detail',
+            component: () => import('@/views/task/Form'),
+            hidden: true,
+            name: 'Task',
+            meta: { title: 'Task' }
+          }
+        ]
       }
     ]
   },
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  //{ path: '*', redirect: '/404', hidden: true }
 ]
 
 const createRouter = () => new Router({

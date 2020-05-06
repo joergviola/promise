@@ -2,7 +2,7 @@
   <div>
     <generic-list
       type="task"
-      :detail="'/projects/project/'+id+'/task'"
+      detail="task"
       :columns="columns"
       :with="w"
       :template="template"
