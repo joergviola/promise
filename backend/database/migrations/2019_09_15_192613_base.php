@@ -60,6 +60,7 @@ class Base extends Migration
 
         StandardTable::create('position', 'Project quote or invoice position.', function (Blueprint $table) {
             $table->integer('no')->unsigned()->nullable();
+            $table->text('name')->nullable(); // String reference
             $table->text('comment')->nullable();
             $table->integer('accounting_id')->unsigned();
             $table->decimal('planned')->nullable();
@@ -98,6 +99,7 @@ class Base extends Migration
             $table->boolean('purchased')->default(false);
             $table->decimal('price')->nullable();
             $table->string('supplier')->nullable();
+            $table->string('position')->nullable(); // String reference to offer position
 
             $table->foreign('project_id')->references('id')->on('project');
             $table->foreign('user_id')->references('id')->on('users');
@@ -110,7 +112,6 @@ class Base extends Migration
             $table->integer('project_id')->unsigned();
             $table->integer('task_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->integer('position_id')->unsigned()->nullable();
             $table->decimal('planned')->nullable();
             $table->decimal('risk')->nullable();
             $table->text('comment')->nullable();
@@ -118,7 +119,6 @@ class Base extends Migration
             $table->foreign('project_id')->references('id')->on('project');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('task_id')->references('id')->on('task');
-            $table->foreign('position_id')->references('id')->on('position');
         });
 
         StandardTable::create('action', 'Project action.', function (Blueprint $table) {

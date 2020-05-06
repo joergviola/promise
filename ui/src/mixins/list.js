@@ -8,19 +8,33 @@ export default {
       loading: true,
     }
   },
+  computed: {
+    meta() {
+      const result = Object.assign({}, this.with)
+      for (var key in result) {
+        result[key].ignore = true
+      }
+      return result
+    }
+  },
   created() {
     this.getList()
   },
   methods: {
+    addNew() {
+      if (this.createBy !== 'button') {
+        const item = Object.assign({}, this.template)
+        item._meta = this.meta
+        this.list.push(item)
+      }
+    },
     async getList() {
       this.loading = true
       this.list = await api.find(this.type, {
         and: this.query || this.template,
         with: this.with
       })
-      if (this.createBy !== 'button') {
-        this.list.push(Object.assign({}, this.template))
-      }
+      this.addNew()
       this.loading = false
     },
     async save(row, attr) {
@@ -33,9 +47,7 @@ export default {
       try {
         const result = await api.create(this.type, row)
         row.id = result.id
-        if (this.createBy !== 'button') {
-          this.list.push(Object.assign({}, this.template))
-        }
+        this.addNew()
       } catch (error) {
         this.$notify({
           title: 'Error',
