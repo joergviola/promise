@@ -8,7 +8,7 @@ use App\Events\ApiAfterUpdateEvent;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Update used on task and project
+ * Update planned on task, project, position and price on position and accounting
  */
 class EstimationEventSubscriber
 {
