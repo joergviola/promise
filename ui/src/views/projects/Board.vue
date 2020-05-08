@@ -1,8 +1,11 @@
 <template>
   <div class="components-container board">
-    <Kanban :key="1" :list="list1" :group="group" class="kanban" header-text="Todo" />
-    <Kanban :key="2" :list="list2" :group="group" class="kanban" header-text="Working" />
-    <Kanban :key="3" :list="list3" :group="group" class="kanban" header-text="Done" />
+    <Kanban :key="0" :list="tasks" state="NEW" :group="group" class="kanban" header-text="Unapproved" />
+    <Kanban :key="1" :list="tasks" state="APPROVED" :group="group" class="kanban" header-text="Backlog" />
+    <Kanban :key="2" :list="tasks" state="PLANNED" :group="group" class="kanban" header-text="Sprint" />
+    <Kanban :key="3" :list="tasks" state="STARTED" :group="group" class="kanban" header-text="Today" />
+    <Kanban :key="4" :list="tasks" state="IMPLEMENTED" :group="group" class="kanban" header-text="Ready" />
+    <Kanban :key="5" :list="tasks" state="TESTED" :group="group" class="kanban" header-text="Tested" />
   </div>
 </template>
 
@@ -18,6 +21,7 @@ export default {
   data() {
     return {
       group: 'mission',
+      tasks: [],
       list1: [
         { name: 'Mission', id: 1 },
         { name: 'Mission', id: 2 },
@@ -34,40 +38,32 @@ export default {
         { name: 'Mission', id: 9 },
         { name: 'Mission', id: 10 }
       ],
-
-      template: {project_id: this.id, type: 'SALES', state: 'APPROVED', supplier: 'S'},
-      open: [],
-      closed: [],
-      loading: null
+      loading: false
     }
   },
   computed: {
     ...mapGetters([
       'user'
-    ])
+    ]),
+    backlog() {return this.tasks.filter(t => t.state == 'APPROVED')}
   },
   async created() {
     this.reload()
   },
   methods: {
     async reload() {
-      const tasks = await api.find('task', {
+      this.tasks = await api.find('task', {
         and: {
           project_id: this.id,
-          type: 'SALES'
+          type: 'DEV'
         },
         with: {
-          finished: { one: 'users', this: 'finished_by' }
+          user: { one: 'users', this: 'user_id' }
         },
         order: {
           finished_at: 'DESC'
         }
       })
-      this.closed = tasks.filter(t => t.state === 'CLOSED')
-      this.open = tasks.filter(t => t.state !== 'CLOSED')
-      if (this.open.length === 0) {
-        this.open.push(this.template)
-      }
     },
     close(task) {
       task.state = 'CLOSED'

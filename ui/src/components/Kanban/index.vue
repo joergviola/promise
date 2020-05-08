@@ -4,12 +4,13 @@
       {{ headerText }}
     </div>
     <draggable
-      :list="list"
+      :list="items"
       v-bind="$attrs"
       class="board-column-content"
       :set-data="setData"
+      @change="onChange"
     >
-      <div v-for="element in list" :key="element.id" class="board-item">
+      <div v-for="element in items" :key="element.id" class="board-item">
         {{ element.name }} {{ element.id }}
       </div>
     </draggable>
@@ -18,6 +19,7 @@
 
 <script>
 import draggable from 'vuedraggable'
+import api from '@/api'
 
 export default {
   name: 'DragKanbanDemo',
@@ -40,13 +42,27 @@ export default {
       default() {
         return []
       }
+    },
+    state: {
+      type: String,
+      default: null
     }
+  },
+  computed: {
+    items() {return this.list.filter(t => t.state === this.state)}
   },
   methods: {
     setData(dataTransfer) {
       // to avoid Firefox bug
       // Detail see : https://github.com/RubaXa/Sortable/issues/1012
       dataTransfer.setData('Text', '')
+    },
+    onChange(event) {
+      if (!event.added) return
+      console.log('XXX', event)
+      const task = event.added.element
+      task.state = this.state
+      api.update('task', task.id, { state: task.state })
     }
   }
 }
