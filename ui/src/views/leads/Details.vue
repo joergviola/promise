@@ -27,7 +27,8 @@ export default {
       buttons: [
         {label: 'Accepted', action: item => item.state='ACCEPTED', andSave: true },
         {label: 'Rejected', action: item => item.state='REJECTED', andSave: true }
-      ]
+      ],
+      contactQuery: {}
     }
   },
   watch: {
@@ -45,7 +46,15 @@ export default {
         { name: 'effort_unit', label: 'Effort unit', type: 'select', options: ['Hours', 'Points', 'Euro', '' ] },
         { name: 'lost_reason', label: 'Lost reason' },
         { name: 'customer_id', label: 'Customer', type: 'to-one', ref: 'customer', display: 'name', input: id => this.contactQuery = {customer_id: id}, link: '/customer' },
-        { name: 'contact_id', label: 'Contact', type: 'to-one', ref: 'users', display: 'name', query: this.contactQuery, link: '/customer' },
+        {
+          name: 'contact_id',
+          label: 'Contact',
+          type: 'to-one',
+          ref: 'users',
+          display: 'name',
+          query: this.contactQuery,
+          create: name => ({ name: name, customer_id: this.contactQuery.customer_id }),
+          link: '/customer' },
       ]
     }
   }

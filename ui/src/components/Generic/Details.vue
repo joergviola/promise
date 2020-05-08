@@ -63,7 +63,9 @@ export default {
       // Don't use foreach here - async!
       for (let i = 0; i < newToOnes.length; i++) {
         const f = newToOnes[i]
-        const { id } = await api.create(f.ref, { name: this.item[f.name] })
+        const data = f.create ? f.create(this.item[f.name]) : { name: this.item[f.name] }
+        const { id } = await api.create(f.ref, data)
+        if (f.input) f.input(id)
         this.item[f.name] = id
       }
     },

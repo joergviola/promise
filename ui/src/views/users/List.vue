@@ -23,6 +23,7 @@ export default {
       columns: [
         { name: 'name', label: 'Name', editable: true },
         { name: 'email', label: 'E-mail', editable: true },
+        { name: 'customer.name', label: 'Company' },
       ]
     }
   }
