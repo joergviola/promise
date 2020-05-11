@@ -31,7 +31,7 @@ export default {
     return {
       item: null,
       image: image,
-      template: { project_id: this.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: 0 },
+      template: { project_id: this.id, name: 'Quote of ' + (new Date().toLocaleDateString()), type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: 0 },
       fields: [
         { name: 'name', label: 'Name' },
         { name: 'price', disabled: true, label: 'Price', postfix: 'EUR' },

@@ -93,14 +93,12 @@
 
 <script>
 
-import GenericDetails from '@/components/Generic/Details'
-import ToOne from '@/components/Generic/ToOne'
 import image from '@/assets/images/undraw_unboxing_pbmf.svg'
 import api from '@/api'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'LeadDetails',
-  components: { GenericDetails, ToOne },
   props: {},
   data() {
     return {
@@ -111,18 +109,7 @@ export default {
       customers: [],
       showContact: false,
       contacts: [],
-
-      template: {
-        state: 'LEAD',
-        effort_unit: 'Hours',
-        template: false,
-      },
-      image: image,
-      buttons: [
-        {label: 'Accepted', action: item => item.state='ACCEPTED', andSave: true },
-        {label: 'Rejected', action: item => item.state='REJECTED', andSave: true }
-      ],
-      contactQuery: {}
+      image: image
     }
   },
   watch: {
@@ -132,32 +119,9 @@ export default {
     }
   },
   computed: {
-    fields() {
-      return [
-        { name: 'name', label: 'Name' },
-        { name: 'description', label: 'Description' },
-        { name: 'source', label: 'Source', type: 'select', options: ['Web', 'Phone', 'Chat', '???' ] },
-        { name: 'effort_unit', label: 'Effort unit', type: 'select', options: ['Hours', 'Points', 'Euro', '' ] },
-        { name: 'lost_reason', label: 'Lost reason' },
-        { name: 'customer_id', label: 'Customer', type: 'to-one', ref: 'customer', display: 'name', input: id => this.contactQuery = {customer_id: id}, link: '/customer' },
-        {
-          name: 'contact_id',
-          label: 'Contact',
-          type: 'to-one',
-          ref: 'users',
-          display: 'name',
-          query: this.contactQuery,
-          create: name => ({ name: name, customer_id: this.contactQuery.customer_id }),
-          link: '/customer' },
-      ]
-    },
-    customer_fields() {
-      return [
-        { name: 'name', label: 'Name' },
-        { name: 'email', label: 'E-Mail' },
-        { name: 'phone', label: 'Phone' },
-      ]
-    }
+    ...mapGetters([
+      'user'
+    ])
   },
   methods: {
     async customerChanged() {
@@ -181,6 +145,8 @@ export default {
         this.item.state = state
       }
 
+      const newLead = !this.item.id
+
       await api.createOrUpdate('customer', this.item.customer)
       this.item.customer_id = this.item.customer.id
       this.item.contact.user.customer_id = this.item.customer.id
@@ -192,6 +158,25 @@ export default {
       this.item.contact.user_id = this.item.contact.user.id
 
       await api.createOrUpdate('allocation', this.item.contact)
+
+      if (newLead) {
+        await api.createOrUpdate('allocation', {
+          project_id: this.item.id,
+          type: 'PROJECT',
+          role: 'Sales',
+          user_id: this.user.id
+        })
+
+        await api.createOrUpdate('accounting', {
+          project_id: this.item.id,
+          name: 'Quote of ' + (new Date().toLocaleDateString()),
+          type: 'QUOTE',
+          state: 'NEW',
+          pricePerUnit: 100,
+          percentBuffer: 15,
+          rounding: 0
+        })
+      }
 
       this.customers = await api.find('customer', {})
       this.customerChanged()

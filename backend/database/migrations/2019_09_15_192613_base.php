@@ -31,13 +31,11 @@ class Base extends Migration
             $table->date('starts_at')->nullable();
             $table->date('ends_at')->nullable();
             $table->integer('customer_id')->unsigned();
-            $table->integer('contact_id')->unsigned();
             $table->decimal('planned')->nullable();
             $table->decimal('used')->nullable();
             $table->boolean('template')->default(false);
 
             $table->foreign('customer_id')->references('id')->on('customer');
-            $table->foreign('contact_id')->references('id')->on('users');
         });
 
         StandardTable::create('accounting', 'Project quote or invoice.', function (Blueprint $table) {

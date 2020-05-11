@@ -6,6 +6,7 @@
     :with="w"
     :template="template"
     createBy="button"
+    :allow-delete=false
   />
 </template>
 

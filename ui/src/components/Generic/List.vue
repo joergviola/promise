@@ -47,7 +47,7 @@
       <el-table-column align="right" label="Actions" fixed="right">
         <template slot-scope="{row}">
           <el-button v-if="row.id && detail" class="filter-item pull-right" type="primary" icon="el-icon-edit" @click="$router.push(`${detail}/${row.id}/detail`)" />
-          <el-button v-if="row.id" class="filter-item pull-right" type="danger" icon="el-icon-remove" @click="remove(row)">
+          <el-button v-if="row.id && allowDelete" class="filter-item pull-right" type="danger" icon="el-icon-remove" @click="remove(row)">
           </el-button>
           <el-button v-if="!row.id" class="filter-item pull-right" type="primary" icon="el-icon-plus" @click="create(row)">
           </el-button>
@@ -63,7 +63,7 @@ import list from '@/mixins/list'
 export default {
   name: 'GenericList',
   mixins: [list],
-  props: ['type', 'detail', 'columns', 'with', 'query', 'template', 'createBy'],
+  props: ['type', 'detail', 'columns', 'with', 'query', 'template', 'createBy', 'allowDelete'],
   data() {
     return {
     }
