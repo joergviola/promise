@@ -1,6 +1,93 @@
 <template>
   <div class="components-container">
-    <generic-details type="project" :id="$route.params.id" :fields="fields" :buttons="buttons" :template="template" :image="image" @update="i => item=i"/>
+    <el-row :gutter="20">
+      <el-col :span="12">
+        <h3>Lead</h3>
+        <el-form label-position="left" label-width="120px" >
+          <el-form-item label="Name">
+            <el-input v-model="item.name" type="text" />
+          </el-form-item>
+          <el-form-item label="Description">
+            <el-input v-model="item.description" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" />
+          </el-form-item>
+          <el-form-item label="Source">
+            <el-select v-model="item.source">
+              <el-option v-for="(o, i) in sources" :key="i" :label="o" :value="o" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Effort unit">
+            <el-select v-model="item.effort_unit">
+              <el-option v-for="(o, i) in units" :key="i" :label="o" :value="o" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Lost reason">
+            <el-input v-model="item.lost_reason" type="text" />
+          </el-form-item>
+          <el-form-item label="Customer">
+            <el-select v-model="item.customer_id" @change="customerChanged" placeholder="New ...">
+              <el-option v-for="(o, i) in customers" :key="i" :label="o.name" :value="o.id" />
+            </el-select>
+            <el-button class="default" @click="showCustomer=!showCustomer">
+              Details
+              <i v-show="!showCustomer" class="el-icon-arrow-right"></i>
+              <i v-show="showCustomer" class="el-icon-arrow-down"></i>
+            </el-button>
+          </el-form-item>
+          <el-collapse-transition>
+            <el-card v-show="showCustomer">
+              <el-form-item label="Name">
+                <el-input v-model="item.customer.name" type="text" />
+              </el-form-item>
+              <el-form-item label="E-Mail">
+                <el-input v-model="item.customer.email" type="text" />
+              </el-form-item>
+              <el-form-item label="Phone">
+                <el-input v-model="item.customer.phone" type="text" />
+              </el-form-item>
+              <el-form-item label="Website">
+                <el-input v-model="item.customer.website" type="text" />
+              </el-form-item>
+            </el-card>
+          </el-collapse-transition>
+          <el-form-item label="Contact">
+            <el-select v-model="item.contact.user_id" @change="contactChanged" placeholder="New ...">
+              <el-option v-for="(o, i) in contacts" :key="i" :label="o.name" :value="o.id" />
+            </el-select>
+            <el-button class="default" @click="showContact=!showContact">
+              Details
+              <i v-show="!showContact" class="el-icon-arrow-right"></i>
+              <i v-show="showContact" class="el-icon-arrow-down"></i>
+            </el-button>
+          </el-form-item>
+          <el-collapse-transition>
+            <el-card v-show="showContact">
+              <el-form-item label="Name">
+                <el-input v-model="item.contact.user.name" type="text" />
+              </el-form-item>
+              <el-form-item label="E-Mail">
+                <el-input v-model="item.contact.user.email" type="text" />
+              </el-form-item>
+              <el-form-item label="Phone">
+                <el-input v-model="item.contact.user.phone" type="text" />
+              </el-form-item>
+            </el-card>
+          </el-collapse-transition>
+        </el-form>
+      </el-col>
+      <el-col :span=12>
+        <img width="100%" :src="image">
+      </el-col>
+    </el-row>
+    <el-row type="flex">
+      <el-col :span="24">
+        <el-button type="secondary" @click="$router.go(-1)">
+          Cancel
+        </el-button>
+        <el-button type="success" @click="save('ACCEPTED')">Accepted</el-button>
+        <el-button type="danger" @click="save('REJECTED')">Rejected</el-button>
+        <el-button type="primary" @click="save()">Save</el-button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -17,7 +104,14 @@ export default {
   props: {},
   data() {
     return {
-      item: {},
+      item: { customer: {}, contact: { user: {} } },
+      sources: ['Web', 'Phone', 'Chat', '???'],
+      units: ['Hours', 'Points', 'Euro', ''],
+      showCustomer: false,
+      customers: [],
+      showContact: false,
+      contacts: [],
+
       template: {
         state: 'LEAD',
         effort_unit: 'Hours',
@@ -56,8 +150,106 @@ export default {
           create: name => ({ name: name, customer_id: this.contactQuery.customer_id }),
           link: '/customer' },
       ]
+    },
+    customer_fields() {
+      return [
+        { name: 'name', label: 'Name' },
+        { name: 'email', label: 'E-Mail' },
+        { name: 'phone', label: 'Phone' },
+      ]
+    }
+  },
+  methods: {
+    async customerChanged() {
+      this.item.customer = this.customers.find(c => c.id == this.item.customer_id)
+      this.contacts = await api.find('users', {
+        and: { customer_id: this.item.customer_id }
+      })
+      if (this.contacts.length > 0) {
+        this.item.contact.user = this.contacts[0]
+        this.item.contact.user_id = this.contacts[0].id
+      } else {
+        this.item.contact.user = {}
+        this.item.contact.user_id = null
+      }
+    },
+    async contactChanged() {
+      this.item.contact = this.contacts.find(c => c.id == this.item.contact.user_id)
+    },
+    async save(state = null) {
+      if (state) {
+        this.item.state = state
+      }
+
+      await api.createOrUpdate('customer', this.item.customer)
+      this.item.customer_id = this.item.customer.id
+      this.item.contact.user.customer_id = this.item.customer.id
+
+      await api.createOrUpdate('project', this.item)
+      this.item.contact.project_id = this.item.id
+
+      await api.createOrUpdate('users', this.item.contact.user)
+      this.item.contact.user_id = this.item.contact.user.id
+
+      await api.createOrUpdate('allocation', this.item.contact)
+
+      this.customers = await api.find('customer', {})
+      this.customerChanged()
+    }
+  },
+  async mounted() {
+    const id = this.$route.params.id
+    this.customers = await api.find('customer', {})
+    if (id === 'new') {
+      this.item = {
+        contact_id: 1, // DROP THAT
+        state: 'LEAD',
+        effort_unit: 'Hours',
+        template: false,
+        customer: {},
+        contact: {
+          type: 'PROJECT',
+          role: 'Customer',
+          user: {},
+          _meta: {
+            user: { ignore: true },
+          }
+        },
+        _meta: {
+          customer: { ignore: true },
+          contact: { ignore: true },
+        }
+      }
+      this.showCustomer = true
+      this.showContact = true
+
+    } else {
+      this.item = await api.findFirst('project', {
+        and: { id: id },
+        with: {
+          customer: { one: 'customer' },
+          contact: {
+            one: 'allocation',
+            this: 'id',
+            that: 'project_id',
+            query: {
+              and: { role: 'Customer' },
+              with: {
+                user: { one: 'users', this: 'user_id' }
+              }
+            },
+          }
+        }
+      })
+      if (!this.item.contact) this.item.contact = {
+        type: 'PROJECT',
+        role: 'Customer',
+        _meta: { user: { ignore: true } }
+      }
+      this.customerChanged()
     }
   }
+
 }
 </script>
 

@@ -81,6 +81,11 @@ const theAPI = {
   find: function(type, query) {
     return call('POST', '/' + type + '/query', query)
   },
+  findFirst: async function(type, query) {
+    const result = await this.find(type, query)
+    if (result.length === 0) return null
+    return result[0]
+  },
   get: function(type, id) {
     return call('GET', '/' + type + '/' + id)
   },
@@ -89,6 +94,14 @@ const theAPI = {
   },
   update: function(type, id, item) {
     return call('PUT', '/' + type + '/' + id, item)
+  },
+  createOrUpdate: async function(type, item) {
+    if (item.id) {
+      await this.update(type, item.id, item)
+    } else {
+      const result = await this.create(type, item)
+      item.id = result.id
+    }
   },
   delete: function(type, id) {
     return call('DELETE', '/' + type + '/' + id)
