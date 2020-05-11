@@ -20,7 +20,7 @@ export default {
     return {
       template: { state: 'LEAD' },
       w: {
-        customer: { one: 'customer', 'this': 'customer_id' },
+        customer: { one: 'organisation', 'this': 'customer_id' },
         last_offer: {
           one: 'accounting',
           this: 'id',

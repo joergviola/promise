@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       template: { state: 'ACCEPTED' },
-      w: { customer: { one: 'customer', 'this': 'customer_id' }},
+      w: { customer: { one: 'organisation', 'this': 'customer_id' }},
       type: 'project',
       columns: [
         { name: 'name', label: 'Name', editable: true },

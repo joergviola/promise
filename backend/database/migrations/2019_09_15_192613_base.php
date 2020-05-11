@@ -11,7 +11,7 @@ class Base extends Migration
 
     public function up()
     {
-        StandardTable::create('customer', 'Customer', function (Blueprint $table) {
+        StandardTable::create('organisation', 'Organisation', function (Blueprint $table) {
             $table->string('name');
             $table->text('address')->nullable();
             $table->string('website')->nullable();
@@ -35,7 +35,7 @@ class Base extends Migration
             $table->decimal('used')->nullable();
             $table->boolean('template')->default(false);
 
-            $table->foreign('customer_id')->references('id')->on('customer');
+            $table->foreign('customer_id')->references('id')->on('organisation');
         });
 
         StandardTable::create('accounting', 'Project quote or invoice.', function (Blueprint $table) {
@@ -151,21 +151,21 @@ class Base extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('customer_id')->unsigned()->nullable();
+            $table->integer('organisation_id')->unsigned()->nullable();
             $table->text('address')->nullable();
             $table->string('phone')->nullable();
             $table->integer('parttime')->unsigned()->nullable(); // in %
             $table->decimal('salary')->nullable();
 
-            $table->foreign('customer_id')->references('id')->on('customer');
+            $table->foreign('organisation_id')->references('id')->on('organisation');
         });
     }
 
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign('users_customer_id_foreign');
-            $table->dropColumn('customer_id');
+            $table->dropForeign('users_organisation_id_foreign');
+            $table->dropColumn('organisation_id');
             $table->dropColumn('address');
             $table->dropColumn('phone');
         });
@@ -177,6 +177,6 @@ class Base extends Migration
         Schema::dropIfExists('payment');
         Schema::dropIfExists('accounting');
         Schema::dropIfExists('project');
-        Schema::dropIfExists('customer');
+        Schema::dropIfExists('organisation');
     }
 }

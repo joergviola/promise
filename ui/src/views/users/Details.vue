@@ -106,15 +106,6 @@ export default {
       }
     }
   },
-  watch: {
-    async customer() {
-      this.item.customer_id = this.customer.id
-      this.contacts = await api.find('users', {and:{customer_id:this.customer.id}})
-    },
-    contact() {
-      this.item.contact_id = this.contact.id
-    },
-  },
   async created() {
     const id = this.$route.params.id
     if (id != 'new') {

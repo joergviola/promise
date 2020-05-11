@@ -127,7 +127,7 @@ export default {
     async customerChanged() {
       this.item.customer = this.customers.find(c => c.id == this.item.customer_id)
       this.contacts = await api.find('users', {
-        and: { customer_id: this.item.customer_id }
+        and: { organisation_id: this.item.customer_id }
       })
       if (this.contacts.length > 0) {
         this.item.contact.user = this.contacts[0]
@@ -147,9 +147,9 @@ export default {
 
       const newLead = !this.item.id
 
-      await api.createOrUpdate('customer', this.item.customer)
+      await api.createOrUpdate('organisation', this.item.customer)
       this.item.customer_id = this.item.customer.id
-      this.item.contact.user.customer_id = this.item.customer.id
+      this.item.contact.user.organisation_id = this.item.customer.id
 
       await api.createOrUpdate('project', this.item)
       this.item.contact.project_id = this.item.id
@@ -178,16 +178,15 @@ export default {
         })
       }
 
-      this.customers = await api.find('customer', {})
+      this.customers = await api.find('organisation', {})
       this.customerChanged()
     }
   },
   async mounted() {
     const id = this.$route.params.id
-    this.customers = await api.find('customer', {})
+    this.customers = await api.find('organisation', {})
     if (id === 'new') {
       this.item = {
-        contact_id: 1, // DROP THAT
         state: 'LEAD',
         effort_unit: 'Hours',
         template: false,
@@ -212,7 +211,7 @@ export default {
       this.item = await api.findFirst('project', {
         and: { id: id },
         with: {
-          customer: { one: 'customer' },
+          customer: { one: 'organisation', this: 'customer_id' },
           contact: {
             one: 'allocation',
             this: 'id',
