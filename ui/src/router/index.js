@@ -122,7 +122,7 @@ export const asyncRoutes = [
         meta: { title: 'Users', icon: 'people' }
       },
       {
-        path: ':id',
+        path: ':id/detail',
         component: () => import('@/views/users/Form'),
         hidden: true,
         name: 'User',

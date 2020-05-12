@@ -8,9 +8,10 @@
 
 import GenericDetails from '@/components/Generic/Details'
 import image from '@/assets/images/undraw_people_tax5.svg'
+import api from '@/api'
 
 export default {
-  name: 'LeadForm',
+  name: 'UserForm',
   components: { GenericDetails },
   data() {
     return {
@@ -18,9 +19,12 @@ export default {
       fields: [
         { name: 'name', label: 'Name' },
         { name: 'email', label: 'E-Mail' },
-      ]
+        { name: 'phone', label: 'Phone' },
+        { name: 'role_id', label: 'Role', type: 'to-one', ref: 'role', display: 'name'},
+        { name: 'organisation_id', label: 'Organsisation', type: 'to-one', ref: 'organisation', display: 'name' },
+      ],
     }
-  }
+  },
 }
 </script>
 
