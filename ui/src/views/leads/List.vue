@@ -1,13 +1,15 @@
 <template>
-  <generic-list
-    type="project"
-    detail="/leads/lead"
-    :columns="columns"
-    :with="w"
-    :template="template"
-    createBy="button"
-    :allow-delete=false
-  />
+  <div class="components-container">
+    <generic-list
+      type="project"
+      detail="/leads/lead"
+      :columns="columns"
+      :with="w"
+      :template="template"
+      createBy="button"
+      :allow-delete=false
+    />
+  </div>
 </template>
 
 <script>

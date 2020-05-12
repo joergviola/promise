@@ -1,12 +1,14 @@
 <template>
-  <generic-list
-    type="project"
-    detail="/projects/project"
-    :columns="columns"
-    :with="w"
-    :template="template"
-    createBy="button"
-  />
+  <div class="components-container">
+    <generic-list
+      type="project"
+      detail="/projects/project"
+      :columns="columns"
+      :with="w"
+      :template="template"
+      createBy="button"
+    />
+  </div>
 </template>
 
 <script>

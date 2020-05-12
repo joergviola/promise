@@ -1,12 +1,14 @@
 <template>
-  <generic-list
-    type="users"
-    detail="/users"
-    :columns="columns"
-    :with="w"
-    :template="template"
-    create-by="button"
-  />
+  <div class="components-container">
+    <generic-list
+      type="users"
+      detail="/users"
+      :columns="columns"
+      :with="w"
+      :template="template"
+      create-by="button"
+    />
+  </div>
 </template>
 
 <script>

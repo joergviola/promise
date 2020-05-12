@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div>
     <div v-if="createBy=='button'" class="filter-container">
       <el-col :span="24" type="flex" align="right">
         <el-button class="filter-item pull-right" style="margin-right: 10px;" type="primary" icon="el-icon-edit" @click="$router.push(detail + '/new/detail')">

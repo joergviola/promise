@@ -1,14 +1,22 @@
 <template>
   <div class="components-container">
     <h2>Welcome, {{user.name}}</h2>
-    <generic-list
-      type="task"
-      :columns="columns"
-      :with="w"
-      :query="query"
-      create-by="row"
-    />
-<button @click="test">Test</button>
+    <el-row>
+      <el-col :span="12">
+        <el-card>
+          <div slot="header" class="clearfix">
+            Your tasks
+          </div>
+          <generic-list
+            type="task"
+            :columns="columns"
+            :with="w"
+            :query="query"
+            create-by="row"
+          />
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -35,15 +43,9 @@ export default {
       columns: [
         { name: 'name', label: 'Name', editable: true, placeholder: "New Task..." },
         { name: 'project.name', label: 'Project' },
-        { name: 'planned', label: 'Planned' },
-        { name: 'used', label: 'Used' },
+        { name: 'used', label: 'Planned', type: 'progress', budget: 'planned' },
       ]
     }
   },
-  methods: {
-    test() {
-      console.log('XXX', this.user)
-    }
-  }
 }
 </script>
