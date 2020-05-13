@@ -5,6 +5,7 @@
     :with="w"
     :template="template"
     createBy="row"
+    :allowDelete="true"
   />
 </template>
 
@@ -22,8 +23,8 @@ export default {
       w: { },
       type: 'position',
       columns: [
-        { name: 'no', label: 'No', editable: true},
-        { name: 'name', label: 'Name', editable: true, placeholder: "New Position..." },
+        { name: 'no', label: 'No', editable: true, placeholder: "New Position..."},
+        { name: 'name', label: 'Name', editable: true },
         { name: 'comment', label: 'Comment', editable: true },
         { name: 'planned', label: 'Effort', editable: false },
         { name: 'price', label: 'Price', editable: false },

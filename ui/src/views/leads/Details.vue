@@ -176,6 +176,9 @@ export default {
           percentBuffer: 15,
           rounding: 0
         })
+
+        this.showCustomer = false
+        this.showContact = false
       }
 
       this.customers = await api.find('organisation', {})

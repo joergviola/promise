@@ -25,7 +25,7 @@ export default {
   props: {},
   data() {
     return {
-      activeTab: '1',
+      activeTab: '2',
     }
   },
 }
