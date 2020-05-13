@@ -1,6 +1,10 @@
 import router from '../router'
 
-const base = 'http://localhost/promise/backend/public/api/v1.0'
+const host = window.location.hostname === 'localhost'
+  ? 'http://localhost/promise/backend/public'
+  : window.location.origin + window.location.pathname + '/../..'
+
+const base = host + '/api/v1.0'
 
 function callDirect(url, options) {
   const user = theAPI.user()
