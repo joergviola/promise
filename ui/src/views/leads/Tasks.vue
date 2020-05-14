@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       type: 'task',
-      template: { project_id: this.id, state: 'NEW', type: 'DEV' },
+      template: { project_id: this.id, state: 'NEW', type: 'DEV', estimation: {} },
       query: { project_id: this.id, type: 'DEV' },
       with: {
         estimation: {
@@ -87,7 +87,7 @@ export default {
   methods: {
     async createWithEstimation(row) {
       await this.create(row)
-      row.estimation = { project_id: this.id, task_id: row.id, user_id: this.user.id }
+      row.estimation = { project_id: this.id, task_id: row.id, user_id: this.user.id, planned: null, comment: null }
     },
     async saveEstimation(task, attr) {
       if (!task.estimation.id) {
