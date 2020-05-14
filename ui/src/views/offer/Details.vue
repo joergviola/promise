@@ -8,6 +8,7 @@
 
 import GenericDetails from '@/components/Generic/Details'
 import image from '@/assets/images/undraw_discount_d4bd.svg'
+import api from '@/api'
 
 export default {
   name: 'OfferDetails',
@@ -16,10 +17,10 @@ export default {
   computed: {
     buttons() {
       const workflow = {
-        'NEW': ['Send'],
-        'SENT': ['Accepted', 'Rejected', 'Reset'],
-        'ACCEPTED': ['Reset'],
-        'REJECTED': ['Reset'],
+        'NEW': ['Send', 'Copy'],
+        'SENT': ['Accepted', 'Rejected', 'Reset', 'Copy'],
+        'ACCEPTED': ['Reset', 'Copy'],
+        'REJECTED': ['Reset', 'Copy'],
       }
       if (!this.item) return []
       const valid = workflow[this.item.state]
@@ -43,8 +44,61 @@ export default {
         {label: 'Reset', action: item => item.state='NEW', shown: item => item.state === 'NEW', andSave: true },
         {label: 'Send', action: item => item.state='SENT', andSave: true },
         {label: 'Accepted', action: item => item.state='ACCEPTED', andSave: true },
-        {label: 'Rejected', action: item => item.state='REJECTED', andSave: true }
+        {label: 'Rejected', action: item => item.state='REJECTED', andSave: true },
+        {label: 'Copy', action: this.copy, andSave: false }
       ]
+    }
+  },
+  methods: {
+    async copy(item) {
+      const items = await api.find('accounting', {
+        and: {id: item.id},
+        with: {
+          positions: { many: 'position' }
+        }
+      })
+      const orig = items[0]
+      console.log('orig', orig)
+      const copy = this.clone(orig, {
+        mask: {
+          name: orig.name + ' (Copy)',
+          state: 'NEW',
+          price: null,
+          approved_at: null,
+          accepted_at: null
+        },
+        refs: {
+          positions: {
+            mask: {
+              planned: null,
+              price: null
+            }
+          }
+        }
+      })
+      console.log('copy', copy)
+      const { id } = await api.create('accounting', copy)
+      this.$router.push(`../${id}/detail`)
+    },
+    clone(orig, options) {
+      const copy = Object.assign({}, orig, options.mask || {})
+      delete copy.id
+      if (orig._meta) {
+        copy._meta = Object.assign({}, orig._meta)
+      }
+      if (options.refs) {
+        for (const ref in options.refs) {
+          const meta = copy._meta[ref]
+          meta.ignore = false
+          if (meta.many) {
+            copy[ref] = orig[ref].map(o => this.clone(o, options.refs[ref]))
+          }
+          if (meta.one) {
+            copy[ref] = this.clone(orig[ref], options.refs[ref])
+          }
+        }
+      }
+      return copy
     }
   }
 }
