@@ -84,12 +84,13 @@ export default {
         await this.create(row)
       }
       this.$nextTick(() => {
-        this.$refs[`field-${index+1}-0`][0].focus()
+        this.$refs[`field-${index + 1}-0`][0].focus()
       })
     },
     async onArrow(row, column, index, dir) {
-      if (0<=index+dir && index+dir<this.list.length)
-      this.$refs[`field-${index+dir}-${column}`][0].focus()
+      if (0 <= index + dir && index + dir < this.list.length) {
+        this.$refs[`field-${index + dir}-${column}`][0].focus()
+      }
     },
     progressValue(value, budget) {
       if (!value) return 0

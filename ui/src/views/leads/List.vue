@@ -29,10 +29,7 @@ export default {
           that: 'project_id',
           query: {
             and: { type: 'QUOTE' },
-            page: {
-              skip: 0,
-              take: 1
-            }
+            order: { id: 'DESC' }
           }
         },
       },
@@ -41,7 +38,6 @@ export default {
         { name: 'name', label: 'Name', editable: true },
         { name: 'customer.name', label: 'Customer', editable: false },
         { name: 'last_offer.price', label: 'Last Offer', editable: false },
-        { name: 'state', label: 'State' },
       ]
     }
   }

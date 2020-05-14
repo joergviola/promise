@@ -2,7 +2,6 @@
   <div class="components-container">
     <el-row :gutter="20">
       <el-col :span="12">
-        <h3>Lead</h3>
         <el-form label-position="left" label-width="120px" >
           <el-form-item label="Name">
             <el-input v-model="item.name" type="text" />

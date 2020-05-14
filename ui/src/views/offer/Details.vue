@@ -23,7 +23,6 @@ export default {
       }
       if (!this.item) return []
       const valid = workflow[this.item.state]
-      console.log(valid)
       return this.allButtons.filter(b => valid.indexOf(b.label)!=-1)
     }
   },

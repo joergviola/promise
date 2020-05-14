@@ -7,7 +7,7 @@
             <el-input v-model="t.name" type="text" placeholder="New Task..."/>
           </el-form-item>
           <el-form-item>
-            <el-input v-model="t.description" :rows="1" type="textarea" autosize placeholder="Notes..." />
+            <el-input v-model="t.description" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" placeholder="Notes..." />
           </el-form-item>
           <el-form-item>
             <el-date-picker
@@ -18,11 +18,11 @@
             />
           </el-form-item>
           <el-form-item>
-            <el-button v-loading="loading" type="primary" @click="save(t)">
-              Save
-            </el-button>
             <el-button v-loading="loading" type="danger" @click="close(t)">
               Done
+            </el-button>
+            <el-button v-loading="loading" type="primary" @click="save(t)">
+              Save
             </el-button>
           </el-form-item>
         </el-form>
