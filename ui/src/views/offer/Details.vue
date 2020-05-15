@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <generic-details type="accounting" :id="oid" :fields="fields" :buttons="buttons" :template="template" :image="image" @update="i => item=i"/>
+    <generic-details type="accounting" :id="oid" :fields="fields" :buttons="buttons" :template="template" :image="image" @update="i => item=i" :reload="true"/>
   </div>
 </template>
 

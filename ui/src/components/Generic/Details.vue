@@ -33,7 +33,7 @@ import api from '../../api'
 export default {
   name: 'GenericDetails',
   components: { Fields },
-  props: ['type', 'id', 'fields', 'buttons', 'with', 'template', 'image'],
+  props: ['type', 'id', 'fields', 'buttons', 'with', 'template', 'image', 'reload'],
   data() {
     return {
       item: this.template || {},
@@ -42,6 +42,12 @@ export default {
   },
   async created() {
     if (this.id !== 'new') {
+      this.load()
+      this.$emit('update', Object.assign({}, this.item))
+    }
+  },
+  methods: {
+    async load() {
       this.loading = true
       const items = await api.find(this.type, {
         and: [{ id: this.id }],
@@ -49,10 +55,7 @@ export default {
       })
       this.item = items[0]
       this.loading = false
-      this.$emit('update', Object.assign({}, this.item))
-    }
-  },
-  methods: {
+    },
     async click(button) {
       button.action(this.item)
       if (button.andSave) this.save()
@@ -78,6 +81,9 @@ export default {
         } else {
           const result = await api.create(this.type, this.item)
           this.item.id = result.id
+        }
+        if (this.reload) {
+          this.load()
         }
       } catch (error) {
         this.$notify({

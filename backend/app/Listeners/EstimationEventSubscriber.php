@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\API;
 use App\Events\ApiAfterCreateEvent;
 use App\Events\ApiAfterUpdateEvent;
+use App\Helper;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -34,25 +35,6 @@ class EstimationEventSubscriber
                 'planned' => DB::raw('(SELECT AVG(planned) FROM estimation WHERE task_id=' . $estimation->task_id . ')')
             ]);
 
-        API::provider('project')
-            ->where('id', $estimation->project_id)
-            ->update([
-                'planned' => DB::raw('(SELECT SUM(planned) FROM task WHERE project_id=' . $estimation->project_id . ')')
-            ]);
-
-        API::provider('position')
-            ->where('accounting.project_id', $estimation->project_id)
-            ->where('accounting.state', 'NEW')
-            ->join('accounting', 'accounting.id', '=', 'position.accounting_id')
-            ->update([
-                'position.planned' => DB::raw('(SELECT SUM(task.planned) FROM task WHERE task.position=position.name AND task.project_id=accounting.project_id)'),
-                'position.price' => DB::raw('(SELECT ROUND(SUM(task.planned)*(1.0+accounting.percentBuffer/100.0)*accounting.pricePerUnit, -accounting.rounding) FROM task WHERE task.position=position.name AND task.project_id=accounting.project_id)'),
-            ]);
-
-        API::provider('accounting')
-            ->update([
-                'accounting.price' => DB::raw('(SELECT SUM(position.price) FROM position WHERE position.accounting_id=accounting.id)'),
-            ]);
-
+        Helper::updatePlanned($estimation->project_id);
     }
 }
