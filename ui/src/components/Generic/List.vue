@@ -20,8 +20,8 @@
             :placeholder="col.placeholder"
             :ref="`field-${$index}-${i}`"
             @keyup.enter.native="onEnter(row, i, $index)"
-            @keyup.up.native="onArrow(row, i, $index, -1)"
-            @keyup.down.native="onArrow(row, i, $index, +1)"
+            @keyup.up.native="onArrow(i, $index, -1)"
+            @keyup.down.native="onArrow(i, $index, +1)"
           />
           <span v-if="!col.editable && !col.type">{{typeof col.name === 'string' ? _.get(row, col.name) : col.name(row) }}</span>
           <el-select v-if="col.type=='select'" class="no-border" v-model="row[col.name]" @blur="save(row, col.name)"  :placeholder="col.placeholder">
@@ -79,19 +79,6 @@ export default {
     }
   },
   methods: {
-    async onEnter(row, column, index) {
-      if (!row.id) {
-        await this.create(row)
-      }
-      this.$nextTick(() => {
-        this.$refs[`field-${index + 1}-0`][0].focus()
-      })
-    },
-    async onArrow(row, column, index, dir) {
-      if (0 <= index + dir && index + dir < this.list.length) {
-        this.$refs[`field-${index + dir}-${column}`][0].focus()
-      }
-    },
     progressValue(value, budget) {
       if (!value) return 0
       if (!budget) return 100

@@ -5,13 +5,22 @@
       <el-table-column type="selection" />
 
       <el-table-column label="Name">
-        <template slot-scope="{row}">
-          <el-input class="no-border" v-model="row.name" @blur="save(row, 'name')" placeholder="New task..." />
+        <template slot-scope="{row, $index}">
+          <el-input
+            class="no-border"
+            v-model="row.name"
+            @blur="save(row, 'name')"
+            placeholder="New task..."
+            :ref="`field-${$index}-0`"
+            @keyup.enter.native="onEnter(row, 0, $index)"
+            @keyup.up.native="onArrow(0, $index, -1)"
+            @keyup.down.native="onArrow(0, $index, +1)"
+          />
         </template>
       </el-table-column>
 
       <el-table-column label="Position">
-        <template slot-scope="{row}">
+        <template slot-scope="{row, $index}">
           <el-select class="no-border" v-model="row.position" @change="save(row, 'position')" >
             <el-option v-for="(name, i) in positionNames" :value="name" :key="i" :label="name" />
           </el-select>
@@ -21,14 +30,34 @@
       <el-table-column label="Planned" prop="planned" />
 
       <el-table-column label="Estimation" >
-        <template slot-scope="{row}">
-          <el-input v-if="row.id" class="no-border" v-model="row.estimation.planned" @blur="saveEstimation(row, 'planned')" placeholder="Your estimation..." />
+        <template slot-scope="{row, $index}">
+          <el-input
+            v-if="row.id"
+            class="no-border"
+            v-model="row.estimation.planned"
+            @blur="saveEstimation(row, 'planned')"
+            placeholder="Your estimation..."
+            :ref="`field-${$index}-3`"
+            @keyup.enter.native="onEnter(row, 3, $index)"
+            @keyup.up.native="onArrow(3, $index, -1)"
+            @keyup.down.native="onArrow(3, $index, +1)"
+          />
         </template>
       </el-table-column>
 
       <el-table-column label="Comment">
-        <template slot-scope="{row}">
-          <el-input v-if="row.id" class="no-border" v-model="row.estimation.comment" @blur="saveEstimation(row, 'comment')" placeholder="Comment" />
+        <template slot-scope="{row, $index}">
+          <el-input
+            v-if="row.id"
+            class="no-border"
+            v-model="row.estimation.comment"
+            @blur="saveEstimation(row, 'comment')"
+            placeholder="Comment"
+            :ref="`field-${$index}-4`"
+            @keyup.enter.native="onEnter(row, 4, $index)"
+            @keyup.up.native="onArrow(4, $index, -1)"
+            @keyup.down.native="onArrow(4, $index, +1)"
+          />
         </template>
       </el-table-column>
 

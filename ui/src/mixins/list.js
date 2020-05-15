@@ -76,6 +76,26 @@ export default {
           duration: 5000
         })
       }
-    }
+    },
+    async onEnter(row, column, index) {
+      if (!row.id) {
+        await this.create(row)
+      }
+      const key = `field-${index + 1}-0`
+      let ref = this.$refs[key]
+      if (Array.isArray(ref)) ref = ref[0]
+      this.$nextTick(() => {
+        ref.focus()
+      })
+    },
+    onArrow(column, index, dir) {
+      if (0 <= index + dir && index + dir < this.list.length) {
+        const key = `field-${index + dir}-${column}`
+        let ref = this.$refs[key]
+        if (Array.isArray(ref)) ref = ref[0]
+        ref.focus()
+      }
+    },
+
   },
 }
