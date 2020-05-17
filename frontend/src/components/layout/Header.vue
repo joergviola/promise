@@ -1,7 +1,7 @@
 <template>
     <el-row type="flex" justify="space-between">
         <el-col :span="5">
-            <img height="50px" src="@/assets/img/logo.png" />
+            <img height="60px" src="@/assets/img/logo.png" />
         </el-col>
         <el-col :span="19">
             <el-breadcrumb separator-class="el-icon-arrow-right" style="height: 60px; line-height: 60px">

@@ -36,7 +36,6 @@ export default [
     component: Parent,
     name: 'Leads',
     meta: {
-      title: 'Leads',
       icon: 'el-icon-shopping-cart-2'
     },
     redirect: '/leads/all',
@@ -67,11 +66,18 @@ export default [
     ]
   },
   {
+    path: '/planning',
+    component: () => import('@/views/planning/List'),
+    name: 'Planning',
+    meta: {
+      icon: 'el-icon-date'
+    },
+  },
+  {
     path: '/projects',
     component: Parent,
     name: 'Projects',
     meta: {
-      title: 'Projects',
       icon: 'el-icon-folder'
     },
     redirect: '/projects/all',

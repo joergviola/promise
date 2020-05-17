@@ -1,5 +1,5 @@
 <template>
-    <el-container>
+    <el-container style="height: 100%">
         <el-header  style="border-bottom: 1px solid #DDDDDD">
             <app-header />
         </el-header>
