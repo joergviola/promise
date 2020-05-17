@@ -33,6 +33,7 @@
             v-if="col.type=='date' || col.type=='datetime'"
             v-model="row[col.name]"
             :type="col.type"
+            :disabled="!col.editable"
             value-format="yyyy-MM-dd hh:mm"
             @blur="save(row, col.name)"
           />
@@ -73,7 +74,7 @@ import list from '@/mixins/list'
 export default {
   name: 'GenericList',
   mixins: [list],
-  props: ['type', 'detail', 'columns', 'with', 'query', 'template', 'createBy', 'allowDelete'],
+  props: ['type', 'detail', 'columns', 'with', 'query', 'order', 'template', 'createBy', 'allowDelete'],
   data() {
     return {
     }

@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <generic-details type="users" :id="$route.params.id" :fields="fields" :image="image"/>
+    <generic-details type="users" :id="$route.params.id" :fields="fields" :image="image" @update="u => $emit('update', u)"/>
   </div>
 </template>
 

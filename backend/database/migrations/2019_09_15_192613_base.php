@@ -141,11 +141,12 @@ class Base extends Migration
             $table->text('comment')->nullable();
             $table->dateTime('from')->nullable();
             $table->dateTime('to')->nullable();
-            $table->string('type'); // PROJECT, HOLIDAY, ILL
-            $table->string('role'); // SALES, PL, DEV, CUSTOMER
+            $table->string('type'); // PROJECT, HOLIDAY, ILL, CONTRACT
+            $table->string('role')->nullable(); // SALES, PL, DEV, CUSTOMER
             $table->integer('parttime')->unsigned()->nullable(); // in %
             $table->integer('project_id')->unsigned()->nullable();
             $table->integer('user_id')->unsigned();
+            $table->decimal('salary')->nullable();
 
             $table->foreign('project_id')->references('id')->on('project');
             $table->foreign('user_id')->references('id')->on('users');
@@ -155,7 +156,6 @@ class Base extends Migration
             $table->text('address')->nullable();
             $table->string('phone')->nullable();
             $table->integer('parttime')->unsigned()->nullable(); // in %
-            $table->decimal('salary')->nullable();
 
             $table->foreign('organisation_id')->references('id')->on('organisation');
         });

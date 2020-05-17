@@ -30,10 +30,13 @@ export default {
     },
     async getList() {
       this.loading = true
-      this.list = await api.find(this.type, {
+      const query =  {
         and: this.query || this.template,
         with: this.with
-      })
+      }
+      if (this.with) query.with = this.with
+      if (this.order) query.order = this.order
+      this.list = await api.find(this.type, query)
       this.addNew()
       this.loading = false
     },
