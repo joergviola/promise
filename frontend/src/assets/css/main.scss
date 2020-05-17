@@ -40,3 +40,10 @@ html, body {
 .no-border .el-input__inner {
   border: none;
 }
+
+.gantt-red g rect  {
+    fill: red !important;
+}
+.gantt-red g text  {
+  fill: black !important;
+}

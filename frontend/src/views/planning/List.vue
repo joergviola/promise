@@ -1,5 +1,6 @@
 <template>
   <div class="components-container">
+    <gantt />
     <generic-list
       type="allocation"
       detail="/user"
@@ -13,10 +14,11 @@
 
 <script>
 import GenericList from '@/components/generic/List'
+import Gantt from '@/components/gantt/Index'
 
 export default {
   name: 'UserList',
-  components: { GenericList },
+  components: { GenericList, Gantt },
   data() {
     return {
       template: {  },
