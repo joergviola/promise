@@ -305,12 +305,20 @@ export default class Gantt {
     }
 
     make_grid_background() {
+        const taskrows=[]
+        let rows = 0
+        for (let task of this.tasks) {
+            if (task.row!=null && taskrows.indexOf(task.row)!=-1) continue;
+            taskrows.push(task.row)
+            rows++;
+        }
+
         const grid_width = this.dates.length * this.options.column_width;
         const grid_height =
             this.options.header_height +
             this.options.padding +
             (this.options.bar_height + this.options.padding) *
-                this.tasks.length;
+                rows;
 
         createSVG('rect', {
             x: 0,
@@ -322,7 +330,7 @@ export default class Gantt {
         });
 
         $.attr(this.$svg, {
-            height: grid_height + this.options.padding + 100,
+            height: grid_height + this.options.padding,
             width: '100%'
         });
     }
