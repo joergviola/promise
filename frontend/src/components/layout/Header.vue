@@ -10,12 +10,13 @@
                 :key="i"
             >{{m.name}}</el-breadcrumb-item>
         </el-breadcrumb>            
-        <el-dropdown style="height: 60px; line-height: 60px; margin-left: auto;margin-right: 5px">
+        <el-dropdown style="height: 60px; line-height: 60px; margin-left: auto;margin-right: 25px">
             <span class="el-dropdown-link text-right">
                 {{user.name}}
                 <i class="el-icon-arrow-down el-icon--right"></i>
             </span>
             <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item><a @click.prevent="profile">Profile</a></el-dropdown-item>
                 <el-dropdown-item><a @click.prevent="logout">Logout</a></el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
@@ -37,6 +38,9 @@ export default {
         async logout() {
             await api.logout()
             this.$router.push("/login")
+        },
+        profile() {
+            this.$router.push(`/users/${this.user.id}/detail`)
         }
     }
 }

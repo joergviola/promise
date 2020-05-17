@@ -112,6 +112,7 @@ export default [
     name: 'Login',
     component: () => import('../views/auth/Login.vue'),
     meta: {
+      layout: 'no-sidebar',
       hidden: true,
       noAuth: true
     }

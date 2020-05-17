@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <h2>{{task.name}}</h2>
+    <h4>{{task.name}}</h4>
     <el-tabs v-model="activeTab">
       <el-tab-pane lazy key="1" label="Details" name="1">
         <task-details :id="$route.params.id" :tid="$route.params.tid" v-on:update="t => task = t" />

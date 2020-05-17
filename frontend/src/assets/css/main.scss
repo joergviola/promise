@@ -36,3 +36,7 @@ html, body {
 .pull-left {
   float: left;
 }
+
+.no-border .el-input__inner {
+  border: none;
+}

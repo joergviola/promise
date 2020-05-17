@@ -10,7 +10,7 @@
 
     <el-table v-loading="loading" :data="list">
 
-      <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label">
+      <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :minWidth="col.width">
         <template slot-scope="{row, $index}">
           <el-input
             v-if="col.editable && !col.type"
@@ -30,10 +30,10 @@
           <el-date-picker
             :placeholder="col.placeholder"
             class="no-border"
-            v-if="col.type=='date'"
+            v-if="col.type=='date' || col.type=='datetime'"
             v-model="row[col.name]"
             :type="col.type"
-            value-format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd hh:mm"
             @blur="save(row, col.name)"
           />
           <el-tooltip

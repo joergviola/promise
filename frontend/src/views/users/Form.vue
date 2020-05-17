@@ -1,29 +1,31 @@
 <template>
   <div class="components-container">
-    <generic-details type="users" :id="$route.params.id" :fields="fields" :image="image"/>
+    <h4>{{user.name}}</h4>
+    <el-tabs v-model="activeTab">
+      <el-tab-pane lazy key="1" label="Details" name="1">
+        <user-details :id="$route.params.id" :tid="$route.params.tid" v-on:update="t => user = t" />
+      </el-tab-pane>
+      <el-tab-pane lazy key="2" label="Timeline" name="2">
+        <user-timeline :id="$route.params.id" />
+      </el-tab-pane>
+    </el-tabs>
+
   </div>
 </template>
 
 <script>
 
-import GenericDetails from '@/components/generic/Details'
-import image from '@/assets/img/undraw_people_tax5.svg'
-import api from '@/api'
+import UserDetails from './Details'
+import UserTimeline from './Timeline'
 
 export default {
-  name: 'UserForm',
-  components: { GenericDetails },
+  name: 'TaskForm',
+  components: { UserDetails, UserTimeline },
+  props: {},
   data() {
     return {
-      image: image,
-      fields: [
-        { name: 'name', label: 'Name' },
-        { name: 'email', label: 'E-Mail' },
-        { name: 'phone', label: 'Phone' },
-        { name: 'password', label: 'Password', type: 'password' },
-        { name: 'role_id', label: 'Role', type: 'to-one', ref: 'role', display: 'name'},
-        { name: 'organisation_id', label: 'Organsisation', type: 'to-one', ref: 'organisation', display: 'name' },
-      ],
+      user: {},
+      activeTab: '1'
     }
   },
 }
