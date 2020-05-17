@@ -8,7 +8,6 @@ export default [
     component: Home,
     meta: {
       icon: 'el-icon-s-home',
-      layout: 'default'
     }
   },
   {
@@ -16,8 +15,7 @@ export default [
     component: Parent,
     name: 'Users',
     meta: {
-      title: 'Users',
-      icon: 'user'
+      icon: 'el-icon-s-custom'
     },
     redirect: '/users/all',
     children: [
@@ -25,14 +23,11 @@ export default [
         path: 'all',
         component: () => import('@/views/users/List'),
         name: 'All',
-        meta: { title: 'Users', icon: 'people' }
       },
       {
         path: ':id/detail',
         component: () => import('@/views/users/Form'),
-        hidden: true,
         name: 'User',
-        meta: { title: 'User' }
       },
     ]
   },
@@ -42,7 +37,7 @@ export default [
     name: 'Leads',
     meta: {
       title: 'Leads',
-      icon: 'table'
+      icon: 'el-icon-shopping-cart-2'
     },
     redirect: '/leads/all',
     children: [
@@ -50,32 +45,24 @@ export default [
         path: 'all',
         component: () => import('@/views/leads/List'),
         name: 'All',
-        hidden: true,
-        meta: { title: 'All' }
       },
       {
         path: 'lead/:id',
         component: () => import('@/views/leads/Layout'),
-        hidden: true,
         name: 'Lead',
-        meta: { title: 'Lead' },
         redirect: 'detail',
         children: [
           {
             path: 'detail',
             component: () => import('@/views/leads/Form'),
-            hidden: true,
             name: 'Detail',
-            meta: { title: 'Detail', breadcrumb: false },
           },
           {
             path: 'offer/:oid/detail',
             component: () => import('@/views/offer/Form'),
-            hidden: true,
             name: 'Offer',
-            meta: { title: 'Offer' }
           }
-            ]
+        ]
       },
     ]
   },
@@ -85,7 +72,7 @@ export default [
     name: 'Projects',
     meta: {
       title: 'Projects',
-      icon: 'education'
+      icon: 'el-icon-folder'
     },
     redirect: '/projects/all',
     children: [
@@ -93,68 +80,32 @@ export default [
         path: 'all',
         component: () => import('@/views/projects/List'),
         name: 'All',
-        hidden: true,
-        meta: { title: 'All' }
       },
       {
         path: 'project/:id',
         component: () => import('@/views/projects/Layout'),
-        hidden: true,
         name: 'Project',
-        meta: { title: 'Project' },
         redirect: 'detail',
         children: [
           {
             path: 'detail',
             component: () => import('@/views/projects/Form'),
-            hidden: true,
             name: 'Detail',
-            meta: { title: 'Detail', breadcrumb: false },
           },
           {
             path: 'task/:tid/detail',
             component: () => import('@/views/task/Form'),
-            hidden: true,
             name: 'Task',
-            meta: { title: 'Task' }
           }
         ]
       }
     ]
   },
-   
-  {
-    path: '/user',
-    name: 'Users',
-    component: () => import('@/views/admin/users/Index.vue'),
-    meta: {
-      icon: 'el-icon-s-home',
-      layout: 'default',
-      redirect: 'all'
-    },
-    children: [
-      {
-        path: 'all',
-        name: 'All',
-        component: () => import('@/views/admin/users/List.vue'),
-      },
-      {
-        path: ':id/detail',
-        name: 'Detail',
-        component: () => import('@/views/admin/users/Form.vue'),
-      },
-    ]
-  },
   {
     path: '/login',
     name: 'Login',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import('../views/auth/Login.vue'),
     meta: {
-      icon: 'el-icon-edit',
-      layout: 'no-sidebar',
       hidden: true,
       noAuth: true
     }
