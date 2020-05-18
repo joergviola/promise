@@ -19,6 +19,7 @@ export default {
     props: {
         tasks: { type: Array, default: [] },
         rows: { type: Array, default: [] },
+        view_mode: { type: String, default: 'Week' },
     },
     data() {
         const self = this
@@ -32,7 +33,7 @@ export default {
                 bar_corner_radius: 3,
                 arrow_curve: 5,
                 padding: 18,
-                view_mode: 'Day',   
+                view_mode: this.view_mode,   
                 date_format: 'YYYY-MM-DD',
                 custom_popup_html: null,
                 on_click: function (task) {
@@ -55,6 +56,10 @@ export default {
     watch: {
         tasks() {
             this.gantt = new Gantt('#gantt', this.tasks, this.options)
+            this.gantt.change_view_mode(this.view_mode)
+        },
+        view_mode() {
+            this.gantt.change_view_mode(this.view_mode)
         }
     }
 }

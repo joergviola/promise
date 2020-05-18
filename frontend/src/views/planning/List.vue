@@ -1,7 +1,13 @@
 <template>
   <div class="components-container">
-    <gantt :rows="data.rows" :tasks="data.tasks" @update="update" />
+    <gantt :rows="data.rows" :tasks="data.tasks" :view_mode="view_mode" @update="update" />
     <div class="text-right">
+      <el-radio-group v-model="view_mode" size="small" class="pull-left">
+        <el-radio-button label="Quarter Day">Hourly</el-radio-button>
+        <el-radio-button label="Day" ></el-radio-button>
+        <el-radio-button label="Week"></el-radio-button>
+        <el-radio-button label="Month"></el-radio-button>
+      </el-radio-group>
       <el-button v-if="modified" type="primary" @click="save">
         Save
       </el-button>
@@ -15,13 +21,15 @@ import moment from 'moment'
 import api from '@/api'
 
 export default {
-  name: 'UserList',
+  name: 'Planning',
   components: { Gantt },
   data() {
     return {
       projects: [],
       users: [],
+      view_mode: 'Week',
       modified: null,
+      user: api.user(),
     }
   },
   computed: {
@@ -44,6 +52,7 @@ export default {
       const users = {}
       this.projects.forEach((p,i) => {
         p.allocations.forEach(a =>  {
+          if (a.user.organisation_id != this.user.organisation_id) return
           if (!users[a.user.id]) users[a.user.id] = {name: a.user.name, tasks: []}
           users[a.user.id].tasks.push({
             id: 'Allocation-' + i,
