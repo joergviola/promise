@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <gantt :rows="rows" :tasks="tasks" @update="update" />
+    <gantt :rows="data.rows" :tasks="data.tasks" @update="update" />
     <div class="text-right">
       <el-button v-if="modified" type="primary" @click="save">
         Save
@@ -25,44 +25,81 @@ export default {
     }
   },
   computed: {
-    tasks() {
+    data() {
       let row = 0
       const tasks = []
       this.projects.forEach((p,i) => {
         tasks.push({
           id: 'Project-' + i,
-          row: row++,
-          row_name: p.name,
           name: p.name,
-          start: this.dateOrFromNow(p.starts_at, 0),
-          end: this.dateOrFromNow(p.ends_at, p.planned/8),
-          custom_class: 'gantt-red',
+          start: p.starts_at,
+          end: p.ends_at,
+          custom_class: 'gantt-blue',
           project: p,
         })
       })
+      
+      const rows = this.packTasks("Projects", tasks, 0)
+
+      const users = {}
       this.projects.forEach((p,i) => {
         p.allocations.forEach(a =>  {
-          tasks.push({
+          if (!users[a.user.id]) users[a.user.id] = {name: a.user.name, tasks: []}
+          users[a.user.id].tasks.push({
             id: 'Allocation-' + i,
-            row: row++,
-            row_name: a.user.name,
             name: `${p.name} [${a.parttime || '100'}%]`,
-            start: this.dateOrFromNow(p.starts_at, 0),
-            end: this.dateOrFromNow(p.ends_at, p.planned/8),
-            custom_class: 'gantt-red',
+            start: p.starts_at,
+            end: p.ends_at,
+            custom_class: 'gantt-blue',
             allocation: a,
           })
         })
       })
-      return tasks
+
+      for (let id in users) {
+        const userRows = this.packTasks(users[id].name, users[id].tasks, rows.length)
+        tasks.push(...users[id].tasks)
+        rows.push(...userRows)
+      }
+
+      this.checkTasks(tasks)
+
+      return {tasks, rows}
     },
-    rows() {
-      const rows = []
-      this.tasks.forEach(t => rows[t.row] = t.row_name)
-      return rows
-    }
   },
   methods: {
+    packTasks(rowname, tasks, firstRow) {
+      const rows = []
+      tasks.sort((a,b) => a.start - b.start)
+      tasks.forEach(t => {
+        let row = rows.find(r => r.date < t.start)
+        if (!row) {
+          row = {no: rows.length + firstRow}
+          rows.push(row)
+        }
+        t.row = row.no
+        row.date = t.end
+      })
+      const result = [rowname] 
+      for (let i=1; i<rows.length; i++) result.push('')
+      return result
+    },
+    checkTasks(tasks) {
+      const usertasks = tasks.filter(t => t.allocation)
+      usertasks.forEach(t => {
+        const simultan = usertasks
+          .filter(o => t.allocation.user_id==o.allocation.user_id)
+          .filter(o => t.end>=o.start && t.start<=o.end)
+        const load = simultan
+          .reduce((acc, o) => acc + (o.allocation.parttime||100), 0)
+        if (load>(t.allocation.user.parttime || 100)) {
+          simultan.forEach(o => o.custom_class = 'gantt-red')
+          const projectTask = tasks
+            .find(o => o.project && o.project.id == t.allocation.project_id)
+          projectTask.custom_class = 'gantt-red'
+        }
+      })
+    },
     update(task, start, end) {
       if (!this.modified) this.modified = {}
       if (task.project) {
@@ -95,7 +132,7 @@ export default {
         mom = moment()
         mom.add(days, 'days')
       }
-      return mom.format('YYYY-MM-DD')
+      return mom.toDate()
     }
   },
   async mounted() {
@@ -114,6 +151,11 @@ export default {
         }
       }
     })
+    this.projects.forEach( p => {
+        p.starts_at = this.dateOrFromNow(p.starts_at, 0)
+        p.ends_at = this.dateOrFromNow(p.ends_at, Math.max(1, p.planned/8))
+    } )
+    
   }
 }
 </script>

@@ -42,8 +42,15 @@ html, body {
 }
 
 .gantt-red g rect  {
-    fill: red !important;
+  fill: red !important;
 }
 .gantt-red g text  {
-  fill: black !important;
+fill: black !important;
+}
+
+.gantt-blue g rect  {
+  fill: rgb(0,164,255, 0.8) !important;
+}
+.gantt-blue g text  {
+fill: white !important;
 }
