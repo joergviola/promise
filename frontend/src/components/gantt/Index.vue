@@ -16,49 +16,13 @@ import Gantt from './gantt'
 
 export default {
     name: 'Gantt',
+    props: {
+        tasks: { type: Array, default: [] },
+        rows: { type: Array, default: [] },
+    },
     data() {
+        const self = this
         return {
-            rows: [
-                'Projects', 'Test länger'
-            ],
-            tasks: [
-                {
-                    id: 'Task 1',
-                    row: 0,
-                    name: 'Redesign website',
-                    start: '2020-06-28',
-                    end: '2020-07-03',
-                    custom_class: 'gantt-red'
-                },
-                {
-                    id: 'Task 2',
-                    row: 0,
-                    name: 'Start website',
-                    start: '2020-007-04',
-                    end: '2020-07-10',
-                },
-                {
-                    id: 'Task 2',
-                    row: 0,
-                    name: 'Start website',
-                    start: '2020-007-04',
-                    end: '2020-07-10',
-                },
-                {
-                    id: 'Task 2',
-                    row: 0,
-                    name: 'Start website',
-                    start: '2020-007-04',
-                    end: '2020-07-10',
-                },
-                {
-                    id: 'Task 3',
-                    row: 1,
-                    name: '3D Modelling',
-                    start: '2020-007-01',
-                    end: '2020-07-10',
-                },
-            ],
             options: {
                 header_height: 50,
                 column_width: 30,
@@ -70,13 +34,28 @@ export default {
                 padding: 18,
                 view_mode: 'Day',   
                 date_format: 'YYYY-MM-DD',
-                custom_popup_html: null
+                custom_popup_html: null,
+                on_click: function (task) {
+                    self.$emit('click', task);
+                },
+                on_date_change: function(task, start, end) {
+                    self.$emit('update', task, start, end);
+                },
+                on_progress_change: function(task, progress) {
+                    self.$emit('progress', task, progress);
+                },
+                on_view_change: function(mode) {
+                    self.$emit('view', mode);
+                }
+
             },
             gantt: null
         }
     },
-    mounted() {
-        this.gantt = new Gantt('#gantt', this.tasks, this.options)
+    watch: {
+        tasks() {
+            this.gantt = new Gantt('#gantt', this.tasks, this.options)
+        }
     }
 }
 </script>
