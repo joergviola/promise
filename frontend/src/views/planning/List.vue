@@ -54,7 +54,7 @@ export default {
         u.allocations.forEach((a,j) =>  {
           if (u.organisation_id != this.user.organisation_id) return
           const task = {
-            id: `Allocation-$i-$j`,
+            id: `Allocation-${i}-${j}`,
             name: a.type,
             start: a.from,
             end: a.to,
@@ -123,7 +123,7 @@ export default {
         let start = null
         let end = null
         simultan.forEach(o => {
-          load += o.allocation.parttime
+          load += (o.allocation.parttime || 100)
           start = Math.max(start, o.start)
           end = Math.min(end, o.end)
         })
@@ -131,13 +131,15 @@ export default {
         const contracts = t.user.allocations.filter(c => c.type=='CONTRACT'
           && (c.from<=end || c.to >= start))
 
-        const parttime = contracts.reduce((c, part) => Math.min(part, c.parttime), 100) 
-
+        const parttime = contracts.reduce((part, c) => Math.min(part, c.parttime), 100) 
+        
         if (load>parttime) {
-          simultan.forEach(o => o.custom_class = 'gantt-critical')
+          simultan
+            .filter(t => t.allocation.type=='PROJECT')
+            .forEach(o => o.custom_class = 'gantt-critical')
           const projectTask = tasks
             .find(o => o.project && o.project.id == t.allocation.project_id)
-          projectTask.custom_class = 'gantt-critical'
+          if (projectTask) projectTask.custom_class = 'gantt-critical'
         }
       })
     },
@@ -151,6 +153,15 @@ export default {
         }
         task.project.starts_at = start
         task.project.ends_at = end
+      }
+      if (task.allocation) {
+        // if (!this.modified.projects) this.modified.projects = {}
+        // this.modified.projects[task.project.id] = {
+        //   starts_at: api.datetime(start),
+        //   ends_at: api.datetime(end)
+        // }
+        task.allocation.from = start
+        task.allocation.to = end
       }
     },
     async save() {
@@ -183,7 +194,7 @@ export default {
       })
       this.projects.forEach( p => {
           p.starts_at = this.dateOrFromNow(p.starts_at, 0)
-          p.ends_at = this.dateOrFromNow(p.ends_at, Math.max(1, p.planned/8))
+          p.ends_at = this.dateOrFromNow(p.ends_at, Math.max(5, p.planned/8))
       } )
     },
     async loadUsers() {

@@ -5,7 +5,7 @@
             <div v-for="(p,i) in rows" :key="i" class="row-legend">{{p}}</div>
         </div>
         <div style="overflow: hidden">
-            <svg id="gantt"></svg>
+            <svg ref="gantt" id="gantt"></svg>
         </div>
     </div>
 </template>
@@ -55,13 +55,16 @@ export default {
     },
     watch: {
         tasks() {
+            this.$refs.gantt.innerHTML = '';
+            if (this.gantt) delete this.gantt
             this.gantt = new Gantt('#gantt', this.tasks, this.options)
             this.gantt.change_view_mode(this.view_mode)
         },
         view_mode() {
             this.gantt.change_view_mode(this.view_mode)
         }
-    }
+    },
+
 }
 </script>
 
