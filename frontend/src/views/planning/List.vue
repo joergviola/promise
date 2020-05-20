@@ -37,12 +37,30 @@ export default {
       let row = 0
       const tasks = []
       this.projects.forEach((p,i) => {
+
+        let allocated = 0
+        this.users.forEach((u,i) => {
+            const off = u.allocations
+                .filter(a => a.type=='ILL' || a.type=='HOLIDAY')
+            u.allocations.forEach((a,j) =>  {
+                if (a.project_id == p.id) {
+                    allocated += (a.parttime || 100)/100 * this.workdays(a.from || p.starts_at, a.to || p.ends_at, off)        
+                }
+            })
+        })
+
+        const buffer = Math.round(((allocated / (p.planned/8)) - 1) * 100)
+console.log(p.name, p.planned, allocated, buffer)
+        let cl = null
+        if (buffer>=20) cl = 'gantt-normal'
+        else if (buffer>=0) cl = 'gantt-warn'
+        else cl = 'gantt-critical'
         tasks.push({
           id: 'Project-' + i,
-          name: p.name,
+          name: `${p.name} [${buffer}%]`,
           start: p.starts_at,
           end: p.ends_at,
-          custom_class: 'gantt-normal',
+          custom_class: cl,
           project: p,
         })
       })
@@ -223,6 +241,10 @@ export default {
         })
       })
     },
+    workdays(from, to, off) {
+        // braindead impl
+        return (to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24) + 1
+    }
   },
   async mounted() {
     await this.loadProjects()

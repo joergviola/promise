@@ -48,6 +48,13 @@ html, body {
 fill: black !important;
 }
 
+.gantt-warn g rect  {
+  fill: yellow !important;
+}
+.gantt-warn g text  {
+fill: black !important;
+}
+
 .gantt-normal g rect  {
   fill: rgb(0,164,255, 0.8) !important;
 }
