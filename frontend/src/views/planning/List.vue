@@ -42,34 +42,54 @@ export default {
           name: p.name,
           start: p.starts_at,
           end: p.ends_at,
-          custom_class: 'gantt-blue',
+          custom_class: 'gantt-normal',
           project: p,
         })
       })
       
       const rows = this.packTasks("Projects", tasks, 0)
 
-      const users = {}
-      this.projects.forEach((p,i) => {
-        p.allocations.forEach(a =>  {
-          if (a.user.organisation_id != this.user.organisation_id) return
-          if (!users[a.user.id]) users[a.user.id] = {name: a.user.name, tasks: []}
-          users[a.user.id].tasks.push({
-            id: 'Allocation-' + i,
-            name: `${p.name} [${a.parttime || '100'}%]`,
-            start: p.starts_at,
-            end: p.ends_at,
-            custom_class: 'gantt-blue',
+      this.users.forEach((u,i) => {
+        const usertasks = []
+        u.allocations.forEach((a,j) =>  {
+          if (u.organisation_id != this.user.organisation_id) return
+          const task = {
+            id: `Allocation-$i-$j`,
+            name: a.type,
+            start: a.from,
+            end: a.to,
+            custom_class: 'gantt-normal',
             allocation: a,
-          })
+            user: u,
+          }        
+          const p = a.project
+          if (p) {
+            task.name = `${p.name} [${a.parttime || '100'}%]`
+            if (!task.start) task.start = p.starts_at
+            if (!task.end) task.end = p.ends_at
+          }
+          switch (a.type) {
+            case 'PROJECT': 
+              if (!p) return
+              break
+            case 'CONTRACT': 
+              return
+              break;
+            case 'ILL': 
+            case 'HOLIDAY':
+              task.custom_class = 'gantt-off'
+              break;
+            default:
+              break;
+          }
+          usertasks.push(task)
         })
+        if (usertasks.length > 0) {
+          const userRows = this.packTasks(u.name, usertasks, rows.length)
+          tasks.push(...usertasks)
+          rows.push(...userRows)
+        }
       })
-
-      for (let id in users) {
-        const userRows = this.packTasks(users[id].name, users[id].tasks, rows.length)
-        tasks.push(...users[id].tasks)
-        rows.push(...userRows)
-      }
 
       this.checkTasks(tasks)
 
@@ -81,7 +101,7 @@ export default {
       const rows = []
       tasks.sort((a,b) => a.start - b.start)
       tasks.forEach(t => {
-        let row = rows.find(r => r.date < t.start)
+        let row = rows.find(r => t.start && r.date < t.start)
         if (!row) {
           row = {no: rows.length + firstRow}
           rows.push(row)
@@ -99,13 +119,25 @@ export default {
         const simultan = usertasks
           .filter(o => t.allocation.user_id==o.allocation.user_id)
           .filter(o => t.end>=o.start && t.start<=o.end)
-        const load = simultan
-          .reduce((acc, o) => acc + (o.allocation.parttime||100), 0)
-        if (load>(t.allocation.user.parttime || 100)) {
-          simultan.forEach(o => o.custom_class = 'gantt-red')
+        let load = 0
+        let start = null
+        let end = null
+        simultan.forEach(o => {
+          load += o.allocation.parttime
+          start = Math.max(start, o.start)
+          end = Math.min(end, o.end)
+        })
+
+        const contracts = t.user.allocations.filter(c => c.type=='CONTRACT'
+          && (c.from<=end || c.to >= start))
+
+        const parttime = contracts.reduce((c, part) => Math.min(part, c.parttime), 100) 
+
+        if (load>parttime) {
+          simultan.forEach(o => o.custom_class = 'gantt-critical')
           const projectTask = tasks
             .find(o => o.project && o.project.id == t.allocation.project_id)
-          projectTask.custom_class = 'gantt-red'
+          projectTask.custom_class = 'gantt-critical'
         }
       })
     },
@@ -142,29 +174,48 @@ export default {
         mom.add(days, 'days')
       }
       return mom.toDate()
-    }
-  },
-  async mounted() {
-    this.projects = await api.find('project', {
-      and: {
-        state: {'<>': 'LEAD'}
-      },
-      with: {
-        allocations: { 
-          many: 'allocation', 
-          query: {
-            with: {
-              user: { one: 'users', this: 'user_id' }
+    },
+    async loadProjects() {
+      this.projects = await api.find('project', {
+        and: {
+          state: {'<>': 'LEAD'}
+        },
+      })
+      this.projects.forEach( p => {
+          p.starts_at = this.dateOrFromNow(p.starts_at, 0)
+          p.ends_at = this.dateOrFromNow(p.ends_at, Math.max(1, p.planned/8))
+      } )
+    },
+    async loadUsers() {
+      this.users = await api.find('users', {
+        and: {
+          organisation_id: this.user.organisation_id
+        },
+        with: {
+          allocations: { 
+            many: 'allocation', 
+            that: 'user_id',
+            query: {
+              order: {
+                type: 'ASC',
+                project_id: 'ASC',
+              }
             }
           }
         }
-      }
-    })
-    this.projects.forEach( p => {
-        p.starts_at = this.dateOrFromNow(p.starts_at, 0)
-        p.ends_at = this.dateOrFromNow(p.ends_at, Math.max(1, p.planned/8))
-    } )
-    
+      })
+      this.users.forEach( u => {
+        u.allocations.forEach( a => {
+          a.project = this.projects.find(p => p.id==a.project_id)
+          a.from = a.from ? new Date(a.from) : null
+          a.to = a.to ? new Date(a.to) : null
+        })
+      })
+    },
+  },
+  async mounted() {
+    await this.loadProjects()
+    await this.loadUsers()    
   }
 }
 </script>

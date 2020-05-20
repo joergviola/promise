@@ -41,16 +41,23 @@ html, body {
   border: none;
 }
 
-.gantt-red g rect  {
+.gantt-critical g rect  {
   fill: red !important;
 }
-.gantt-red g text  {
+.gantt-critical g text  {
 fill: black !important;
 }
 
-.gantt-blue g rect  {
+.gantt-normal g rect  {
   fill: rgb(0,164,255, 0.8) !important;
 }
-.gantt-blue g text  {
+.gantt-normal g text  {
+fill: white !important;
+}
+
+.gantt-off g rect  {
+  fill: rgb(128, 128, 128, 0.8) !important;
+}
+.gantt-off g text  {
 fill: white !important;
 }

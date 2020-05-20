@@ -223,7 +223,7 @@ export default class Gantt {
                 this.gantt_end = task._end;
             }
         }
-
+        
         this.gantt_start = date_utils.start_of(this.gantt_start, 'day');
         this.gantt_end = date_utils.start_of(this.gantt_end, 'day');
 
@@ -241,6 +241,12 @@ export default class Gantt {
             this.gantt_start = date_utils.add(this.gantt_start, -1, 'month');
             this.gantt_end = date_utils.add(this.gantt_end, 1, 'month');
         }
+
+        for (let task of this.tasks) {
+            if (!task.start) task._start = this.gantt_start
+            if (!task.end) task._end = this.gantt_end
+        }
+
     }
 
     setup_date_values() {

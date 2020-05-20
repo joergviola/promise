@@ -155,7 +155,6 @@ class Base extends Migration
             $table->integer('organisation_id')->unsigned()->nullable();
             $table->text('address')->nullable();
             $table->string('phone')->nullable();
-            $table->integer('parttime')->unsigned()->nullable(); // in %
 
             $table->foreign('organisation_id')->references('id')->on('organisation');
         });

@@ -7,6 +7,7 @@
       :order="order"
       :template="template"
       :query="query"
+      :allowDelete="true"
     />
   </div>
 </template>
@@ -39,7 +40,7 @@ export default {
       switch(this.types[0]) {
         case 'CONTRACT':
           additional = [
-//            { name: 'salary', label: 'Salary', editable: true },
+            { name: 'salary', label: 'Salary', editable: true },
             { name: 'parttime', label: 'Percent', editable: true },
           ]
           break;
