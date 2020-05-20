@@ -23,6 +23,7 @@ class Base extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('state'); // LEAD, REJECTED, ACCEPTED, CLOSED
+            $table->string('key')->nullable(); // For external reference
             $table->string('source')->nullable();
             $table->string('lost_reason')->nullable();
             $table->string('effort_unit')->nullable();
@@ -80,6 +81,7 @@ class Base extends Migration
             $table->string('name');
             $table->string('type'); // SALES, DEV, BACKOFFICE
             $table->string('state'); // NEW, APPROVED, PLANNED, STARTED, IMPLEMENTED, TESTED, CLOSED
+            $table->string('key')->nullable(); // For external reference
             $table->text('description')->nullable();
             $table->date('approved_at')->nullable(); // ab hier zählt es fpür den burndown
             $table->integer('approved_by')->unsigned()->nullable();
