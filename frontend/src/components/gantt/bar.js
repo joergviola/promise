@@ -188,7 +188,7 @@ export default class Bar {
             this.gantt.unselect_all();
             this.group.classList.toggle('active');
 
-            this.show_popup();
+            // this.show_popup();
         });
     }
 

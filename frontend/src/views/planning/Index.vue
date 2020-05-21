@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <gantt :rows="data.rows" :tasks="data.tasks" :view_mode="view_mode" @update="update" />
+    <gantt :rows="data.rows" :tasks="data.tasks" :view_mode="view_mode" @update="update" @click="onClick" />
     <div class="text-right">
       <el-radio-group v-model="view_mode" size="small" class="pull-left">
         <el-radio-button label="Quarter Day">Hourly</el-radio-button>
@@ -12,6 +12,41 @@
         Save
       </el-button>
     </div>
+    <el-dialog
+      title="Edit allocation"
+      :visible.sync="selected.task"
+      width="50%"
+      center>
+      <el-form label-position="top">
+        <el-form-item v-if="selected.task && !selected.task.allocation.id" label="Type">
+          <el-select v-model="selected.type" placeholder="Type...">
+            <el-option-group label="Standard">
+              <el-option value="HOLIDAY" label="Holiday" />
+              <el-option value="ILL" label="Ill" />
+            </el-option-group>
+            <el-option-group label="Projects">
+              <el-option v-for="p in projects" :key="p.id" :value="p.id" :label="p.name" />
+            </el-option-group>
+          </el-select>
+
+        </el-form-item>
+        <el-form-item label="Part time">
+          <el-slider v-model="selected.parttime" :step="10" show-stops show-input />
+        </el-form-item>
+        <el-form-item label="Date">
+          <el-date-picker
+            v-model="selected.date"
+            type="daterange"
+            value-format="yyyy-MM-dd"
+          />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="selected = {}">Cancel</el-button>
+        <el-button type="primary" @click="saveSelected">Save</el-button>
+        <el-button type="danger" @click="deleteSelected">Delete</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -30,6 +65,7 @@ export default {
       view_mode: 'Week',
       modified: null,
       user: api.user(),
+      selected: {},
     }
   },
   computed: {
@@ -43,7 +79,7 @@ export default {
             const off = u.allocations
                 .filter(a => a.type=='ILL' || a.type=='HOLIDAY')
             u.allocations.forEach((a,j) =>  {
-                if (a.project_id == p.id) {
+                if (a.project_id == p.id && a.role=='Dev') {
                     allocated += (a.parttime || 100)/100 * this.workdays(a.from || p.starts_at, a.to || p.ends_at, off)        
                 }
             })
@@ -82,7 +118,7 @@ export default {
           }        
           const p = a.project
           if (p) {
-            task.name = `${p.name} [${a.parttime || '100'}%]`
+            task.name = `${p.name} [${a.role} ${a.parttime || '100'}%]`
             if (!task.start) task.start = p.starts_at
             if (!task.end) task.end = p.ends_at
           }
@@ -132,7 +168,7 @@ export default {
       return result
     },
     checkTasks(tasks) {
-      const usertasks = tasks.filter(t => t.allocation)
+      const usertasks = tasks.filter(t => t.allocation && t.allocation.role=='Dev')
       usertasks.forEach(t => {
         const simultan = usertasks
           .filter(o => t.allocation.user_id==o.allocation.user_id)
@@ -150,7 +186,6 @@ export default {
           && (c.from<=end || c.to >= start))
 
         const parttime = contracts.reduce((part, c) => Math.min(part, c.parttime), 100) 
-        
         if (load>parttime) {
           simultan
             .filter(t => t.allocation.type=='PROJECT')
@@ -160,6 +195,38 @@ export default {
           if (projectTask) projectTask.custom_class = 'gantt-critical'
         }
       })
+    },
+    onClick(task) {
+      if (task.allocation) {
+        this.selected = {
+          task: task,
+          parttime: task.allocation.parttime,
+          date: [task.allocation.from || '', task.allocation.to || ''],
+          type: task.allocation.type=='PROJECT' ? task.allocation.project_id : task.allocation.type
+        }
+      }
+    },
+    saveSelected() {
+      const a = this.selected.task.allocation
+      a.parttime = this.selected.parttime
+      switch (this.selected.type) {
+        case 'ILL':
+        case 'HOLIDAY':
+          a.type = this.selected.type
+          a.project_id = null
+          break;
+        default:
+          a.type = 'PROJECT'
+          a.project_id = this.selected.type
+          a.project = this.projects.find(p => p.id == a.project_id)
+      }
+      a.from = this.selected.date[0]
+      a.to = this.selected.date[1]
+      this.allocationModified(a)
+      this.selected = {}
+    },
+    deleteSelected() {
+      this.selected = {}
     },
     update(task, start, end) {
       if (!this.modified) this.modified = {}
@@ -180,12 +247,13 @@ export default {
         // }
         task.allocation.from = start
         task.allocation.to = end
-        if (!this.modified.allocations) this.modified.allocations = {}
-        this.modified.allocations[task.allocation.id] = {
-          from: api.datetime(start),
-          to: api.datetime(end)
-        }
+        this.allocationModified(task.allocation)
       }
+    },
+    allocationModified(allocation) {
+      if (!this.modified) this.modified = {}
+      if (!this.modified.allocations) this.modified.allocations = {}
+      this.modified.allocations[allocation.id] = allocation
     },
     async save() {
       try {

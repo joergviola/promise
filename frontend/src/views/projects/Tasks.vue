@@ -17,13 +17,14 @@ import GenericList from '@/components/generic/List'
 import api from '@/api'
 
 export default {
-  name: 'LeadTaskList',
+  name: 'ProjetTaskList',
   components: { GenericList },
   props: ['id'],
   data() {
     return {
       allocations: [],
       template: { project_id: this.id, state: 'NEW', type: "DEV", supplier: 'S'  },
+      w: {},
       query: { project_id: this.id, type: "DEV"  },
       type: 'task',
     }

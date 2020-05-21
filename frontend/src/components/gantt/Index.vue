@@ -35,7 +35,7 @@ export default {
                 padding: 18,
                 view_mode: this.view_mode,   
                 date_format: 'YYYY-MM-DD',
-                custom_popup_html: null,
+                custom_popup_html: "",
                 on_click: function (task) {
                     self.$emit('click', task);
                 },
