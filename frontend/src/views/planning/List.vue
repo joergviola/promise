@@ -180,12 +180,20 @@ export default {
         // }
         task.allocation.from = start
         task.allocation.to = end
+        if (!this.modified.allocations) this.modified.allocations = {}
+        this.modified.allocations[task.allocation.id] = {
+          from: api.datetime(start),
+          to: api.datetime(end)
+        }
       }
     },
     async save() {
       try {
         if (this.modified.projects) {
           await api.updateBulk('project', this.modified.projects)
+        }
+        if (this.modified.allocations) {
+          await api.updateBulk('allocation', this.modified.allocations)
         }
       } catch (error) {
         this.$notify.error({
@@ -207,7 +215,7 @@ export default {
     async loadProjects() {
       this.projects = await api.find('project', {
         and: {
-          state: {'<>': 'LEAD'}
+          state: 'ACCEPTED'
         },
       })
       this.projects.forEach( p => {

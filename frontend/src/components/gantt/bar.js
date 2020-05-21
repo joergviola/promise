@@ -360,11 +360,13 @@ export default class Bar {
     }
 
     update_progressbar_position() {
-        this.$bar_progress.setAttribute('x', this.$bar.getX());
-        this.$bar_progress.setAttribute(
-            'width',
-            this.$bar.getWidth() * (this.task.progress / 100)
-        );
+        if (this.task.progress) {
+            this.$bar_progress.setAttribute('x', this.$bar.getX());
+            this.$bar_progress.setAttribute(
+                'width',
+                this.$bar.getWidth() * (this.task.progress / 100)
+            );
+        }
     }
 
     update_label_position() {
