@@ -31,7 +31,7 @@ class Base extends Migration
             $table->date('approved_at')->nullable(); // REJECTED OR ACCEPTED
             $table->date('starts_at')->nullable();
             $table->date('ends_at')->nullable();
-            $table->integer('customer_id')->unsigned();
+            $table->integer('customer_id')->unsigned()->nullable();
             $table->decimal('planned')->nullable();
             $table->decimal('used')->nullable();
             $table->boolean('template')->default(false);

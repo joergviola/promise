@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     addNew() {
-      if (this.createBy !== 'button') {
+      if (this.createBy == 'row' || this.createBy==null) {
         const item = Object.assign({}, this.template)
         item._meta = this.meta
         this.list.push(item)

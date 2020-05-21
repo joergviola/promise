@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div v-if="createBy=='button'" class="filter-container">
+    <div class="filter-container">
       <el-col :span="24" type="flex" align="right">
         <slot name="header"></slot>
-        <el-button class="filter-item pull-right" style="margin-right: 10px;" type="primary" icon="el-icon-edit" @click="$router.push(detail + '/new/detail')">
+        <el-button v-if="createBy=='button'" class="filter-item pull-right" style="margin-right: 10px;" type="primary" icon="el-icon-edit" @click="$router.push(detail + '/new/detail')">
           Add
         </el-button>
       </el-col>

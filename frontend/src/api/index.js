@@ -157,6 +157,26 @@ const theAPI = {
   datetime: function(value = null) {
     if (!value) value = new Date()
     return value.toISOString().slice(0, 19).replace('T', ' ')
+  },
+  clone: function(orig, options) {
+    const copy = Object.assign({}, orig, options.mask || {})
+    delete copy.id
+    if (orig._meta) {
+      copy._meta = Object.assign({}, orig._meta)
+    }
+    if (options.refs) {
+      for (const ref in options.refs) {
+        const meta = copy._meta[ref]
+        meta.ignore = false
+        if (meta.many) {
+          copy[ref] = orig[ref].map(o => this.clone(o, options.refs[ref]))
+        }
+        if (meta.one) {
+          copy[ref] = this.clone(orig[ref], options.refs[ref])
+        }
+      }
+    }
+    return copy
   }
 }
 

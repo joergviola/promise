@@ -21,7 +21,7 @@
 
       <el-table-column label="Position">
         <template slot-scope="{row, $index}">
-          <el-select class="no-border" v-model="row.position" @change="save(row, 'position')" >
+          <el-select class="no-border" v-model="row.position" filterable allow-create @change="save(row, 'position')" >
             <el-option v-for="(name, i) in positionNames" :value="name" :key="i" :label="name" />
           </el-select>
         </template>

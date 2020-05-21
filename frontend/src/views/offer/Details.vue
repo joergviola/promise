@@ -59,7 +59,7 @@ export default {
       })
       const orig = items[0]
       console.log('orig', orig)
-      const copy = this.clone(orig, {
+      const copy = api.clone(orig, {
         mask: {
           name: orig.name + ' (Copy)',
           state: 'NEW',
@@ -80,26 +80,6 @@ export default {
       const { id } = await api.create('accounting', copy)
       this.$router.push(`../${id}/detail`)
     },
-    clone(orig, options) {
-      const copy = Object.assign({}, orig, options.mask || {})
-      delete copy.id
-      if (orig._meta) {
-        copy._meta = Object.assign({}, orig._meta)
-      }
-      if (options.refs) {
-        for (const ref in options.refs) {
-          const meta = copy._meta[ref]
-          meta.ignore = false
-          if (meta.many) {
-            copy[ref] = orig[ref].map(o => this.clone(o, options.refs[ref]))
-          }
-          if (meta.one) {
-            copy[ref] = this.clone(orig[ref], options.refs[ref])
-          }
-        }
-      }
-      return copy
-    }
   }
 }
 </script>
