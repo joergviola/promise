@@ -312,11 +312,14 @@ export default class Gantt {
 
     make_grid_background() {
         const taskrows=[]
-        let rows = 0
-        for (let task of this.tasks) {
-            if (task.row!=null && taskrows.indexOf(task.row)!=-1) continue;
-            taskrows.push(task.row)
-            rows++;
+        let rows = this.options.rows
+        if (!rows) {
+            rows = 0
+            for (let task of this.tasks) {
+                if (task.row!=null && taskrows.indexOf(task.row)!=-1) continue;
+                taskrows.push(task.row)
+                rows++;
+            }
         }
 
         const grid_width = this.dates.length * this.options.column_width;

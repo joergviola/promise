@@ -28,6 +28,7 @@ export default {
                 header_height: 50,
                 column_width: 30,
                 step: 24,
+                rows: this.rows.length,
                 view_modes: ['Quarter Day', 'Half Day', 'Day', 'Week', 'Month'],
                 bar_height: 20,
                 bar_corner_radius: 3,
@@ -54,7 +55,14 @@ export default {
         }
     },
     watch: {
-        tasks() {
+        tasks() { this.reload() },
+        rows() { this.options.rows = this.rows.length; this.reload() },
+        view_mode() {
+            this.gantt.change_view_mode(this.view_mode)
+        }
+    },
+    methods: {
+        reload() {
             if (this.gantt) {
                 this.gantt.clear()
                 delete this.gantt
@@ -62,11 +70,8 @@ export default {
             this.$refs.gantt.innerHTML = '<svg id="gantt"></svg>';
             this.gantt = new Gantt('#gantt', this.tasks, this.options)
             this.gantt.change_view_mode(this.view_mode)
-        },
-        view_mode() {
-            this.gantt.change_view_mode(this.view_mode)
         }
-    },
+    }
 
 }
 </script>

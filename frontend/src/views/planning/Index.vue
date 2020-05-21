@@ -1,5 +1,5 @@
 <template>
-  <div class="components-container">
+  <div v-loading="loading" class="components-container">
     <gantt :rows="data.rows" :tasks="data.tasks" :view_mode="view_mode" @update="update" @click="onClick" />
     <div class="text-right">
       <el-radio-group v-model="view_mode" size="small" class="pull-left">
@@ -66,6 +66,7 @@ export default {
       modified: null,
       user: api.user(),
       selected: {},
+      loading: false,
     }
   },
   computed: {
@@ -138,11 +139,9 @@ export default {
           }
           usertasks.push(task)
         })
-        if (usertasks.length > 0) {
           const userRows = this.packTasks(u.name, usertasks, rows.length)
           tasks.push(...usertasks)
           rows.push(...userRows)
-        }
       })
 
       this.checkTasks(tasks)
@@ -323,8 +322,10 @@ export default {
     }
   },
   async mounted() {
+    this.loading = true
     await this.loadProjects()
     await this.loadUsers()    
+    this.loading = false
   }
 }
 </script>
