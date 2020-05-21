@@ -175,7 +175,7 @@ export default {
       const usertasks = tasks.filter(t => t.allocation)
       usertasks.forEach(t => {
         const simultan = usertasks
-          .filter(o => t.allocation.user_id==o.allocation.user_id)
+          .filter(o => t.allocation.user_id==o.allocation.user_id && o.allocation.type=='PROJECT')
           .filter(o => t.end>=o.start && t.start<=o.end) // Must be dates!
         let load = 0
         let start = null
@@ -251,8 +251,9 @@ export default {
           a.project_id = this.selected.type
           a.project = this.projects.find(p => p.id == a.project_id)
       }
-      a.from = new Date(this.selected.date[0])
-      a.to = new Date(this.selected.date[1])
+      a.from = this.selected.date[0]=='' ? null : new Date(this.selected.date[0])
+      a.to = this.selected.date[1]=='' ? null : new Date(this.selected.date[1])
+      console.log(this.selected.date, a)
       this.allocationModified(a, create)
       this.selected = {}
     },
@@ -335,7 +336,6 @@ export default {
             await api.create('allocation', data)
           }
         }
-        debugger
         if (this.modified.deleted) {
           if (this.modified.deleted.allocations) {
             await api.delete('allocation', this.modified.deleted.allocations.join(','))
