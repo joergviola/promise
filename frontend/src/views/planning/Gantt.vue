@@ -257,6 +257,20 @@ export default {
       this.selected = {}
     },
     deleteSelected() {
+      const a = this.selected.task.allocation
+      const user = this.users.find(u=>u.id == a.user_id)
+      const index = user.allocations.indexOf(a)
+      if (index>=0) {
+        user.allocations.splice(index, 1);
+      }
+      
+      if (a.id) {
+        if (!this.modified) this.modified = {}
+        if (!this.modified.deleted) this.modified.deleted = {}
+        if (!this.modified.deleted.allocations) this.modified.deleted.allocations = []
+        this.modified.deleted.allocations.push(a.id)
+      }
+
       this.selected = {}
     },
     update(task, start, end) {
@@ -319,6 +333,12 @@ export default {
               parttime: allocation.parttime,
             }))
             await api.create('allocation', data)
+          }
+        }
+        debugger
+        if (this.modified.deleted) {
+          if (this.modified.deleted.allocations) {
+            await api.delete('allocation', this.modified.deleted.allocations.join(','))
           }
         }
         this.modified = null
