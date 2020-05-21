@@ -50,7 +50,7 @@ export default {
         })
 
         const buffer = Math.round(((allocated / (p.planned/8)) - 1) * 100)
-console.log(p.name, p.planned, allocated, buffer)
+
         let cl = null
         if (buffer>=20) cl = 'gantt-normal'
         else if (buffer>=0) cl = 'gantt-warn'

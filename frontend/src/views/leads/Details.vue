@@ -85,6 +85,8 @@
         <el-button type="success" @click="save('ACCEPTED')">Accepted</el-button>
         <el-button type="danger" @click="save('REJECTED')">Rejected</el-button>
         <el-button type="primary" @click="save()">Save</el-button>
+        <el-button v-if="!item.template" type="secondary" @click="saveAsTemplate(true)">Save as template</el-button>
+        <el-button v-if="item.template" type="secondary" @click="saveAsTemplate(false)">No template</el-button>
       </el-col>
     </el-row>
   </div>
@@ -132,6 +134,10 @@ export default {
     },
     async contactChanged() {
       this.item.contact = this.contacts.find(c => c.id == this.item.contact.user_id)
+    },
+    saveAsTemplate(tmpl) {
+      this.item.template = tmpl
+      this.save()
     },
     async save(state = null) {
       if (state) {

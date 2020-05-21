@@ -17,6 +17,11 @@ export default {
       return result
     }
   },
+  watch: {
+    query() {
+      this.getList()
+    }
+  },
   created() {
     this.getList()
   },
