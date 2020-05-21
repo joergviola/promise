@@ -17,7 +17,7 @@ class TaskEventSubscriber
     public function handleUpdate(ApiAfterUpdateEvent $event) {
         if ($event->type!='task') return;
 
-        $task = API::read('estimation', $event->id);
+        $task = API::read('task', $event->id);
 
         Helper::updatePlanned($task->project_id);
     }
