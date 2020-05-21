@@ -37,6 +37,9 @@ export default {
                 view_mode: this.view_mode,   
                 date_format: 'YYYY-MM-DD',
                 custom_popup_html: "",
+                on_click_back: function (event) {
+                    self.$emit('clickBack', event);
+                },
                 on_click: function (task) {
                     self.$emit('click', task);
                 },

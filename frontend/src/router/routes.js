@@ -67,7 +67,7 @@ export default [
   },
   {
     path: '/planning',
-    component: () => import('@/views/planning/Index'),
+    component: () => import('@/views/planning/Gantt'),
     name: 'Planning',
     meta: {
       icon: 'el-icon-date'

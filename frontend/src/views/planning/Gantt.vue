@@ -1,6 +1,6 @@
 <template>
   <div v-loading="loading" class="components-container">
-    <gantt :rows="data.rows" :tasks="data.tasks" :view_mode="view_mode" @update="update" @click="onClick" />
+    <gantt :rows="data.rows.map(r => r.name)" :tasks="data.tasks" :view_mode="view_mode" @update="update" @click="onClick" @clickBack="onClickBack"/>
     <div class="text-right">
       <el-radio-group v-model="view_mode" size="small" class="pull-left">
         <el-radio-button label="Quarter Day">Hourly</el-radio-button>
@@ -43,8 +43,9 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="selected = {}">Cancel</el-button>
-        <el-button type="primary" @click="saveSelected">Save</el-button>
-        <el-button type="danger" @click="deleteSelected">Delete</el-button>
+        <el-button v-if="!selected.isNew" type="primary" @click="saveSelected(false)">Save</el-button>
+        <el-button v-if="!selected.isNew" type="danger" @click="deleteSelected">Delete</el-button>
+        <el-button v-if="selected.isNew" type="primary" @click="saveSelected(true)">Create</el-button>
       </span>
     </el-dialog>
   </div>
@@ -156,22 +157,26 @@ export default {
       tasks.forEach(t => {
         let row = rows.find(r => t.start && r.date < t.start)
         if (!row) {
-          row = {no: rows.length + firstRow}
+          row = {
+            no: rows.length + firstRow,
+            name: rows.length==0 ? rowname : ''
+          }
+          if (t.allocation) {
+            row.user = t.allocation.user
+          }
           rows.push(row)
         }
         t.row = row.no
         row.date = t.end
       })
-      const result = [rowname] 
-      for (let i=1; i<rows.length; i++) result.push('')
-      return result
+      return rows
     },
     checkTasks(tasks) {
-      const usertasks = tasks.filter(t => t.allocation && t.allocation.role=='Dev')
+      const usertasks = tasks.filter(t => t.allocation)
       usertasks.forEach(t => {
         const simultan = usertasks
           .filter(o => t.allocation.user_id==o.allocation.user_id)
-          .filter(o => t.end>=o.start && t.start<=o.end)
+          .filter(o => t.end>=o.start && t.start<=o.end) // Must be dates!
         let load = 0
         let start = null
         let end = null
@@ -185,6 +190,9 @@ export default {
           && (c.from<=end || c.to >= start))
 
         const parttime = contracts.reduce((part, c) => Math.min(part, c.parttime), 100) 
+
+        console.log('CHECK', t.name, load, parttime, simultan)
+
         if (load>parttime) {
           simultan
             .filter(t => t.allocation.type=='PROJECT')
@@ -194,6 +202,30 @@ export default {
           if (projectTask) projectTask.custom_class = 'gantt-critical'
         }
       })
+    },
+    onClickBack(rowNo) {
+      const row = this.data.rows[rowNo]
+      if (!row.user) return
+
+      const allocation = {
+        user: row.user,
+        user_id: row.user.id,
+        parttime: 100,
+        role: 'Dev'
+      }
+
+      const task = {
+        allocation: allocation
+      }
+
+      this.selected = {
+        isNew: true,
+        task: task,
+        parttime: task.allocation.parttime,
+        date: [task.allocation.from || '', task.allocation.to || ''],
+        type: task.allocation.type=='PROJECT' ? task.allocation.project_id : task.allocation.type
+      }
+
     },
     onClick(task) {
       if (task.allocation) {
@@ -205,7 +237,7 @@ export default {
         }
       }
     },
-    saveSelected() {
+    saveSelected(create = false) {
       const a = this.selected.task.allocation
       a.parttime = this.selected.parttime
       switch (this.selected.type) {
@@ -219,9 +251,9 @@ export default {
           a.project_id = this.selected.type
           a.project = this.projects.find(p => p.id == a.project_id)
       }
-      a.from = this.selected.date[0]
-      a.to = this.selected.date[1]
-      this.allocationModified(a)
+      a.from = new Date(this.selected.date[0])
+      a.to = new Date(this.selected.date[1])
+      this.allocationModified(a, create)
       this.selected = {}
     },
     deleteSelected() {
@@ -239,20 +271,33 @@ export default {
         task.project.ends_at = end
       }
       if (task.allocation) {
-        // if (!this.modified.projects) this.modified.projects = {}
-        // this.modified.projects[task.project.id] = {
-        //   starts_at: api.datetime(start),
-        //   ends_at: api.datetime(end)
-        // }
         task.allocation.from = start
         task.allocation.to = end
         this.allocationModified(task.allocation)
       }
     },
-    allocationModified(allocation) {
+    allocationModified(allocation, create=false) {
       if (!this.modified) this.modified = {}
-      if (!this.modified.allocations) this.modified.allocations = {}
-      this.modified.allocations[allocation.id] = allocation
+      if (create) {
+        if (!this.modified.created) this.modified.created = {}
+        if (!this.modified.created.allocations) this.modified.created.allocations = []
+        this.modified.created.allocations.push(allocation)
+        const user = this.users.find(u=>u.id == allocation.user_id)
+        user.allocations.push(allocation)
+      } else {
+        const data = {
+          from: api.datetime(allocation.from),
+          to: api.datetime(allocation.to),
+          parttime: allocation.parttime,
+        } 
+        if (this.modified.created && this.modified.created.allocations) {
+          // Wurd die Allocation neu erzeugt? 
+          if (this.modified.created.allocations.find(a => a===allocation))
+            return
+        }
+        if (!this.modified.allocations) this.modified.allocations = {}
+        this.modified.allocations[allocation.id] = data
+      }
     },
     async save() {
       try {
@@ -262,6 +307,21 @@ export default {
         if (this.modified.allocations) {
           await api.updateBulk('allocation', this.modified.allocations)
         }
+        if (this.modified.created) {
+          if (this.modified.created.allocations) {
+            const data = this.modified.created.allocations.map(allocation => ({ 
+              user_id: allocation.user_id,
+              project_id: allocation.project_id,
+              type: allocation.type,
+              role: allocation.role,
+              from: api.datetime(allocation.from),
+              to: api.datetime(allocation.to),
+              parttime: allocation.parttime,
+            }))
+            await api.create('allocation', data)
+          }
+        }
+        this.modified = null
       } catch (error) {
         this.$notify.error({
           title: 'Could not save',
@@ -313,6 +373,7 @@ export default {
           a.project = this.projects.find(p => p.id==a.project_id)
           a.from = a.from ? new Date(a.from) : null
           a.to = a.to ? new Date(a.to) : null
+          a.user = u
         })
       })
     },

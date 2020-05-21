@@ -660,7 +660,14 @@ export default class Gantt {
             this.$svg,
             this.options.popup_trigger,
             '.grid-row, .grid-header',
-            () => {
+            (e, element) => {
+                if (this.options.on_click_back) {
+                    const headerHeight = this.options.header_height + this.options.padding / 2
+                    const rowHeight = this.options.bar_height + this.options.padding
+                    const y = element.getY()
+                    const row = Math.round((y - headerHeight) / rowHeight)
+                    this.options.on_click_back(row)
+                }
                 this.unselect_all();
                 this.hide_popup();
             }
