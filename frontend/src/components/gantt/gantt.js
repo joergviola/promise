@@ -353,10 +353,16 @@ export default class Gantt {
 
         let row_y = this.options.header_height + this.options.padding / 2;
 
-        const rows=[]
-        for (let task of this.tasks) {
-            if (task.row!=null && rows.indexOf(task.row)!=-1) continue;
-            rows.push(task.row)
+        let rowCount = this.options.rows
+        if (!rowCount) {
+            const rows=[]
+            for (let task of this.tasks) {
+                if (task.row!=null && rows.indexOf(task.row)!=-1) continue;
+                rows.push(task.row)
+            }   
+            rowCount = rows.length 
+        }
+        for (let i=0; i<rowCount; i++) {
 
             createSVG('rect', {
                 x: 0,

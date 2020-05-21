@@ -140,9 +140,9 @@ export default {
           }
           usertasks.push(task)
         })
-          const userRows = this.packTasks(u.name, usertasks, rows.length)
-          tasks.push(...usertasks)
-          rows.push(...userRows)
+        const userRows = this.packTasks(u.name, usertasks, rows.length, u)
+        tasks.push(...usertasks)
+        rows.push(...userRows)
       })
 
       this.checkTasks(tasks)
@@ -151,7 +151,7 @@ export default {
     },
   },
   methods: {
-    packTasks(rowname, tasks, firstRow) {
+    packTasks(rowname, tasks, firstRow, user=null) {
       const rows = []
       tasks.sort((a,b) => a.start - b.start)
       tasks.forEach(t => {
@@ -169,6 +169,7 @@ export default {
         t.row = row.no
         row.date = t.end
       })
+      if (rows.length==0) rows.push({no: rows.length + firstRow, name: rowname, user: user})
       return rows
     },
     checkTasks(tasks) {
@@ -205,6 +206,7 @@ export default {
     },
     onClickBack(rowNo) {
       const row = this.data.rows[rowNo]
+      console.log(row)
       if (!row.user) return
 
       const allocation = {

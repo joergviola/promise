@@ -25,6 +25,7 @@
           <el-form-item label="Customer">
             <el-select v-model="item.customer_id" @change="customerChanged" placeholder="New ...">
               <el-option v-for="(o, i) in customers" :key="i" :label="o.name" :value="o.id" />
+              <el-option key="new" label="New..." :value="null" />
             </el-select>
             <el-button class="default" @click="showCustomer=!showCustomer">
               Details
@@ -51,6 +52,7 @@
           <el-form-item label="Contact">
             <el-select v-model="item.contact.user_id" @change="contactChanged" placeholder="New ...">
               <el-option v-for="(o, i) in contacts" :key="i" :label="o.name" :value="o.id" />
+              <el-option key="new" label="New..." :value="null" />
             </el-select>
             <el-button class="default" @click="showContact=!showContact">
               Details
@@ -120,6 +122,16 @@ export default {
   },
   methods: {
     async customerChanged() {
+      if (!this.item.customer_id) {
+        this.contacts = []
+        this.item.customer = {}
+        this.item.contact = { user: {},  _meta: { user: { ignore: true }, }
+ }
+        this.showCustomer = true
+        this.showContact = true
+
+        return
+      }
       this.item.customer = this.customers.find(c => c.id == this.item.customer_id)
       this.contacts = await api.find('users', {
         and: { organisation_id: this.item.customer_id }
