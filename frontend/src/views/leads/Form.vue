@@ -21,7 +21,7 @@
         <lead-tasks :id="$route.params.id" />
       </el-tab-pane>
       <el-tab-pane lazy key="4" label="Offers" name="4">
-        <lead-offers :id="$route.params.id" />
+        <lead-offers :id="$route.params.id"  />
       </el-tab-pane>
     </el-tabs>
 

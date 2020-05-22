@@ -18,11 +18,10 @@ import GenericList from '@/components/generic/List'
 export default {
   name: 'UserList',
   components: { GenericList },
-  props: ['id'],
+  props: ['user'],
   data() {
     return {
       template: {  },
-      query: { user_id: this.id },
       w: { 
         user: { one: 'users', this: 'user_id' },
         project: { one: 'project'},
@@ -37,8 +36,12 @@ export default {
         { name: 'comment', label: 'Comment', editable: true, width: 500 },
       ]
     }
+  },
+  computed: {
+      query() {
+        return { user_id: this.user.id }
+      }
   }
-
 }
 </script>
 

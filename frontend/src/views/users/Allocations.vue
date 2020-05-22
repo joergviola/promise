@@ -18,14 +18,9 @@ import GenericList from '@/components/generic/List'
 export default {
   name: 'UserList',
   components: { GenericList },
-  props: ['id', 'types'],
+  props: ['id', 'user', 'types'],
   data() {
     return {
-      template: { user_id: this.id, type: this.types[0], role: 'NONE' },
-      query: { 
-        user_id: this.id,
-        type: {'in': this.types}
-      },
       w: { },
       order: {from: 'DESC'},
       baseColumns: [
@@ -52,7 +47,17 @@ export default {
       }
       additional.push({ name: 'comment', label: 'Comment', editable: true, width: 300 })
       return this.baseColumns.concat(additional)
-    }
+    },
+    template() {
+      return { user_id: this.user.id, type: this.types[0], role: 'NONE' }
+    },
+    query() {
+      return { 
+        user_id: this.user.id,
+        type: {'in': this.types}
+      }
+    },
+
   }
 
 }

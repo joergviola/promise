@@ -125,7 +125,7 @@ export default {
       if (!this.item.customer_id) {
         this.contacts = []
         this.item.customer = {}
-        this.item.contact = { user: {},  _meta: { user: { ignore: true }, }
+        this.item.contact = { type: 'PROJECT', role: 'Customer', user: {},  _meta: { user: { ignore: true }, }
  }
         this.showCustomer = true
         this.showContact = true
