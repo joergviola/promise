@@ -1,11 +1,15 @@
 <template>
   <div class="components-container board">
-    <Kanban :key="0" :list="tasks" state="NEW" :group="group" class="kanban" header-text="Unapproved" />
-    <Kanban :key="1" :list="tasks" state="APPROVED" :group="group" class="kanban" header-text="Backlog" />
-    <Kanban :key="2" :list="tasks" state="PLANNED" :group="group" class="kanban" header-text="Sprint" />
-    <Kanban :key="3" :list="tasks" state="STARTED" :group="group" class="kanban" header-text="Today" />
-    <Kanban :key="4" :list="tasks" state="IMPLEMENTED" :group="group" class="kanban" header-text="Ready" />
-    <Kanban :key="5" :list="tasks" state="TESTED" :group="group" class="kanban" header-text="Tested" />
+    <Kanban 
+      v-for="(col,i) in columns"
+      :key="i" 
+      :list="tasks" 
+      :state="col.state" 
+      :group="group" 
+      class="kanban" 
+      :header-text="col.label" 
+      @click="onClick" 
+    />
   </div>
 </template>
 
@@ -19,6 +23,14 @@ export default {
   components: { Kanban },
   data() {
     return {
+      columns: [
+        { state: 'NEW', label: 'Unapproved' },
+        { state: 'APPROVED', label: 'Backlog' },
+        { state: 'PLANNED', label: 'Sprint' },
+        { state: 'STARTED', label: 'Today' },
+        { state: 'IMPLEMENTED', label: 'Ready' },
+        { state: 'TESTED', label: 'Tested' },
+      ],
       group: 'mission',
       tasks: [],
       list1: [
@@ -85,6 +97,9 @@ export default {
       }
       this.loading = false
     },
+    onClick(task) {
+      this.$router.push(`task/${task.id}/detail`)
+    }
   }
 
 }
@@ -92,8 +107,8 @@ export default {
 
 <style lang="scss">
 .board {
-  width: 80%;
-  margin-left: 20px;
+  width: 100%;
+  margin-left: 0px;
   display: flex;
   justify-content: space-around;
   flex-direction: row;
@@ -106,9 +121,9 @@ export default {
   width: 500px;
   min-width: 150px;
   max-width: 500px;
+  font-size: 14px;
 
   .board-column-header {
-    background: #00A4FF;
   }
 }
 </style>
