@@ -5,6 +5,7 @@
     :with="w"
     :template="template"
     createBy="row"
+    :allowDelete="true"
   />
 </template>
 

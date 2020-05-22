@@ -42,14 +42,14 @@ html, body {
 }
 
 .gantt-critical g rect  {
-  fill: red !important;
+  fill: rgb(200, 64, 0, 0.8) !important;
 }
 .gantt-critical g text  {
 fill: black !important;
 }
 
 .gantt-warn g rect  {
-  fill: yellow !important;
+  fill: rgb(64, 255, 0, 0.8) !important;
 }
 .gantt-warn g text  {
 fill: black !important;
@@ -59,7 +59,7 @@ fill: black !important;
   fill: rgb(0,164,255, 0.8) !important;
 }
 .gantt-normal g text  {
-fill: white !important;
+fill: #000000 !important;
 }
 
 .gantt-off g rect  {

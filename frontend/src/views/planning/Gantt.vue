@@ -176,7 +176,7 @@ export default {
       const usertasks = tasks.filter(t => t.allocation)
       usertasks.forEach(t => {
         const simultan = usertasks
-          .filter(o => t.allocation.user_id==o.allocation.user_id && o.allocation.type=='PROJECT')
+          .filter(o => t.allocation.user_id==o.allocation.user_id)
           .filter(o => t.end>=o.start && t.start<=o.end) // Must be dates!
         let load = 0
         let start = null

@@ -155,7 +155,7 @@ const theAPI = {
     return call('GET', '/' + type + '/' + id + '/documents')
   },
   datetime: function(value = null) {
-    if (!value) value = new Date()
+    if (!value) return null
     return value.toISOString().slice(0, 19).replace('T', ' ')
   },
   clone: function(orig, options) {
