@@ -6,7 +6,7 @@
         <el-breadcrumb separator-class="el-icon-arrow-right" style="height: 60px; line-height: 60px">
             <el-breadcrumb-item 
                 v-for="(m,i) in $route.matched"
-                :to="{ path: m.path }"
+                :to="breadcrumbPath(i)"
                 :key="i"
             >{{m.name}}</el-breadcrumb-item>
         </el-breadcrumb>            
@@ -41,6 +41,23 @@ export default {
         },
         profile() {
             this.$router.push(`/users/${this.user.id}/detail`)
+        },
+        breadcrumbPath(index) {
+            const route = this.$route.matched[index]
+            let tmpl = route.path
+            if (route.redirect) {
+                if (route.redirect[0] == '/') tmpl = route.redirect
+                else tmpl += '/' + route.redirect
+            }
+            const params = this.$route.params
+
+            return { path: this.replace(tmpl, params) }
+        },
+        replace(tmpl, params) {
+            for (let key in params) {
+                tmpl = tmpl.replace(':'+key, params[key])
+            }
+            return tmpl
         }
     }
 }
