@@ -404,6 +404,21 @@ export default {
         return (to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24) + 1
     }
   },
+  beforeRouteLeave (to, from, next) {
+    if (!this.modified) {
+      next()
+    } else {
+      this.$confirm('You have unsaved changes.', 'Warning', {
+        confirmButtonText: 'Throw them away',
+        cancelButtonText: 'Stay here',
+        type: 'warning'
+      }).then(() => {
+        next()
+      }).catch(() => {
+        next(false)
+      });
+    }
+  },
   async mounted() {
     this.loading = true
     await this.loadProjects()
