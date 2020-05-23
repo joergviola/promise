@@ -91,7 +91,7 @@ export default {
   data() {
     return {
       type: 'task',
-      template: { project_id: this.id, state: 'NEW', type: 'DEV', estimation: {} },
+      template: { project_id: this.id, state: 'NEW', type: 'DEV', estimation: {}, planned: null },
       query: { project_id: this.id, type: 'DEV' },
       with: {
         estimation: {
@@ -114,6 +114,7 @@ export default {
     },
     async saveEstimation(task, attr) {
       if (!task.estimation.id) {
+        task.estimation.project_id = task.project_id
         task.estimation.task_id = task.id
         task.estimation.user_id = api.user().id
         const result = await api.create('estimation', task.estimation)
