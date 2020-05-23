@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="40">
-      <el-col :xs="24" :md="12">
+      <el-col :xs="24" :md="image ? 12 : 24">
         <el-form ref="postForm" v-loading="loading" :model="item" label-position="left" label-width="120px" >
           <fields :item="item" :fields="fields" />
         </el-form>

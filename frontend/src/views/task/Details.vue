@@ -1,13 +1,12 @@
 <template>
   <div class="components-container">
-    <generic-details type="task" :id="tid" :fields="fields" :buttons="buttons" :template="template" :image="image" @update="update"/>
+    <generic-details type="task" :id="tid" :fields="fields" :buttons="buttons" :template="template" @update="update"/>
   </div>
 </template>
 
 <script>
 
 import GenericDetails from '@/components/generic/Details'
-import image from '@/assets/img/undraw_task_31wc.svg'
 
 export default {
   name: 'OfferDetails',
@@ -32,7 +31,6 @@ export default {
   data() {
     return {
       item: null,
-      image: image,
       template: { project_id: this.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: 10 },
       fields: [
         { name: 'name', label: 'Name' },
