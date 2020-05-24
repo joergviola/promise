@@ -15,7 +15,7 @@
         <project-team :id="$route.params.id" />
       </el-tab-pane>
       <el-tab-pane key="5" label="State" name="5">
-
+        <project-burndown :id="$route.params.id" />
       </el-tab-pane>
     </el-tabs>
 
@@ -28,10 +28,11 @@ import ProjectDetails from './Details'
 import ProjectTasks from './Tasks'
 import ProjectBoard from './Board'
 import ProjectTeam from './Team'
+import ProjectBurndown from './Burndown'
 
 export default {
   name: 'ProjectForm',
-  components: { ProjectDetails, ProjectBoard, ProjectTasks, ProjectTeam },
+  components: { ProjectDetails, ProjectBoard, ProjectTasks, ProjectTeam, ProjectBurndown },
   props: {},
   data() {
     return {

@@ -1,5 +1,5 @@
 <template>
-  <el-timeline>
+  <el-timeline  v-loading="loading">
     <el-timeline-item timestamp="You, Now" placement="top">
       <el-card>
         <el-form>
@@ -10,7 +10,7 @@
             <el-input v-model="duration" type="text" placeholder="hh:mm [hh:mm]" />
           </el-form-item>
           <el-form-item>
-            <el-button v-loading="loading" type="primary" @click="save">
+            <el-button type="primary" @click="save">
               Save
             </el-button>
           </el-form-item>
@@ -29,7 +29,7 @@ import moment from 'moment'
 
 export default {
   name: 'TaskTimeline',
-  props: ['id', 'task'],
+  props: ['task'],
   data() {
     return {
       action: {},
@@ -41,28 +41,27 @@ export default {
   async created() {
     this.reload()
   },
+  watch: {
+    task() {
+    this.reload()
+    }
+  },
   methods: {
     async reload() {
-      const tasks = await api.find('task', {
+      this.loading = true
+      this.actions = await api.find('action', {
         and: {
-          id: this.task.id
+          task_id: this.task.id
         },
         with: {
-          actions: {
-            many: 'action',
-            query: {
-              with: {
-                user: { one: 'users', this: 'user_id' }
-              },
-              order: {
-                to: 'DESC'
-              }
-            }
-          }
+          user: { one: 'users', this: 'user_id' }
+        },
+        order: {
+          to: 'DESC'
         }
       })
-      this.actions = tasks[0].actions
-      this.action =  { project_id: this.id, task_id: this.task.id }
+      this.action =  { project_id: this.task.project_id, task_id: this.task.id }
+      this.loading = false
     },
     prepare(action) {
       const fromTo = this.duration.split(' ')
