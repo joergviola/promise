@@ -93,6 +93,7 @@ export default {
 
           const result = await api.create('action', this.action)
           this.action.id = result.id
+          this.task.used = parseFloat(this.task.used) + this.action.used
         }
         this.reload()
       } catch (error) {
