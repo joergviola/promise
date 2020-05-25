@@ -41,6 +41,10 @@ html, body {
   border: none;
 }
 
+.el-input.is-disabled.no-border .el-input__inner {
+  background-color: transparent;
+}
+
 .gantt-critical g rect  {
   fill: rgb(200, 64, 0, 0.8) !important;
 }

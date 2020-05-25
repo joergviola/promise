@@ -33,15 +33,27 @@
         <template slot-scope="{row, $index}">
           <el-input
             v-if="row.id"
-            class="no-border"
+            class="no-border pull-left"
             v-model="row.estimation.planned"
+            :disabled="row.position_id!=null"
             @blur="saveEstimation(row, 'planned')"
             placeholder="Your estimation..."
             :ref="`field-${$index}-3`"
             @keyup.enter.native="onEnter(row, 3, $index)"
             @keyup.up.native="onArrow(3, $index, -1)"
             @keyup.down.native="onArrow(3, $index, +1)"
-          />
+          >
+           <el-popover
+            v-if="row.position_id" 
+            slot="suffix" 
+            placement="bottom"
+            title="Offer already sent"
+            width="200"
+            trigger="click"
+            content="This task is already offered to the customer.">
+            <i slot="reference" class="el-icon-remove-outline"></i>
+          </el-popover>
+          </el-input>
         </template>
       </el-table-column>
 
@@ -52,7 +64,6 @@
             class="no-border"
             v-model="row.estimation.comment"
             @blur="saveEstimation(row, 'comment')"
-            placeholder="Comment"
             :ref="`field-${$index}-4`"
             @keyup.enter.native="onEnter(row, 4, $index)"
             @keyup.up.native="onArrow(4, $index, -1)"
@@ -150,5 +161,5 @@ export default {
 }
 </script>
 
-<style scoped type="sass">
+<style scoped>
 </style>
