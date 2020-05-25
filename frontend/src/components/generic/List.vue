@@ -14,7 +14,7 @@
       <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :minWidth="col.width">
         <template slot-scope="{row, $index}">
           <el-input
-            v-if="!col.type"
+            v-if="editable(row, col) && !col.type"
             class="no-border"
             v-model="row[col.name]"
             :disabled="!editable(row, col)"
@@ -25,6 +25,7 @@
             @keyup.up.native="onArrow(i, $index, -1)"
             @keyup.down.native="onArrow(i, $index, +1)"
           />
+          <span v-if="!editable(row, col) && !col.type" class="input-disabled">{{typeof col.name === 'string' ? _.get(row, col.name) : col.name(row) }}</span>
           <el-select v-if="col.type=='select'" class="no-border" v-model="row[col.name]" @blur="save(row, col.name)"  :placeholder="col.placeholder">
             <el-option v-for="(o, i) in col.options" :key="i" :label="col.display ? _.get(o, col.display) : o" :value="col.id ? _.get(o, col.id) : o" />
           </el-select>
@@ -104,4 +105,7 @@ export default {
 </script>
 
 <style scoped type="sass">
+.input-disabled {
+  padding: 0 15px;
+}
 </style>

@@ -23,17 +23,15 @@ export default {
     return {
       template: {  },
       w: { 
-        user: { one: 'users', this: 'user_id' },
         project: { one: 'project'},
         task: { one: 'task'},
        },
       columns: [
-        { name: 'user.name', label: 'User' },
         { name: 'project.name', label: 'Project' },
-        { name: 'task.name', label: 'Task' },
+        { name: 'task.name', label: 'Task', width: 200 },
         { name: 'from', label: 'Started', type: 'datetime', editable: true, width: 180 },
         { name: 'used', label: 'Duration', editable: true },
-        { name: 'comment', label: 'Comment', editable: true, width: 500 },
+        { name: 'comment', label: 'Comment', editable: true, width: 200 },
       ]
     }
   },
