@@ -35,6 +35,7 @@ export default {
         { name: 'name', label: 'Name', editable: true, placeholder: "New Task..." },
         { name: 'user_id', label: 'Responsible', editable: true, type: 'select', options: this.allocations, display: 'user.name', id: 'user.id', placeholder: 'New member...' },
         { name: 'due_at', label: 'Due', type: 'date', editable: true },
+        { name: 'planned', label: 'Planned', editable: task=>task.position_id==null },
         { name: 'state', label: 'State' },
         { name: 'used', budget: 'planned', label: 'Progress', type: 'progress' },
       ]

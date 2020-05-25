@@ -11,12 +11,17 @@
           <draggable class="list-group" :list="today" group="tasks" @change="dragToday">
             <div v-for="task in today" :class="['task', {selected: selected==task}]" :key="task.id" @click="selected = task">
               <div class="header">
-                {{task.project.name}} 
-                <router-link :to="`/projects/project/${task.project.id}/detail`">
-                  &gt;
-                </router-link>
+                <span class="pull-left">
+                  {{task.project.name}} 
+                  <router-link :to="`/projects/project/${task.project.id}/detail`">
+                    &gt;
+                  </router-link>
+                </span>
+                <span v-if="task.due_at" class="pull-right">
+                  {{task.due_at}}
+                </span>
               </div>
-              <div class="body">
+              <div class="body pull-clear">
                 {{task.name}}
                 <router-link :to="`/projects/project/${task.project.id}/task/${task.id}/detail`">
                   &gt;
@@ -134,8 +139,10 @@ export default {
 
 <style lang="sass" scoped>
 .task 
-  margin-bottom: 10px
+  margin-bottom: 5px
   cursor: pointer
+  padding: 3px
+  border-radius: 3px
 
   &.selected  
     background-color: #EEEEEE

@@ -14,9 +14,10 @@
       <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :minWidth="col.width">
         <template slot-scope="{row, $index}">
           <el-input
-            v-if="col.editable && !col.type"
+            v-if="!col.type"
             class="no-border"
             v-model="row[col.name]"
+            :disabled="!editable(row, col)"
             @blur="save(row, col.name)"
             :placeholder="col.placeholder"
             :ref="`field-${$index}-${i}`"
@@ -24,7 +25,6 @@
             @keyup.up.native="onArrow(i, $index, -1)"
             @keyup.down.native="onArrow(i, $index, +1)"
           />
-          <span v-if="!col.editable && !col.type">{{typeof col.name === 'string' ? _.get(row, col.name) : col.name(row) }}</span>
           <el-select v-if="col.type=='select'" class="no-border" v-model="row[col.name]" @blur="save(row, col.name)"  :placeholder="col.placeholder">
             <el-option v-for="(o, i) in col.options" :key="i" :label="col.display ? _.get(o, col.display) : o" :value="col.id ? _.get(o, col.id) : o" />
           </el-select>
@@ -34,7 +34,7 @@
             v-if="col.type=='date' || col.type=='datetime'"
             v-model="row[col.name]"
             :type="col.type"
-            :disabled="!col.editable"
+            :disabled="!editable(row, col)"
             value-format="yyyy-MM-dd hh:mm"
             @blur="save(row, col.name)"
           />
@@ -94,6 +94,10 @@ export default {
       if (progress <= 0.8) return 'success'
       if (progress <= 1.0) return 'warning'
       return 'exception'
+    },
+    editable(row, col) {
+      if (typeof col.editable == 'function') return col.editable(row)
+      else return col.editable
     }
   }
 }
