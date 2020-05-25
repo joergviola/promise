@@ -60,7 +60,7 @@
           </draggable>
         </el-card>
       </el-col>
-      <el-col :span="16">
+      <el-col :span="8">
         <el-card>
           <div slot="header" class="clearfix">
             <span v-if="!selected">Book time</span>
@@ -68,6 +68,30 @@
           </div>
             <span v-if="!selected">Select a task</span>
           <task-timeline v-if="selected" :task="selected" />
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card>
+          <div slot="header" class="clearfix">
+            Your projects
+          </div>
+          <div v-for="allocation in allocations" class="task" :key="allocation.id">
+            <div class="header">
+              {{allocation.role}} {{allocation.project.starts_at}} - {{allocation.project.ends_at}}
+            </div>
+            <div class="body pull-clear">
+                {{allocation.project.name}} 
+                <router-link :to="`/projects/project/${allocation.project.id}/detail`">
+                  &gt;
+                </router-link>
+            </div>
+            <el-progress
+              :show-text="false"
+              :stroke-width="5"
+              :percentage="percentage(allocation.project)"
+              status="success"
+            />
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -88,6 +112,7 @@ export default {
       user: api.user(),
       today: [],
       current: [],
+      allocations: [],
       selected: null,
     }
   },
@@ -121,18 +146,30 @@ export default {
       const offset = this.today.length
       this.current.forEach((task, i) => data[task.id] = {sort_user: offset + i})
       await api.updateBulk('task', data)
-    }
+    },
+    async loadTasks() {
+      const tasks = await api.find('task', {
+        and: { user_id: this.user.id, state: {'<>': 'NEW' }},
+        with: {
+          project: { one: 'project' }
+        },
+        order: { sort_user: 'ASC' }
+      })
+      this.today = tasks.filter(t => t.state=='STARTED')
+      this.current = tasks.filter(t => t.state!='STARTED')
+    },
+    async loadProjects() {
+      this.allocations = await api.find('allocation', {
+        and: { user_id: this.user.id },
+        with: {
+          project: { one: 'project' }
+        },
+      })
+    },
   },
   async mounted() {
-    const tasks = await api.find('task', {
-      and: { user_id: this.user.id, state: {'<>': 'NEW' }},
-      with: {
-        project: { one: 'project' }
-      },
-      order: { sort_user: 'ASC' }
-    })
-    this.today = tasks.filter(t => t.state=='STARTED')
-    this.current = tasks.filter(t => t.state!='STARTED')
+    this.loadTasks()
+    this.loadProjects()
   },
 }
 </script>
