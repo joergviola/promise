@@ -32,8 +32,8 @@ class Base extends Migration
             $table->date('starts_at')->nullable();
             $table->date('ends_at')->nullable();
             $table->integer('customer_id')->unsigned()->nullable();
-            $table->decimal('planned')->nullable();
-            $table->decimal('used')->nullable();
+            $table->double('planned')->nullable();
+            $table->double('used')->nullable();
             $table->boolean('template')->default(false);
 
             $table->foreign('customer_id')->references('id')->on('organisation');
@@ -43,12 +43,12 @@ class Base extends Migration
             $table->string('type'); // QUOTE, INVOICE, PURCHASE
             $table->string('state'); // OPEN, APPROVED, ACCEPTED, REJECTED, PAYED
             $table->string('name');
-            $table->decimal('pricePerUnit');
+            $table->double('pricePerUnit');
             $table->unsignedInteger('percentBuffer');
             $table->unsignedInteger('rounding'); // 0, 1, 10, 100
-            $table->decimal('price')->nullable();
+            $table->double('price')->nullable();
             $table->integer('project_id')->unsigned()->nullable();
-            $table->decimal('part')->nullable(); // Rechnung: Teil des Angebotes 30%, 40%, 30%
+            $table->double('part')->nullable(); // Rechnung: Teil des Angebotes 30%, 40%, 30%
             $table->date('approved_at')->nullable();
             $table->date('accepted_at')->nullable();
             $table->integer('reference_id')->unsigned()->nullable(); // Bei Rechnung ggf. welches Angebot?
@@ -62,15 +62,15 @@ class Base extends Migration
             $table->text('name')->nullable(); // String reference
             $table->text('comment')->nullable();
             $table->integer('accounting_id')->unsigned();
-            $table->decimal('planned')->nullable();
-            $table->decimal('price')->nullable();
+            $table->double('planned')->nullable();
+            $table->double('price')->nullable();
 
             $table->foreign('accounting_id')->references('id')->on('accounting');
         });
 
         StandardTable::create('Payment', 'Customer payment.', function (Blueprint $table) {
             $table->integer('accounting_id')->unsigned();
-            $table->decimal('payed')->nullable();
+            $table->double('payed')->nullable();
             $table->date('payed_at')->nullable();
             $table->text('comment')->nullable();
 
@@ -94,10 +94,10 @@ class Base extends Migration
             $table->integer('parent_id')->unsigned()->nullable();
             $table->integer('sort_project')->unsigned()->nullable();
             $table->integer('sort_user')->unsigned()->nullable();
-            $table->decimal('planned')->nullable();
-            $table->decimal('used')->nullable();
+            $table->double('planned')->nullable();
+            $table->double('used')->nullable();
             $table->boolean('purchased')->default(false);
-            $table->decimal('price')->nullable();
+            $table->double('price')->nullable();
             $table->string('supplier')->nullable();
             $table->string('position')->nullable(); // String reference to offer position
             $table->integer('position_id')->unsigned()->nullable(); // Accounting position that has been ACCEPTED
@@ -114,8 +114,8 @@ class Base extends Migration
             $table->integer('project_id')->unsigned();
             $table->integer('task_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->decimal('planned')->nullable();
-            $table->decimal('risk')->nullable();
+            $table->double('planned')->nullable();
+            $table->double('risk')->nullable();
             $table->text('comment')->nullable();
 
             $table->foreign('project_id')->references('id')->on('project');
@@ -128,7 +128,7 @@ class Base extends Migration
             $table->dateTime('from')->nullable();
             $table->dateTime('to')->nullable(); // from NOT NULL und to NULL: Timer läuft
             $table->integer('user_id')->unsigned();
-            $table->decimal('used')->nullable();
+            $table->double('used')->nullable();
             $table->integer('project_id')->unsigned();
             $table->integer('task_id')->unsigned()->nullable();
             $table->integer('position_id')->unsigned()->nullable(); // Rechnungsposition, wenn abgerechnet
@@ -148,7 +148,7 @@ class Base extends Migration
             $table->integer('parttime')->unsigned()->nullable(); // in %
             $table->integer('project_id')->unsigned()->nullable();
             $table->integer('user_id')->unsigned();
-            $table->decimal('salary')->nullable();
+            $table->double('salary')->nullable();
 
             $table->foreign('project_id')->references('id')->on('project');
             $table->foreign('user_id')->references('id')->on('users');
