@@ -2,7 +2,6 @@
   <div class="components-container">
     <generic-list
       type="action"
-      detail="/user"
       :columns="columns"
       :with="w"
       :template="template"

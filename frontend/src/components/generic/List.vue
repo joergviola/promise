@@ -11,7 +11,7 @@
 
     <el-table v-loading="loading" :data="list">
 
-      <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :minWidth="col.width">
+      <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :prop="col.name" :minWidth="col.width" sortable>
         <template slot-scope="{row, $index}">
           <el-input
             v-if="editable(row, col) && !col.type"

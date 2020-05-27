@@ -38,7 +38,7 @@ html, body {
 }
 
 .pull-clear {
-  clear: both;;
+  clear: both;
 }
 
 .no-border .el-input__inner {
@@ -48,7 +48,9 @@ html, body {
 .el-input.is-disabled.no-border .el-input__inner {
   background-color: transparent;
 }
-
+#app .el-table th>.cell {
+  padding-left: 25px;
+}
 .gantt-critical g rect  {
   fill: rgb(200, 64, 0, 0.8) !important;
 }
