@@ -56,13 +56,8 @@ export default {
       return diffs
     },
     calcPlanned(diffs) {
-      this.graph.labels = diffs.map(diff => {
-        const day = diff.day % 100
-        const month = Math.floor(diff.day/100) % 100
-        const year = Math.floor(diff.day/10000)
-        const date = new Date(year, month, day)
-        return date.toLocaleDateString()
-      })
+      this.graph.labels = diffs.map(diff => this.getDate(diff.day).toLocaleDateString() )
+
       this.graph.datasets = [
         {
           label: 'Burndown',
@@ -96,7 +91,7 @@ export default {
         const state = null
         task.actions.forEach(action => {
           if (action.used>0) {
-            const day = this.getDate(action.from)
+            const day = this.getDay(action.from)
             if (!days[day]) days[day] = {day: day}
             if (!days[day].used) days[day].used = 0
             days[day].used += action.used
@@ -111,7 +106,7 @@ export default {
           const content = JSON.parse(log.content)
           if (content.state != null) {
             if (state[content.state]) return
-            const day = this.getDate(log.created_at)
+            const day = this.getDay(log.created_at)
             state[content.state] = day
             if (!days[day]) days[day] = {day: day}
             if (!days[day].planned) days[day].planned = 0
@@ -142,12 +137,13 @@ export default {
       const allocations = this.project.allocations
         .filter(a => a.role=='Dev')
         .map(a => ({
-          from: this.getDate(a.from || this.project.starts_at),
-          to: this.getDate(a.to || this.project.ends_at),
+          from: this.getDay(a.from || this.project.starts_at),
+          to: this.getDay(a.to || this.project.ends_at),
           parttime: a.parttime
         }))
       const end = Math.max(... allocations.map(a => a.to))
-      for (let day = today+1; day <= end; day++) {
+      let day = today+1
+      while (day <= end) {
         const cont = allocations
           .filter(a => a.from <= day && a.to >= day)
           .reduce((cont, a) => cont += (a.parttime || 100), 0)
@@ -157,14 +153,28 @@ export default {
           day: day,
           projection: left
         })
-      }    },
+        const date = this.getDate(day)
+        date.setDate(date.getDate() + 1);
+        day = this.getDay(date)
+      }    
+    },
     // 20200520
-    getDate(s) {
-      const date = new Date(s)
+    getDay(date) {
+      if (typeof date == "string") {
+        date = new Date(date)
+      }
       return date.getDate()
         + 100*date.getMonth()
         + 10000*date.getFullYear()
     },
+
+    getDate(d) {
+        const day = d % 100
+        const month = Math.floor(d/100) % 100
+        const year = Math.floor(d/10000)
+        return new Date(year, month, day)
+    },
+
     async loadProject() {
       const projects = await api.find('project', {
         and: {id: this.id},
