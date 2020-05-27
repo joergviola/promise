@@ -43,7 +43,7 @@ export default {
   },
   async created() {
     this.allocations = await api.find('allocation', {
-      and: { project_id: this.id },
+      and: { project_id: this.id, role: 'Dev' },
       with: { user: { one: 'users', this: 'user_id' }}
     })
   }
