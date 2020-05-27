@@ -3,7 +3,7 @@
 
     <el-tabs v-model="activeTab">
       <el-tab-pane key="1" label="Details" name="1">
-        <project-details :id="$route.params.id" />
+        <project-details :id="$route.params.id" @change="p => project=p" />
       </el-tab-pane>
       <el-tab-pane key="2" label="Tasks" name="2">
         <project-tasks :id="$route.params.id" />
@@ -17,6 +17,9 @@
       <el-tab-pane key="5" label="State" name="5">
         <project-burndown :id="$route.params.id" />
       </el-tab-pane>
+      <el-tab-pane key="6" label="Timeline" name="6">
+        <project-timeline :id="$route.params.id" />
+      </el-tab-pane>
     </el-tabs>
 
   </div>
@@ -29,14 +32,16 @@ import ProjectTasks from './Tasks'
 import ProjectBoard from './Board'
 import ProjectTeam from './Team'
 import ProjectBurndown from './Burndown'
+import ProjectTimeline from './Timeline'
 
 export default {
   name: 'ProjectForm',
-  components: { ProjectDetails, ProjectBoard, ProjectTasks, ProjectTeam, ProjectBurndown },
+  components: { ProjectDetails, ProjectBoard, ProjectTasks, ProjectTeam, ProjectBurndown, ProjectTimeline },
   props: {},
   data() {
     return {
       activeTab: '1',
+      project: null
     }
   },
 }

@@ -10,24 +10,12 @@ export default {
   data() {
       return {
           graph: {
-            labels: ['January', 'February'],
-            datasets: [
-                {
-                label: 'Burndown',
-                backgroundColor: '#00A4FF',
-                data: [40, 20]
-                },
-                {
-                label: 'Used',
-                backgroundColor: '#f87979',
-                data: [10, 20]
-                },
-                {
-                label: 'Effort',
-                backgroundColor: '#DDDDDD',
-                data: [10, 20]
-                },
-            ]
+            labels: [],
+            datasets: []
+          },
+          options: {
+            scales: {
+            }
           },
           project: null,
       }
@@ -38,9 +26,11 @@ export default {
       const days = {}
       this.calcPlannedDiff(days)
       this.calcEffort(days)
-      this.calcPlanned(days)
+      const data = this.sortAndSum(days)
+      this.calcProjection(data)
+      this.calcPlanned(data)
     },
-    calcPlanned(data) {
+    sortAndSum(data) {
       const days = Object.keys(data)
       const diffs = days
         .sort()
@@ -63,11 +53,43 @@ export default {
           diff.used = 0
         }
       })
-      this.graph.labels = diffs.map(diff => diff.day)
-      this.graph.datasets[0].data = diffs.map(diff => diff.planned)
-      this.graph.datasets[1].data = diffs.map(diff => diff.check)
-      this.graph.datasets[2].data = diffs.map(diff => diff.used)
-      console.log(diffs)
+      return diffs
+    },
+    calcPlanned(diffs) {
+      this.graph.labels = diffs.map(diff => {
+        const day = diff.day % 100
+        const month = Math.floor(diff.day/100) % 100
+        const year = Math.floor(diff.day/10000)
+        const date = new Date(year, month, day)
+        return date.toLocaleDateString()
+      })
+      this.graph.datasets = [
+        {
+          label: 'Burndown',
+          backgroundColor: '#00A4FF',
+          data: diffs.map(diff => diff.planned),
+					lineTension: 0,
+        },
+        {
+          label: 'Used',
+          backgroundColor: '#f87979',
+          data: diffs.map(diff => diff.check),
+					lineTension: 0,
+        },
+        {
+          label: 'Effort',
+          backgroundColor: '#DDDDDD',
+          data: diffs.map(diff => diff.used),
+          fill: false,
+					lineTension: 0,
+        },
+        {
+          label: 'Projection',
+          backgroundColor: '#44DD88',
+          data: diffs.map(diff => diff.projection),
+					lineTension: 0,
+        },
+      ]
     },
     calcEffort(days) {
       this.project.tasks.forEach(task => {
@@ -84,11 +106,13 @@ export default {
     },
     calcPlannedDiff(days) {
       this.project.tasks.forEach(task => {
-        const state = null
+        const state = {}
         task.log.forEach(log => {
           const content = JSON.parse(log.content)
-          if (content.state != state) {
+          if (content.state != null) {
+            if (state[content.state]) return
             const day = this.getDate(log.created_at)
+            state[content.state] = day
             if (!days[day]) days[day] = {day: day}
             if (!days[day].planned) days[day].planned = 0
             if (!days[day].check) days[day].check = 0
@@ -99,6 +123,10 @@ export default {
                 break;
               case 'IMPLEMENTED': 
                 days[day].planned += -task.planned; 
+                /*
+                1. Originaly planned effort is marked as done
+                2. Originaly planned effort is substituted by the used effort
+                */
                 days[day].check += -2*task.planned + task.used
                 break;
             }
@@ -106,6 +134,30 @@ export default {
         })
       })
     },
+    calcProjection(days) {
+      const lastDay = days[days.length-1]
+      const today = lastDay.day
+      let left = lastDay.planned
+      lastDay.projection = left
+      const allocations = this.project.allocations
+        .filter(a => a.role=='Dev')
+        .map(a => ({
+          from: this.getDate(a.from || this.project.starts_at),
+          to: this.getDate(a.to || this.project.ends_at),
+          parttime: a.parttime
+        }))
+      const end = Math.max(... allocations.map(a => a.to))
+      for (let day = today+1; day <= end; day++) {
+        const cont = allocations
+          .filter(a => a.from <= day && a.to >= day)
+          .reduce((cont, a) => cont += (a.parttime || 100), 0)
+        left -= cont / 100 * 8
+        if (left < 0) left = 0
+        days.push({
+          day: day,
+          projection: left
+        })
+      }    },
     // 20200520
     getDate(s) {
       const date = new Date(s)
@@ -125,15 +177,16 @@ export default {
                 order: {created_at: 'ASC'}
               }}
             }
-          }}
+          }},
+          allocations: {many: 'allocation'}
         }
       })
       this.project = projects[0]
     }
   },
   async mounted () {
-    this.prepareData()
-    this.renderChart(this.graph, {})
+    await this.prepareData()
+    this.renderChart(this.graph, this.options)
   }
 }
 </script>
