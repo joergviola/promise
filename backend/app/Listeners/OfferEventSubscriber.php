@@ -9,7 +9,10 @@ use App\Helper;
 use Illuminate\Support\Facades\DB;
 
 /**
- * If ACCEPTED, accept project also
+ * If SENT, assign tasks to positions
+ * If NEW or REJECTED de-assign tasks
+ * If ACCEPTED, accept project also and APPROVE tasks
+ * Always update positions and projekt
  */
 class OfferEventSubscriber
 {
@@ -50,6 +53,13 @@ class OfferEventSubscriber
                 break;
 
             case 'ACCEPTED':
+                API::provider('task')
+                    ->where('task.project_id', $old->project_id)
+                    ->where('position.accounting_id', $old->id)
+                    ->join('position', 'position.id', '=', 'task.position_id')
+                    ->update([
+                        'task.state' => 'APPROVED'
+                    ]);
                 API::update('project', $old->project_id, ['state' => 'ACCEPTED']);
                 break;
 

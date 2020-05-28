@@ -43,7 +43,7 @@ class Base extends Migration
             $table->string('type'); // QUOTE, INVOICE, PURCHASE
             $table->string('state'); // OPEN, APPROVED, ACCEPTED, REJECTED, PAYED
             $table->string('name');
-            $table->double('pricePerUnit');
+            $table->double('pricePerUnit')->nullable();
             $table->unsignedInteger('percentBuffer');
             $table->unsignedInteger('rounding'); // 0, 1, 10, 100
             $table->double('price')->nullable();
@@ -68,7 +68,7 @@ class Base extends Migration
             $table->foreign('accounting_id')->references('id')->on('accounting');
         });
 
-        StandardTable::create('Payment', 'Customer payment.', function (Blueprint $table) {
+        StandardTable::create('payment', 'Customer payment.', function (Blueprint $table) {
             $table->integer('accounting_id')->unsigned();
             $table->double('payed')->nullable();
             $table->date('payed_at')->nullable();
