@@ -160,7 +160,7 @@ export default {
     },
     async loadProjects() {
       this.allocations = await api.find('allocation', {
-        and: { user_id: this.user.id },
+        and: { user_id: this.user.id, type: 'PROJECT' },
         with: {
           project: { one: 'project' }
         },

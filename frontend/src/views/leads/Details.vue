@@ -242,6 +242,7 @@ export default {
       if (!this.item.contact) this.item.contact = {
         type: 'PROJECT',
         role: 'Customer',
+        user: {},
         _meta: { user: { ignore: true } }
       }
       this.customerChanged()

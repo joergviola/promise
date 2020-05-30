@@ -1,14 +1,6 @@
 <template>
   <div class="components-container">
     <div style="display: none/*flex*/; justify-content: flex-start; align-items: baseline;">
-      <h3 style="margin-top: 0em; margin-bottom: 0em">{{item.name}}</h3>
-      <small style="padding-left: 2em;">
-        <span v-if="item.customer.name">{{item.customer.name}}</span>
-        <span v-if="item.customer.website"><a :href="item.customer.website">{{item.customer.website}}</a>,</span>
-        <span v-if="item.contact.user.name">{{item.contact.user.name}},</span>
-        <span v-if="item.contact.user.phone">{{item.contact.user.phone}},</span>
-        <span v-if="item.contact.user.email"><a :href="'mailto:'+item.contact.user.email">{{item.contact.user.email}}</a></span>
-      </small>
     </div>
     <el-tabs v-model="activeTab">
       <el-tab-pane key="1" label="Details" name="1">
