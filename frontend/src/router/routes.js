@@ -108,6 +108,17 @@ export default [
     ]
   },
   {
+    path: '/roles',
+    name: 'Roles',
+    component: () => import('@/views/admin/roles/Index.vue'),
+    meta: {
+      icon: 'el-icon-s-home',
+      layout: 'default',
+      bottom: true,
+      roles: ['Admin']
+    },
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import('../views/auth/Login.vue'),

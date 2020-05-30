@@ -20,7 +20,10 @@ export default {
   watch: {
     query() {
       this.getList()
-    }
+    },
+    template() {
+      this.getList()
+    },
   },
   created() {
     this.getList()
@@ -101,7 +104,9 @@ export default {
         const key = `field-${index + dir}-${column}`
         let ref = this.$refs[key]
         if (Array.isArray(ref)) ref = ref[0]
-        ref.focus()
+        this.$nextTick(() => {
+          ref.focus()
+        })
       }
     },
 
