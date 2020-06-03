@@ -1,0 +1,49 @@
+
+primary = #4599DF
+secondary = #F0B544
+
+html, body, #app, .content__default
+    height: 100%
+
+html
+    scroll-behavior: smooth
+
+ul
+    list-style-type: disc
+    
+
+.content
+    margin-left: 100px
+
+.slider
+    width: 70%
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;  
+    scroll-behavior: smooth;
+    max-height: 400px
+
+    img
+        flex-shrink: 0;
+        scroll-snap-align: start;
+
+
+.process 
+    position: fixed
+    top: 10%
+    width: 280px
+
+    .step 
+        background-color: primary
+        color: white
+        padding: 8px 20px
+        display: block
+        margin-top: 15px
+        z-index: 10
+        border: primary 2px solid
+
+        &:hover
+            background-color: secondary
+            border: white 2px solid
+

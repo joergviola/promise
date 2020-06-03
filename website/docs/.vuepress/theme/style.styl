@@ -1,0 +1,23 @@
+@tailwind base;
+
+@tailwind components;
+
+
+.process
+   for width in 8 10 12 14 16 18 20 22 24 26
+        .custom-tr-{width} 
+            --transform-translate-x: (-290px+(10px*width))
+
+            &:hover
+                --transform-translate-x: (-270px+(10px*width))
+
+@tailwind utilities;
+
+@import url(https://fonts.googleapis.com/css?family=Roboto);
+
+
+* {
+    font-family: Roboto;
+    font-weight: 300;
+}
+
