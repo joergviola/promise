@@ -1,10 +1,12 @@
 <template>
     <div :class="classes">
         <a :name="name || title"></a>
-        <div v-if="title" class="text-right container pt-12">
-            <h2 class="text-5xl -mt-6">{{title}}</h2>
+        <div class="p-6">
+            <div v-if="title" class="text-right container pt-12">
+                <h2 class="text-5xl -mt-6">{{title}}</h2>
+            </div>
+            <slot></slot>
         </div>
-        <slot></slot>
     </div>
 </template>
 
@@ -14,7 +16,7 @@ export default {
     props: ['name', 'title', 'type'],
     computed: {
         classes() {
-            const result = ['h-full']
+            const result = ['min-h-full']
             switch(this.type) {
                 case "first":
                     result.push('bg-secondary', 'text-white'); break

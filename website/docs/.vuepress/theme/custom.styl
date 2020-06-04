@@ -7,7 +7,7 @@ html, body, #app, .content__default
 
 html
     scroll-behavior: smooth
-
+    -webkit-overflow-scrolling: touch;
 ul
     list-style-type: disc
     
@@ -16,13 +16,11 @@ ul
     margin-left: 100px
 
 .slider
-    width: 70%
     display: flex;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;  
     scroll-behavior: smooth;
-    max-height: 400px
 
     img
         flex-shrink: 0;
@@ -37,10 +35,9 @@ ul
     .step 
         background-color: primary
         color: white
-        padding: 8px 20px
         display: block
         margin-top: 15px
-        z-index: 10
+        z-index: 20
         border: primary 2px solid
 
         &:hover
