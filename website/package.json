@@ -6,7 +6,7 @@
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "fa:build": "node node_modules/vuepress-plugin-font-awesome/index.js"
+    "push": "vuepress build docs; cd docs/.vuepress/dist; git add .; git commit -a -m \"`date`\"; git push"
   },
   "keywords": [],
   "author": "",
