@@ -78,7 +78,7 @@ class Base extends Migration
         });
 
         StandardTable::create('task', 'Project task.', function (Blueprint $table) {
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('type'); // SALES, DEV, BACKOFFICE
             $table->string('state'); // NEW, APPROVED, PLANNED, STARTED, IMPLEMENTED, TESTED, CLOSED
             $table->string('key')->nullable(); // For external reference

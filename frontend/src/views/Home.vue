@@ -156,7 +156,7 @@ export default {
         order: { sort_user: 'ASC' }
       })
       this.today = tasks.filter(t => t.state=='STARTED')
-      this.current = tasks.filter(t => t.state!='STARTED')
+      this.current = tasks.filter(t => t.state=='APPROVED' || t.state=='PLANNED')
     },
     async loadProjects() {
       this.allocations = await api.find('allocation', {

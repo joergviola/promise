@@ -72,7 +72,8 @@ export default {
       this.closed = tasks.filter(t => t.state === 'CLOSED')
       this.open = tasks.filter(t => t.state !== 'CLOSED')
       if (this.open.length === 0) {
-        this.open.push(this.template)
+        const task = Object.assign({}, this.template)
+        this.save(task)
       }
     },
     close(task) {
