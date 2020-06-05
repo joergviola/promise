@@ -3,7 +3,7 @@
     <a :name="anchor"></a>
     <div class="flex flex-wrap my-12">
       <div v-if="align=='left'" class="w-full sm:w-1/2">
-        <div class="flex flex-1 m-6 h-48 md:h-auto md:px-0 bg-white rounded shadow-xl hover:scale-200 sm:transform origin-left transition duration-500 ease-in-out" >
+        <div class="flex flex-1 m-6 h-48 md:h-auto md:px-0 bg-white rounded shadow-xl hover:scale-200 sm:transform origin-top-left transition duration-500 ease-in-out" >
           <img class="object-cover" :src="$withBase(`/images/${image}`)">
         </div> 
       </div>
@@ -16,7 +16,7 @@
         </p>
       </div>
       <div v-if="align=='right'" class="w-full sm:w-1/2">
-        <div class="flex flex-1 m-6 h-48 md:h-auto md:px-0 bg-white rounded shadow-xl hover:scale-200 sm:transform origin-right transition duration-500 ease-in-out" >
+        <div class="flex flex-1 m-6 h-48 md:h-auto md:px-0 bg-white rounded shadow-xl hover:scale-200 sm:transform origin-top-right transition duration-500 ease-in-out" >
           <img class="object-cover" :src="$withBase(`/images/${image}`)">
         </div> 
       </div>
