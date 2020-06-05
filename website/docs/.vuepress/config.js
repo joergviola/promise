@@ -1,6 +1,6 @@
 module.exports = {
-    title: "Hello Tailwind-Press!",
-    description: "Blog v0.0.1",
+    title: "gluon-project",
+    description: "Project lifecycle management software for service companies",
     plugins:  ['@limdongjin/vuepress-plugin-simple-seo', {}],
     themeConfig: {
       nav: [

@@ -1,6 +1,4 @@
 ---
-title: gluon-project
-description: gluon-project
 image: '/post-specific-image.png'
 twitter_creator: gluon_project
 twitter_site: gluon_project

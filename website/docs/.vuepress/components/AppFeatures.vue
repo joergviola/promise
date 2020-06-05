@@ -49,7 +49,7 @@
       </feature>
 
       <feature anchor="Ressource" title="Ressource planning" image="gluon-ressource-planning.jpg" align="left">
-        Your offer was accepted? Congrats! Now assign a team and plan the timeline with 
+        Your offer was accepted? &#x1F389; Congrats! Now assign a team and plan the timeline with 
         respect to all your other projects as well as holidays and other off-times.
         <ul class="list-disc ml-6 my-3">
           <li>See all projects and assignments visually on a timeline</li>
@@ -66,9 +66,9 @@
         They can take tasks from the backlog and schedule them in a sprint or start working on them today.
         Then they appear on their <a href="#Home">home screen</a>.
         <ul class="list-disc ml-6 my-3">
-          <li>Approve task that your team is allowing to work on</li>
-          <li>Organise tasks in sprints</li>
-          <li>Put tasks in your daily todo list</li>
+          <li>Approve tasks that your team is allowed to work on</li>
+          <li>Organize tasks in sprints</li>
+          <li>Put tasks in your today's todo list</li>
           <li>Mark them as ready, then tested, then deployed</li>
         </ul>            
           <em>A workflow specialized for software and web development.</em>

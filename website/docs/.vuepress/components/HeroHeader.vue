@@ -20,22 +20,21 @@
       </p>
 
       <div class="md:py-12">
-        <p class="text-white mb-4">
-          Built by a service company for service companies.<br>
-          We are currently building gluon and implementing it in our own company.<br>
+        <p class="text-gray-800 mb-4">
+          Built for project based service companies.<br>
           Apply for news and early access:
         </p>
         <input type="email" placeholder="Your e-mail address" class="md:text-xl text-black w-64 -mr-2 py-2 pl-4 rounded-l-full outline-none shadow-lg">
         <button class="rounded-r-full bg-secondary hover:underline text-white md:text-xl text-bold py-2 pl-4 pr-6  shadow-lg">Apply</button>
-        <p class="text-xs text-gray-800 mt-2">
-          (We are a german software shop and underly GDPR. 
+        <div class="text-xs text-gray-800 mt-2 mx-32">
+          (We are from germany and underly GDPR. 
           So we certainly will not spam you and remove your address on request immediately.)
-        </p>
+        </div>
       </div>
     </div>
 
     <div class="flex items-center w-full mx-auto content-end">
-      <div class="h-48 md:h-auto flex flex-1 m-6 md:px-0 md:m-12 bg-white w-1/2 rounded shadow-xl" >
+      <div class="h-48 sm:h-auto flex flex-1 m-6 md:px-0 md:m-12 bg-white w-1/2 rounded shadow-xl" >
         <img class="object-cover" :src="$withBase(`/images/gluon-home.jpg`)">
       </div> 
     </div>
