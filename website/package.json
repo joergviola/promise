@@ -6,7 +6,7 @@
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "push": "sh docs/.vuepress/push.sh"
+    "push": "vuepress build docs;sh docs/.vuepress/push.sh"
   },
   "keywords": [],
   "author": "",
