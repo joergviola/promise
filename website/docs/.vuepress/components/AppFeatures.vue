@@ -10,7 +10,7 @@
         ></div>
       </div>
 
-      <feature anchor="Lead" title="Lead Management" image="gluon-leads.png" align="right">
+      <feature anchor="Lead" title="Lead Management" image="gluon-lead-detail2.jpg" align="right">
         Handle your new project opportunities, supporting your sales people:
         <ul class="list-disc ml-6">
           <li>Create new leads from templates</li>
@@ -21,7 +21,7 @@
         </ul>            
       </feature>
 
-      <feature anchor="Estimation" title="Estimation" image="gluon-leads.png" align="left">
+      <feature anchor="Estimation" title="Estimation" image="gluon-lead-tasks.jpg" align="left">
         Let your developers and designers estimate the efforts:
         <ul class="list-disc ml-6">
           <li>Create a work-breaddown-structure including all tasks for the project</li>
@@ -31,7 +31,7 @@
         </ul>            
       </feature>
 
-      <feature anchor="Offer" title="Offer" image="gluon-leads.png" align="right">
+      <feature anchor="Offer" title="Offer" image="gluon-offer-positions.jpg" align="right">
         Handle your new project opportunities, supporting your sales people:
         <ul class="list-disc ml-6">
           <li>Create new leads from templates</li>
@@ -42,7 +42,7 @@
         </ul>            
       </feature>
 
-      <feature anchor="Ressource" title="Ressource planning" image="gluon-leads.png" align="left">
+      <feature anchor="Ressource" title="Ressource planning" image="gluon-ressource-planning.jpg" align="left">
         Let your developers and designers estimate the efforts:
         <ul class="list-disc ml-6">
           <li>Create a work-breaddown-structure including all tasks for the project</li>
@@ -52,7 +52,7 @@
         </ul>            
       </feature>
 
-      <feature anchor="Task" title="Task Management" image="gluon-leads.png" align="right">
+      <feature anchor="Task" title="Task Management" image="gluon-project-tasks.jpg" align="right">
         Handle your new project opportunities, supporting your sales people:
         <ul class="list-disc ml-6">
           <li>Create new leads from templates</li>
@@ -63,7 +63,7 @@
         </ul>            
       </feature>
 
-      <feature anchor="Time" title="Time tracking" image="gluon-leads.png" align="left">
+      <feature anchor="Time" title="Time tracking" image="gluon-task-timeline.jpg" align="left">
         Let your developers and designers estimate the efforts:
         <ul class="list-disc ml-6">
           <li>Create a work-breaddown-structure including all tasks for the project</li>
@@ -73,7 +73,7 @@
         </ul>            
       </feature>
 
-      <feature anchor="Project" title="Project monitoring" image="gluon-leads.png" align="right">
+      <feature anchor="Project" title="Project monitoring" image="gluon-projects.jpg" align="right">
         Handle your new project opportunities, supporting your sales people:
         <ul class="list-disc ml-6">
           <li>Create new leads from templates</li>
@@ -84,7 +84,7 @@
         </ul>            
       </feature>
 
-      <feature anchor="Invoice" title="Invoicing" image="gluon-leads.png" align="left">
+      <feature anchor="Invoice" title="Invoicing" image="gluon-lead-offers.jpg" align="left">
         Let your developers and designers estimate the efforts:
         <ul class="list-disc ml-6">
           <li>Create a work-breaddown-structure including all tasks for the project</li>
@@ -94,7 +94,7 @@
         </ul>            
       </feature>
 
-      <feature anchor="Post" title="Post calculation" image="gluon-leads.png" align="right">
+      <feature anchor="Post" title="Post calculation" image="gluon-projects.jpg" align="right">
         Handle your new project opportunities, supporting your sales people:
         <ul class="list-disc ml-6">
           <li>Create new leads from templates</li>
@@ -105,7 +105,7 @@
         </ul>            
       </feature>
 
-      <feature anchor="Home" title="Home screen" image="gluon-leads.png" align="left">
+      <feature anchor="Home" title="Home screen" image="gluon-home.jpg" align="left">
         Let your developers and designers estimate the efforts:
         <ul class="list-disc ml-6">
           <li>Create a work-breaddown-structure including all tasks for the project</li>

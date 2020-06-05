@@ -36,7 +36,7 @@
 
     <div class="flex items-center w-full mx-auto content-end">
       <div class="h-48 md:h-auto flex flex-1 m-6 md:px-0 md:m-12 bg-white w-1/2 rounded shadow-xl" >
-        <img class="object-cover" :src="$withBase(`/images/gluon-leads.png`)">
+        <img class="object-cover" :src="$withBase(`/images/gluon-home.jpg`)">
       </div> 
     </div>
   </div>
