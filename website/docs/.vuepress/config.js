@@ -1,4 +1,5 @@
 module.exports = {
+    base: '/promise/website/docs/.vuepress/dist/',
     title: "gluon-project",
     description: "Project lifecycle management software for service companies",
     plugins:  ['@limdongjin/vuepress-plugin-simple-seo', {}],

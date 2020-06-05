@@ -1,8 +1,5 @@
+// Not purging!
 module.exports = {
-  purge: [
-    './docs/**/*.html',
-    './docs/**/*.vue',
-  ],
   theme: {
     extend: {
       colors: {
