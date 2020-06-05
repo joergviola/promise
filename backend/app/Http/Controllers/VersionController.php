@@ -15,8 +15,11 @@ class VersionController extends Controller
                 'item_id' => $id,
             ],
             'with' => [
-                'user' => ['type'=>'users', 'from' => 'user_id'],
+                'user' => ['one'=>'users', 'this' => 'user_id'],
             ],
+            'order' => [
+                'id' => 'ASC'
+            ]
         ]);
         foreach ($items as &$item) {
             $item->content = json_decode($item->content);
