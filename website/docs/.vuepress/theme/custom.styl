@@ -2,45 +2,77 @@
 primary = #4599DF
 secondary = #F0B544
 
-html, body, #app, .content__default
-    height: 100%
-
-html
-    scroll-behavior: smooth
-    -webkit-overflow-scrolling: touch;
-ul
-    list-style-type: disc
-    
-
-.content
-    margin-left: 100px
-
-.slider
-    display: flex;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;  
+html {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
     scroll-behavior: smooth;
+}
 
-    img
-        flex-shrink: 0;
-        scroll-snap-align: start;
+body {
+    background: primary
+}
+
+button,
+.gradient2 {
+    background: secondary
+}
+
+.right-arrow {
+    display: inline-block;
+    line-height: 38px;
+    position: relative;
+}
+.right-arrow:before, .right-arrow:after {
+    content:"";
+    border-style: solid;
+    border-width: 0;
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+.right-arrow {
+    background-color: secondary
+}
+.right-arrow:after, .right-arrow:before {
+    border-width: 19px 0 19px 19px;
+}
+.right-arrow:before {
+    border-color: secondary transparent;
+    left: -19px;
+}
+.right-arrow:after {
+    border-color: transparent secondary;
+    right: -19px;
+}
 
 
-.process 
-    position: fixed
-    top: 10%
-    width: 280px
+/* Browser mockup code
+* Contribute: https://gist.github.com/jarthod/8719db9fef8deb937f4f
+* Live example: https://updown.io
+*/
 
-    .step 
-        background-color: primary
-        color: white
-        display: block
-        margin-top: 15px
-        z-index: 20
-        border: primary 2px solid
+.browser-mockup {
+    border-top: 2em solid rgba(230, 230, 230, 0.7);
+    position: relative;
+}
 
-        &:hover
-            background-color: secondary
-            border: white 2px solid
+.browser-mockup:before {
+    display: block;
+    position: absolute;
+    content: "";
+    top: -1.25em;
+    left: 1em;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background-color: #f44;
+    box-shadow: 0 0 0 2px #f44, 1.5em 0 0 2px #9b3, 3em 0 0 2px #fb5;
+}
 
+.browser-mockup > * {
+    display: block;
+}
+
+/* Custom code for the demo */
