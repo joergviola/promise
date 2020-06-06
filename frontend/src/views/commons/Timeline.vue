@@ -10,8 +10,17 @@
             <el-input v-model="duration" type="text" placeholder="hh:mm [hh:mm]" />
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="save">
+            <el-button type="secondary" @click="save(null)">
               Save
+            </el-button>
+            <el-button v-if="task.state == 'PLANNED'" type="danger" @click="save('STARTED')">
+              Start working
+            </el-button>
+            <el-button v-if="task.state == 'STARTED'" type="danger" @click="save('IMPLEMENTED')">
+              Close
+            </el-button>
+            <el-button v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('STARTED')">
+              Reopen
             </el-button>
           </el-form-item>
         </el-form>
@@ -117,10 +126,14 @@ export default {
       action.used = duration
       action.user_id = api.user().id
     },
-    async save() {
+    async save(state=null) {
       console.log('Saving', this.action)
       this.loading = true
       try {
+        if (state) {
+          this.task.state = state
+          await api.update('task', this.task.id, {state: state})
+        }
         if (this.action.id) {
           await api.update('action', this.action.id, this.action)
         } else {
