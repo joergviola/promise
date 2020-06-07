@@ -4,7 +4,7 @@
       class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-2 lg:py-6"
     >
       <div class="pl-4 flex items-center">
-        <a class="text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="#" > 
+        <a class="text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="./" > 
           <svg class="h-8 w-8 inline-block fill-current" 
             viewBox="0 0 100 100" version="1.1"
             xmlns="http://www.w3.org/2000/svg">

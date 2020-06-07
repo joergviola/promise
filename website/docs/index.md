@@ -4,7 +4,6 @@ twitter_creator: gluon_project
 twitter_site: gluon_project
 ---
 
-
 <app-nav></app-nav>
 <hero-header></hero-header>
 <social-proof></social-proof>
