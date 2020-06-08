@@ -30,6 +30,7 @@ export default {
         { state: 'STARTED', label: 'Today' },
         { state: 'IMPLEMENTED', label: 'Ready' },
         { state: 'TESTED', label: 'Tested' },
+        { state: 'DEPLOYED', label: 'Deployed' },
       ],
       group: 'mission',
       tasks: [],

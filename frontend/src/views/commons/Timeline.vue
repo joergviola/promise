@@ -22,6 +22,12 @@
             <el-button v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('STARTED')">
               Reopen
             </el-button>
+            <el-button v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('TESTED')">
+              Tested
+            </el-button>
+            <el-button v-if="task.state == 'TESTED'" type="danger" @click="save('DEPLOYED')">
+              Deployed
+            </el-button>
           </el-form-item>
         </el-form>
       </el-card>

@@ -5,7 +5,7 @@
       <el-col :span="8">
         <el-card>
           <div slot="header" class="clearfix">
-            Your tasks
+            My tasks
           </div>
           <h4>Today</h4>
           <draggable class="list-group" :list="today" group="tasks" @change="dragToday">
@@ -35,7 +35,7 @@
               />
             </div>
           </draggable>
-          <h4>Current</h4>
+          <h4>Upcoming</h4>
           <draggable class="list-group" :list="current" group="tasks" @change="dragCurrent">
             <div v-for="task in current" :class="['task', {selected: selected==task}]" :key="task.id"  @click="selected = null">
               <div class="header">
@@ -63,10 +63,10 @@
       <el-col :span="8">
         <el-card>
           <div slot="header" class="clearfix">
-            <span v-if="!selected">Book time</span>
-            <span v-if="selected">{{selected.name}}</span>
+            Book time
           </div>
-            <span v-if="!selected">Select a task</span>
+            <h4 v-if="selected">{{selected.name}}</h4>
+            <h4 v-if="!selected">Select a task of today</h4>
           <task-timeline v-if="selected" :task="selected" />
         </el-card>
       </el-col>
