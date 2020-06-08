@@ -77,8 +77,10 @@ export default {
     async updateSort() {
       const data = {}
       this.list.forEach((item, i) => {
-        data[item.id] = {}
-        data[item.id][this.sort] = i
+        if (item.id) {
+          data[item.id] = {}
+          data[item.id][this.sort] = i
+        }
       })
       api.updateBulk(this.type, data)
     },

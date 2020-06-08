@@ -1,8 +1,12 @@
 <template>
   <div>
 
-    <el-table v-loading="loading" :data="list" @selection-change="handleSelectionChange">>
-      <el-table-column type="selection" />
+    <el-table ref="theTable" v-loading="loading" :data="list" row-key="id">
+      <el-table-column v-if="sort" label="" width="25">
+        <template slot-scope="{row, $index}">
+          <i class="el-icon-menu"></i>
+        </template>
+      </el-table-column>
 
       <el-table-column label="Name">
         <template slot-scope="{row, $index}">
@@ -114,8 +118,8 @@ export default {
       },
       loading: false,
       list: [],
+      sort: 'sort_project',
       positionNames: [],
-      selectedTasks: [],
     }
   },
   methods: {
@@ -140,9 +144,6 @@ export default {
       const changed = await api.get('task', task.id)
       task.planned = changed.planned
     },
-    handleSelectionChange(val) {
-      this.selectedTasks = val.map(v => v.id);
-    }
   },
   async created() {
     const offers = await api.find('accounting', {
@@ -162,4 +163,8 @@ export default {
 </script>
 
 <style scoped>
+i {
+  color: #EEEEEE;
+  cursor: grab;
+}
 </style>
