@@ -25,6 +25,7 @@
           </el-form-item>
         </el-form>
       </el-card>
+      <a class="detail" href="#" @click.prevent="toggleDetail">Show Detail</a>
     </el-timeline-item>
     <el-timeline-item v-for="(a,i) in actions" :key="i" :timestamp="timestamp(a)" placement="top">
       <p>{{a.comment}}</p>
@@ -45,7 +46,8 @@ export default {
       actions: [],
       logs: [],
       duration: "",
-      loading: null
+      loading: null,
+      detail: false
     }
   },
   async created() {
@@ -70,29 +72,31 @@ export default {
           to: 'DESC'
         }
       })
-      const logs = await api.log('task', this.task.id)
-      if (logs.length>0) {
-        let state = {}
-        logs.forEach(l => {
-          const content = l.content
-          const diff = {}
-          for (let key in content) {
-            if (content[key] && content[key]!==state[key]) {
-              switch (key) {
-                case 'name': diff.Name = content.name; break;
-                case 'state': diff.State = content.state; break;
-                case 'planned': diff.Planned = content.planned; break;
-                case 'user_id': diff.Assigned = content.user_id; break;
+      if (this.detail) {
+        const logs = await api.log('task', this.task.id)
+        if (logs.length>0) {
+          let state = {}
+          logs.forEach(l => {
+            const content = l.content
+            const diff = {}
+            for (let key in content) {
+              if (content[key] && content[key]!==state[key]) {
+                switch (key) {
+                  case 'name': diff.Name = content.name; break;
+                  case 'state': diff.State = content.state; break;
+                  case 'planned': diff.Planned = content.planned; break;
+                  case 'user_id': diff.Assigned = content.user_id; break;
+                }
               }
             }
-          }
-          state = Object.assign(state, content)
-          if (_.isEmpty(diff)) return
-          const entry = {$log: true, user: l.user, to: l.created_at, diff: diff}
-          this.actions.push(entry)
-        })
+            state = Object.assign(state, content)
+            if (_.isEmpty(diff)) return
+            const entry = {$log: true, user: l.user, to: l.created_at, diff: diff}
+            this.actions.push(entry)
+          })
+        }
+        this.actions.sort((a, b) => new Date(b.to) - new Date(a.to))
       }
-      this.actions.sort((a, b) => new Date(b.to) - new Date(a.to))
       this.action =  { project_id: this.task.project_id, task_id: this.task.id }
       this.loading = false
     },
@@ -153,6 +157,10 @@ export default {
         })
       }
       this.loading = false
+    },
+    toggleDetail() {
+      this.detail = !this.detail
+      this.reload()
     }
   }
 
@@ -160,4 +168,10 @@ export default {
 </script>
 
 <style scoped type="sass">
+a.detail {
+  font-size: 80%;
+  float: right;
+  color: #CCCCCC;
+  padding-bottom: 10px;
+}
 </style>
