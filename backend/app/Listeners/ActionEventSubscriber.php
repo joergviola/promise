@@ -17,8 +17,8 @@ class ActionEventSubscriber
 
     public function handleUpdate(ApiAfterUpdateEvent $event) {
         if ($event->type!='action') return;
-
-        $this->updateUsed($event->item);
+        $old = API::read('action', $event->id);
+        $this->updateUsed(get_object_vars($old));
     }
 
     public function handleCreate(ApiAfterCreateEvent $event) {

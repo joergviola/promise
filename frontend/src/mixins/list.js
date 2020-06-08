@@ -86,9 +86,18 @@ export default {
     },
     async save(row, attr) {
       if (!row.id) return
-      const data = {}
-      data[attr] = row[attr]
-      await api.update(this.type, row.id, data)
+      try {
+        const data = {}
+        data[attr] = row[attr]
+        await api.update(this.type, row.id, data)
+      } catch (error) {
+        this.$notify({
+          title: 'Error',
+          message: error.message,
+          type: 'error',
+          duration: 5000
+        })
+      }
     },
     async create(row) {
       try {
