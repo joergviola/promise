@@ -2,12 +2,24 @@
   <div>
 
     <el-table ref="theTable" v-loading="loading" :data="list" row-key="id">
+      <!--
       <el-table-column v-if="sort" label="" width="25">
         <template slot-scope="{row, $index}">
           <i class="el-icon-menu"></i>
         </template>
       </el-table-column>
-
+      -->
+      <el-table-column type="expand">
+        <template slot-scope="{row}">
+          <el-input 
+            v-model="row.description" 
+            :rows="2" type="textarea" 
+            :autosize="{ minRows: 2, maxRows: 4}"
+            placeholder="More info..." 
+            @blur="save(row, 'description')"
+          />
+        </template>
+      </el-table-column>
       <el-table-column label="Name">
         <template slot-scope="{row, $index}">
           <el-input

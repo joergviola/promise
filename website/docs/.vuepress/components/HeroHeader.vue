@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto h-screen">
+  <div class="container mx-auto">
     <div class="text-center px-3 lg:px-0">
       <h1 class="my-4 text-2xl md:text-3xl lg:text-5xl font-black leading-tight"> 
         Your whole project lifecycle in one software!
@@ -8,15 +8,15 @@
         If this is your process, <span class="font-black">gluon project</span> is for you:
       </p>
       <p class="leading-normal text-gray-800 text-base mb-8">
-        <a class="right-arrow bg-secondary px-2 shadow-lg hover:underline text-white" href="#Lead">Lead</a>
-        <a class="right-arrow ml-6 mb-2 px-2 shadow-lg hover:underline text-white" href="#Estimation">Estimation</a>
-        <a class="right-arrow ml-6 mb-2 px-2 shadow-lg hover:underline text-white" href="#Offer">Offer</a>
-        <a class="right-arrow ml-6 mb-2 px-2 shadow-lg hover:underline text-white" href="#Ressource">Ressource planning</a>
-        <a class="right-arrow ml-6 mb-2 px-2 shadow-lg hover:underline text-white" href="#Task">Task management</a>
-        <a class="right-arrow ml-6 mb-2 px-2 shadow-lg hover:underline text-white" href="#Time">Time tracking</a>
-        <a class="right-arrow ml-6 mb-2 px-2 shadow-lg hover:underline text-white" href="#Project">Project monitoring</a>
-        <a class="right-arrow ml-6 mb-2 px-2 shadow-lg hover:underline text-white" href="#Invoice">Invoice</a>
-        <a class="right-arrow ml-6 mb-2 px-2 shadow-lg hover:underline text-white" href="#Post">Post calculation</a>
+        <process-arrow to="#Lead" title="Lead"></process-arrow>
+        <process-arrow to="#Estimation" title="Estimation"></process-arrow>
+        <process-arrow to="#Offer" title="Offer"></process-arrow>
+        <process-arrow to="#Ressource" title="Ressource planning"></process-arrow>
+        <process-arrow to="#Task" title="Task management"></process-arrow>
+        <process-arrow to="#Time" title="Time tracking"></process-arrow>
+        <process-arrow to="#Project" title="Project monitoring"></process-arrow>
+        <process-arrow to="#Invoice" title="Invoice"></process-arrow>
+        <process-arrow to="#Post" title="Post calculation"></process-arrow>
       </p>
 
       <div class="md:py-12">
@@ -34,7 +34,7 @@
     </div>
 
     <div class="flex items-center w-full mx-auto content-end">
-      <div class="h-48 sm:h-auto flex flex-1 m-6 md:px-0 md:m-12 bg-white w-1/2 rounded shadow-xl" >
+      <div class="flex flex-1 m-6 md:px-0 md:m-12 bg-white w-1/2 rounded shadow-xl" >
         <img class="object-cover" :src="$withBase(`/images/gluon-home.jpg`)">
       </div> 
     </div>
