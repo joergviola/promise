@@ -1,6 +1,7 @@
 import Home from '@/views/Home.vue'
 import Parent from '@/router/view.vue'
 import Tabs from '@/components/layout/Tabs.vue'
+import List from '@/components/generic/List.vue'
 
 export default [
   {
@@ -82,8 +83,23 @@ export default [
           },
           {
             path: 'offers',
-            component: () => import('@/views/leads/Offers'),
-            props: true,
+            component: List,
+            props: route => ({
+              type: 'accounting',
+              template: { project_id: route.params.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: "10" },
+              query: { project_id: route.params.id, type: 'QUOTE' },
+              with: { },
+              type: 'accounting',
+              columns: [
+                { name: 'name', label: 'Name', editable: true, placeholder: "New Offer..." },
+                { name: 'price', label: 'Price', editable: false },
+                { name: 'state', label: 'State', editable: false },
+                { name: 'approved_at', label: 'Approved', editable: false },
+                { name: 'accepted_at', label: 'Accepted', editable: false },
+              ],
+              createBy: "button",
+              detail: 'offer'
+            }),
             name: 'Offers',
           },
           {
