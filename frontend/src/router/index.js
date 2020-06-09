@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '@/views/Home.vue'
 import api from '@/api'
 import routes from './routes'
-import { TabPane } from 'element-ui'
 
 Vue.use(VueRouter)
 

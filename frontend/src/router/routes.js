@@ -1,5 +1,6 @@
 import Home from '@/views/Home.vue'
 import Parent from '@/router/view.vue'
+import Tabs from '@/components/layout/Tabs.vue'
 
 export default [
   {
@@ -47,19 +48,55 @@ export default [
       },
       {
         path: 'lead/:id',
-        component: () => import('@/views/leads/Layout'),
+        component: Tabs,
         name: 'Lead',
+        props: true,
         redirect: 'detail',
         children: [
           {
             path: 'detail',
-            component: () => import('@/views/leads/Form'),
-            name: 'Detail',
+            component: () => import('@/views/leads/Details'),
+            props: true,
+            name: 'Lead-Detail',
+            meta: {
+              title: 'Detail'
+            },
+          },
+          {
+            path: 'timeline',
+            component: () => import('@/views/leads/Timeline'),
+            props: true,
+            name: 'Lead-Timeline',
+            meta: {
+              title: 'Timeline'
+            },
+          },
+          {
+            path: 'tasks',
+            component: () => import('@/views/leads/Tasks'),
+            props: true,
+            name: 'Lead-Tasks',
+            meta: {
+              title: 'Tasks'
+            },
+          },
+          {
+            path: 'offers',
+            component: () => import('@/views/leads/Offers'),
+            props: true,
+            name: 'Offers',
           },
           {
             path: 'offer/:oid/detail',
-            component: () => import('@/views/offer/Form'),
+            component: () => import('@/views/offer/Details'),
+            props: true,
             name: 'Offer',
+          },
+          {
+            path: 'offer/:oid/positions',
+            component: () => import('@/views/offer/Positions'),
+            props: true,
+            name: 'Positions',
           }
         ]
       },
@@ -89,20 +126,68 @@ export default [
       },
       {
         path: 'project/:id',
-        component: () => import('@/views/projects/Layout'),
+        component: Tabs,
+        props: true,
         name: 'Project',
         redirect: 'detail',
         children: [
           {
             path: 'detail',
-            component: () => import('@/views/projects/Form'),
-            name: 'Detail',
+            component: () => import('@/views/projects/Details'),
+            props: true,
+            name: 'Project-Detail',
+            meta: {
+              title: 'Detail'
+            },
+          },
+          {
+            path: 'tasks',
+            component: () => import('@/views/projects/Tasks'),
+            props: true,
+            name: 'Project-Tasks',
+            meta: {
+              title: 'Tasks'
+            },
           },
           {
             path: 'task/:tid/detail',
-            component: () => import('@/views/task/Form'),
+            component: () => import('@/views/task/Details'),
+            props: true,
             name: 'Task',
-          }
+          },
+          {
+            path: 'task/:tid/timeline',
+            component: () => import('@/views/commons/Timeline'),
+            props: true,
+            name: 'Work',
+          },
+          {
+            path: 'board',
+            component: () => import('@/views/projects/Board'),
+            props: true,
+            name: 'Board',
+          },
+          {
+            path: 'team',
+            component: () => import('@/views/projects/Team'),
+            props: true,
+            name: 'Team',
+          },
+          {
+            path: 'state',
+            component: () => import('@/views/projects/Burndown'),
+            props: true,
+            name: 'State',
+          },
+          {
+            path: 'timeline',
+            component: () => import('@/views/projects/Timeline'),
+            props: true,
+            name: 'Project-Timeline',
+            meta: {
+              title: 'Timeline'
+            },
+          },
         ]
       }
     ]

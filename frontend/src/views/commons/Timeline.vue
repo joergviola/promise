@@ -45,7 +45,7 @@ import moment from 'moment'
 
 export default {
   name: 'TaskTimeline',
-  props: ['task'],
+  props: ['tid'],
   data() {
     return {
       action: {},
@@ -61,25 +61,34 @@ export default {
   },
   watch: {
     task() {
-    this.reload()
+      this.reload()
     }
   },
   methods: {
     async reload() {
       this.loading = true
-      this.actions = await api.find('action', {
+      const tasks = await api.find('task', {
         and: {
-          task_id: this.task.id
+          id: this.tid
         },
         with: {
-          user: { one: 'users', this: 'user_id' }
-        },
-        order: {
-          to: 'DESC'
+          actions: {
+            many: 'action',
+            query: {
+              with: {
+                user: { one: 'users', this: 'user_id' }
+              },
+              order: {
+                to: 'DESC'
+              }
+            }
+          }
         }
       })
+      this.task = tasks[0]
+      this.actions = this.task.actions
       if (this.detail) {
-        const logs = await api.log('task', this.task.id)
+        const logs = await api.log('task', this.tid)
         if (logs.length>0) {
           let state = {}
           logs.forEach(l => {
