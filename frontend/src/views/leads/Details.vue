@@ -4,26 +4,26 @@
       <el-col :span="12">
         <el-form label-position="left" label-width="120px" >
           <el-form-item label="Name">
-            <el-input v-model="item.name" type="text" />
+            <el-input v-model="item.name" type="text" :disabled="readonly"/>
           </el-form-item>
           <el-form-item label="Description">
-            <el-input v-model="item.description" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" />
+            <el-input v-model="item.description" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" :disabled="readonly" />
           </el-form-item>
           <el-form-item label="Source">
-            <el-select v-model="item.source">
+            <el-select v-model="item.source" :disabled="readonly">
               <el-option v-for="(o, i) in sources" :key="i" :label="o" :value="o" />
             </el-select>
           </el-form-item>
           <el-form-item label="Effort unit">
-            <el-select v-model="item.effort_unit">
+            <el-select v-model="item.effort_unit" :disabled="readonly">
               <el-option v-for="(o, i) in units" :key="i" :label="o" :value="o" />
             </el-select>
           </el-form-item>
           <el-form-item label="Lost reason">
-            <el-input v-model="item.lost_reason" type="text" />
+            <el-input v-model="item.lost_reason" type="text" :disabled="readonly" />
           </el-form-item>
           <el-form-item label="Customer">
-            <el-select v-model="item.customer_id" @change="customerChanged" placeholder="New ...">
+            <el-select v-model="item.customer_id" @change="customerChanged" placeholder="New ..." :disabled="readonly">
               <el-option v-for="(o, i) in customers" :key="i" :label="o.name" :value="o.id" />
               <el-option key="new" label="New..." :value="null" />
             </el-select>
@@ -36,21 +36,21 @@
           <el-collapse-transition>
             <el-card v-show="showCustomer">
               <el-form-item label="Name">
-                <el-input v-model="item.customer.name" type="text" />
+                <el-input v-model="item.customer.name" type="text"  :disabled="readonly"/>
               </el-form-item>
               <el-form-item label="E-Mail">
-                <el-input v-model="item.customer.email" type="text" />
+                <el-input v-model="item.customer.email" type="text"  :disabled="readonly"/>
               </el-form-item>
               <el-form-item label="Phone">
-                <el-input v-model="item.customer.phone" type="text" />
+                <el-input v-model="item.customer.phone" type="text"  :disabled="readonly"/>
               </el-form-item>
               <el-form-item label="Website">
-                <el-input v-model="item.customer.website" type="text" />
+                <el-input v-model="item.customer.website" type="text"  :disabled="readonly"/>
               </el-form-item>
             </el-card>
           </el-collapse-transition>
           <el-form-item label="Contact">
-            <el-select v-model="item.contact.user_id" @change="contactChanged" placeholder="New ...">
+            <el-select v-model="item.contact.user_id" @change="contactChanged" placeholder="New ..." :disabled="readonly">
               <el-option v-for="(o, i) in contacts" :key="i" :label="o.name" :value="o.id" />
               <el-option key="new" label="New..." :value="null" />
             </el-select>
@@ -63,13 +63,13 @@
           <el-collapse-transition>
             <el-card v-show="showContact">
               <el-form-item label="Name">
-                <el-input v-model="item.contact.user.name" type="text" />
+                <el-input v-model="item.contact.user.name" type="text" :disabled="readonly"/>
               </el-form-item>
               <el-form-item label="E-Mail">
-                <el-input v-model="item.contact.user.email" type="text" />
+                <el-input v-model="item.contact.user.email" type="text" :disabled="readonly" />
               </el-form-item>
               <el-form-item label="Phone">
-                <el-input v-model="item.contact.user.phone" type="text" />
+                <el-input v-model="item.contact.user.phone" type="text" :disabled="readonly" />
               </el-form-item>
             </el-card>
           </el-collapse-transition>
@@ -81,14 +81,14 @@
     </el-row>
     <el-row type="flex">
       <el-col :span="24">
-        <el-button type="secondary" @click="$router.go(-1)">
+        <el-button v-if="!readonly" type="secondary" @click="$router.go(-1)">
           Cancel
         </el-button>
-        <el-button type="success" @click="save('ACCEPTED')">Accepted</el-button>
-        <el-button type="danger" @click="save('REJECTED')">Rejected</el-button>
-        <el-button type="primary" @click="save()">Save</el-button>
-        <el-button v-if="!item.template" type="secondary" @click="saveAsTemplate(true)">Save as template</el-button>
-        <el-button v-if="item.template" type="secondary" @click="saveAsTemplate(false)">No template</el-button>
+        <el-button v-if="!readonly" type="success" @click="save('ACCEPTED')">Accepted</el-button>
+        <el-button v-if="!readonly" type="danger" @click="save('REJECTED')">Rejected</el-button>
+        <el-button v-if="!readonly" type="primary" @click="save()">Save</el-button>
+        <el-button v-if="!item.template && !readonly" type="secondary" @click="saveAsTemplate(true)">Save as template</el-button>
+        <el-button v-if="item.template && !readonly" type="secondary" @click="saveAsTemplate(false)">No template</el-button>
       </el-col>
     </el-row>
   </div>
@@ -112,6 +112,15 @@ export default {
       showContact: false,
       contacts: [],
       image: image
+    }
+  },
+  computed: {
+    readonly() {
+      const actions = ['CRUD', 'U']
+      const rights = api.user().role.rights
+        .filter(right => right.tables=='*' || right.tables.search(this.type)!=-1)
+        .filter(right => actions.indexOf(right.actions)!=-1)
+      return rights.length==0
     }
   },
   watch: {

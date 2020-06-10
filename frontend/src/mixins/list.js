@@ -16,6 +16,13 @@ export default {
         result[key].ignore = true
       }
       return result
+    },
+    rights() {
+      return api.user().role.rights
+        .filter(right => right.tables=='*' || right.tables.search(this.type)!=-1)
+    },
+    readonly() {
+      return !this.userCan(['CRUD', 'R'])
     }
   },
   watch: {
@@ -49,11 +56,20 @@ export default {
         query.order = {}
         query.order[this.sort] = 'ASC'
       }
-      this.list = await api.find(this.type, query)
-      this.addNew()
-      if (this.sort) {
-        this.$nextTick(() => {
-          this.setSort()
+      try {
+        this.list = await api.find(this.type, query)
+        this.addNew()
+        if (this.sort) {
+          this.$nextTick(() => {
+            this.setSort()
+          })
+        }
+      } catch (error) {
+        this.$notify({
+          title: 'Error',
+          message: error.message,
+          type: 'error',
+          duration: 5000
         })
       }
       this.loading = false
@@ -154,6 +170,9 @@ export default {
         })
       }
     },
-
+    userCan(actions) {
+      const rights = this.rights.filter(right => actions.indexOf(right.actions)!=-1)
+      return rights.length!=0
+    }
   },
 }

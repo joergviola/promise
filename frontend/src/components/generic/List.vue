@@ -67,6 +67,7 @@
 <script>
 import list from '@/mixins/list'
 import ProgressBar from './Progress'
+
 export default {
   name: 'GenericList',
   mixins: [list],
@@ -78,6 +79,7 @@ export default {
   },  
   methods: {
     editable(row, col) {
+      if (this.readonly) return false
       if (typeof col.editable == 'function') return col.editable(row)
       else return col.editable
     },

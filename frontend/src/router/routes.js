@@ -17,7 +17,8 @@ export default [
     component: Parent,
     name: 'Users',
     meta: {
-      icon: 'el-icon-s-custom'
+      icon: 'el-icon-s-custom',
+      roles: ['Admin']
     },
     redirect: '/users/all',
     children: [
@@ -69,7 +70,8 @@ export default [
             props: true,
             name: 'Lead-Timeline',
             meta: {
-              title: 'Timeline'
+              title: 'Timeline',
+              roles: ['Admin']
             },
           },
           {
@@ -101,6 +103,9 @@ export default [
               detail: 'offer'
             }),
             name: 'Offers',
+            meta: {
+              roles: ['Admin']
+            },
           },
           {
             path: 'offer/:oid/detail',
@@ -123,7 +128,8 @@ export default [
     component: () => import('@/views/planning/Gantt'),
     name: 'Planning',
     meta: {
-      icon: 'el-icon-date'
+      icon: 'el-icon-date',
+      roles: ['Admin']
     },
   },
   {
@@ -131,7 +137,8 @@ export default [
     component: Parent,
     name: 'Projects',
     meta: {
-      icon: 'el-icon-folder'
+      icon: 'el-icon-folder',
+      roles: ['Admin']
     },
     redirect: '/projects/all',
     children: [

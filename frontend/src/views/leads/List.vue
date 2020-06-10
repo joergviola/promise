@@ -11,13 +11,13 @@
       :allow-delete=false
     >
       <span slot="header">
-          <el-select v-model="show" placeholder="Show..." @change="updateShow">
+          <el-select v-if="admin" v-model="show" placeholder="Show..." @change="updateShow">
             <el-option value="OPEN" label="Open" />
             <el-option value="ACC" label="Accepted" />
             <el-option value="REJ" label="Rejected" />
             <el-option value="TMPL" label="Templates" />
           </el-select>
-          <el-dropdown  @command="createFromTmpl">
+          <el-dropdown  v-if="admin" @command="createFromTmpl">
             <el-button type="primary">
               Create<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
@@ -62,6 +62,11 @@ export default {
         { name: 'customer.name', label: 'Customer', editable: false },
         { name: 'last_offer.price', label: 'Last Offer', editable: false },
       ]
+    }
+  },
+  computed: {
+    admin() {
+      return api.userCan('project', ['CRUD', 'U'])
     }
   },
   async mounted() {

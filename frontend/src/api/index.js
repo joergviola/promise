@@ -72,6 +72,12 @@ const theAPI = {
   user: function() {
     return storage.get('user')
   },
+  userCan: function(type, actions) {
+    const rights = this.user().role.rights
+      .filter(right => right.tables=='*' || right.tables.search(type)!=-1)
+      .filter(right => actions.indexOf(right.actions)!=-1)
+    return rights.length>0
+  },
   login: function(email, password) {
     return call('POST', '/../../login', { email, password })
       .then(user => {

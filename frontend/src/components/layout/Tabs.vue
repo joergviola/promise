@@ -17,6 +17,8 @@
 
 <script>
 
+import api from '@/api'
+
 export default {
   name: 'Tabs',
   props: {},
@@ -27,6 +29,9 @@ export default {
     },
     activeIndex() {
       return this.$route.name
+    },
+    user() {
+      return api.user()
     }
   },
   data() {
@@ -49,11 +54,26 @@ export default {
       return route
     },
     valid(route) {
+      if (route.meta) {
+        if (!this.showItem(route)) return false
+      }
       let path = route.path
       for (let key in this.$attrs) {
         path = path.replace(':'+key, this.$attrs[key])
       }
       return path.indexOf(':')==-1
+    },
+    showItem(route) {
+      const meta = route.meta
+      const role = this.user.role
+      if (meta && meta.roles) {
+          if (meta.roles.indexOf(role.name)==-1) return false
+      }
+      if (meta && meta.rights) {
+          const right = role.rights.find(r => meta.rights.indexOf(r.actions)!=-1)
+          if (!right) return false
+      }
+      return !meta.hidden
     }
   }
 }

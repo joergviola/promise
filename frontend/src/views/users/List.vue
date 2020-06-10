@@ -20,12 +20,16 @@ export default {
   data() {
     return {
       template: {  },
-      w: { organisation: { one: 'organisation' } },
+      w: { 
+        organisation: { one: 'organisation' },
+        role: { one: 'role' },
+      },
       type: 'users',
       columns: [
         { name: 'name', label: 'Name', editable: true },
         { name: 'email', label: 'E-mail', editable: true },
         { name: 'organisation.name', label: 'Company' },
+        { name: 'role.name', label: 'Role' },
       ]
     }
   }
