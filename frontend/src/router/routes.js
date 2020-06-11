@@ -2,6 +2,7 @@ import Home from '@/views/Home.vue'
 import Parent from '@/router/view.vue'
 import Tabs from '@/components/layout/Tabs.vue'
 import List from '@/components/generic/List.vue'
+import Details from '@/components/generic/Details.vue'
 
 export default [
   {
