@@ -19,7 +19,7 @@
               <el-option v-for="(o, i) in units" :key="i" :label="o" :value="o" />
             </el-select>
           </el-form-item>
-          <el-form-item label="Lost reason">
+          <el-form-item v-if="item.state=='REJECTED'" label="Lost reason">
             <el-input v-model="item.lost_reason" type="text" :disabled="readonly" />
           </el-form-item>
           <el-form-item label="Customer">
@@ -81,12 +81,10 @@
     </el-row>
     <el-row type="flex">
       <el-col :span="24">
-        <el-button v-if="!readonly" type="secondary" @click="$router.go(-1)">
-          Cancel
-        </el-button>
-        <el-button v-if="!readonly" type="success" @click="save('ACCEPTED')">Accepted</el-button>
-        <el-button v-if="!readonly" type="danger" @click="save('REJECTED')">Rejected</el-button>
+        <el-button v-if="item.state=='LEAD' && !readonly" type="success" @click="save('ACCEPTED')">Accepted</el-button>
+        <el-button v-if="item.state=='LEAD' && !readonly" type="danger" @click="save('REJECTED')">Rejected</el-button>
         <el-button v-if="!readonly" type="primary" @click="save()">Save</el-button>
+        <el-button v-if="item.state!='LEAD' && !readonly" type="primary" @click="save('LEAD')">Reset</el-button>
         <el-button v-if="!item.template && !readonly" type="secondary" @click="saveAsTemplate(true)">Save as template</el-button>
         <el-button v-if="item.template && !readonly" type="secondary" @click="saveAsTemplate(false)">No template</el-button>
       </el-col>
@@ -106,7 +104,7 @@ export default {
     return {
       item: { customer: {}, contact: { user: {} } },
       sources: ['Web', 'Phone', 'Chat', '???'],
-      units: ['Hours', 'Points', 'Euro', ''],
+      units: ['Hour', 'Point', 'Euro', ''],
       showCustomer: false,
       customers: [],
       showContact: false,

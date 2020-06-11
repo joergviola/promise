@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <generic-details type="accounting" :id="oid" :fields="fields" :buttons="buttons" :template="template" :image="image" @update="i => item=i" :reload="true"/>
+    <generic-details type="accounting" :id="oid" :fields="fields" :buttons="buttons" :with="w" :template="template" :image="image" @update="i => item=i" :reload="true"/>
   </div>
 </template>
 
@@ -25,21 +25,25 @@ export default {
       if (!this.item) return []
       const valid = workflow[this.item.state]
       return this.allButtons.filter(b => valid.indexOf(b.label)!=-1)
-    }
+    },
+    fields() {
+      return [
+        { name: 'name', label: 'Name' },
+        { name: 'price', disabled: true, label: 'Price', postfix: 'EUR' },
+        { name: 'pricePerUnit', label: 'Rate', postfix: this.item ? '/ ' + this.item.project.effort_unit : ''},
+        { name: 'percentBuffer', label: 'Buffer', postfix: '%' },
+        { name: 'rounding', label: 'Rounding', type: 'select', options: ['0','1','2','3','-1', '-2' ] },
+        { name: 'state', disabled: true, label: 'State' },
+      ]
+    },
+
   },
   data() {
     return {
       item: null,
       image: image,
       template: { project_id: this.id, name: 'Quote of ' + (new Date().toLocaleDateString()), type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: 0 },
-      fields: [
-        { name: 'name', label: 'Name' },
-        { name: 'price', disabled: true, label: 'Price', postfix: 'EUR' },
-        { name: 'pricePerUnit', label: 'Rate', postfix: '/ h' },
-        { name: 'percentBuffer', label: 'Buffer', postfix: '%' },
-        { name: 'rounding', label: 'Rounding', type: 'select', options: ['0','1','2','3','-1', '-2' ] },
-        { name: 'state', disabled: true, label: 'State' },
-      ],
+      w: { project: {one: 'project'} },
       allButtons: [
         {label: 'Reset', action: item => item.state='NEW', shown: item => item.state === 'NEW', andSave: true },
         {label: 'Send', action: item => item.state='SENT', andSave: true },

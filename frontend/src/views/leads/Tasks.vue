@@ -5,7 +5,7 @@
       <!--
       <el-table-column v-if="sort" label="" width="25">
         <template slot-scope="{row, $index}">
-          <i class="el-icon-menu"></i>
+          <i class="grab el-icon-menu"></i>
         </template>
       </el-table-column>
       -->
@@ -175,7 +175,7 @@ export default {
 </script>
 
 <style scoped>
-i {
+i.grab {
   color: #EEEEEE;
   cursor: grab;
 }
