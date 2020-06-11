@@ -1,1 +1,10 @@
 /.idea
+backend/public/css
+backend/public/fonts
+backend/public/img
+backend/public/js
+backend/public/index.html
+backend/public/precache-manifest.*
+backend/public/manifest.json
+backend/public/service-worker.js
+backend/public/favicon.ico
