@@ -43,7 +43,24 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Planned" prop="planned" />
+      <el-table-column label="Planned">
+        <template slot-scope="{row, $index}">
+          <span v-if="row.id" class="estimation el-input el-input--small">{{row.planned}}
+            <span class="count">{{row.estimations.length}}</span>
+            <el-popover
+              v-if="deviating(row.estimations)"
+              slot="suffix" 
+              placement="bottom"
+              title="Estimations are deviating"
+              width="200"
+              trigger="click"
+              :content="`Estimations vary from ${deviating(row.estimations).min} to ${deviating(row.estimations).max}.<br>This is more than 20%`">
+              <i slot="reference" class="warning el-icon-warning"></i>
+            </el-popover>
+          </span>
+          
+        </template>
+      </el-table-column>
 
       <el-table-column label="Estimation" >
         <template slot-scope="{row, $index}">
@@ -125,7 +142,10 @@ export default {
           one: 'estimation',
           this: 'id',
           that: 'task_id',
-          query: { and: { user_id: 1 } }
+          query: { and: { user_id: api.user().id } }
+        },
+        estimations: {
+          many: 'estimation',
         }
       },
       loading: false,
@@ -156,6 +176,14 @@ export default {
       const changed = await api.get('task', task.id)
       task.planned = changed.planned
     },
+    deviating(estimations) {
+      if (estimations.length==0) return null
+      const min = estimations.reduce((m, c) => Math.min(m, c.planned), estimations[0].planned)
+      const max = estimations.reduce((m, c) => Math.max(m, c.planned), estimations[0].planned)
+      const av = (max+min)/2
+      if ((max-min) / av > 0.2) return {min, max}
+      else return null
+    }
   },
   async created() {
     const offers = await api.find('accounting', {
@@ -179,4 +207,15 @@ i.grab {
   color: #EEEEEE;
   cursor: grab;
 }
+
+.estimation .count {
+  margin-left: 10px;
+  font-size: 80%;
+  color: #AAAAAA;
+}
+.estimation .warning {
+  margin-left: 10px;
+  color: red;
+}
+
 </style>
