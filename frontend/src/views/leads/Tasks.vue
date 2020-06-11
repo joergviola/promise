@@ -43,19 +43,23 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Planned">
+      <el-table-column label="Planned" align="right">
         <template slot-scope="{row, $index}">
-          <span v-if="row.id" class="estimation el-input el-input--small">{{row.planned}}
-            <span class="count">{{row.estimations.length}}</span>
+          <span v-if="row.id" class="estimation el-input el-input--small">
             <el-popover
-              v-if="deviating(row.estimations)"
               slot="suffix" 
               placement="bottom"
-              title="Estimations are deviating"
+              title="Estimations"
               width="200"
-              trigger="click"
-              :content="`Estimations vary from ${deviating(row.estimations).min} to ${deviating(row.estimations).max}.<br>This is more than 20%`">
-              <i slot="reference" class="warning el-icon-warning"></i>
+              trigger="click">
+              <el-table :data="row.estimations" :summary-method="getEstSummaries" show-summary >
+                <el-table-column prop="user.name" label="By"/>
+                <el-table-column prop="planned" label="Estimated" align="right"/>
+              </el-table>
+              <span slot="reference">
+                <i v-if="deviating(row.estimations)" class="warning el-icon-warning"></i>
+                {{row.planned}}
+              </span>
             </el-popover>
           </span>
           
@@ -142,10 +146,15 @@ export default {
           one: 'estimation',
           this: 'id',
           that: 'task_id',
-          query: { and: { user_id: api.user().id } }
+          query: { 
+            and: { user_id: api.user().id } ,
+          }
         },
         estimations: {
           many: 'estimation',
+          query: { 
+            with: { user: {one: 'users', this: 'user_id'} } ,
+          }
         }
       },
       loading: false,
@@ -183,6 +192,11 @@ export default {
       const av = (max+min)/2
       if ((max-min) / av > 0.2) return {min, max}
       else return null
+    },
+    getEstSummaries(param) {
+      if (param.data.length==0) return ['', '']
+      const sum = param.data.reduce((s, c) => s + c.planned, 0)
+      return ['Estimation', sum/param.data.length]
     }
   },
   async created() {
