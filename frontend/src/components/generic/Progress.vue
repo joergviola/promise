@@ -2,15 +2,35 @@
   <el-tooltip
     class="item"
     effect="dark"
-    :content="`${used} of ${planned}`"
     placement="top-start"
   >
-    <el-progress
-      :text-inside="true"
-      :stroke-width="width || 24"
-      :percentage="percentage"
-      :status="status"
-    />
+    <div slot="content">
+      <span v-if="!used && !planned">Not worked on, no planned budget</span>
+      <span v-else-if="!planned">{{used}}, but no planned budget</span>
+      <span v-else-if="!used">0 of {{planned}}</span>
+      <span v-else-if="status=='exception'">{{Math.round(used/planned*100-100)}}% OVERRUN! {{used}} of {{planned}}</span>
+      <span v-else-if="status=='warning'">{{percentage}}% warning, {{used}} of {{planned}}</span>
+      <span v-else>{{used}} of {{planned}}</span>
+    </div>
+    <div
+      class="el-progress"
+      :class="[
+        'el-progress--' + type,
+        status ? 'is-' + status : '',
+        'el-progress--without-text',
+      ]"
+      role="progressbar"
+      :aria-valuenow="percentage"
+      aria-valuemin="0"
+      aria-valuemax="100"
+    >
+      <div class="el-progress-bar" v-if="type === 'line'">
+        <div class="el-progress-bar__outer" :style="{height: (width||12) + 'px'}">
+          <div class="el-progress-bar__inner" :style="barStyle">
+          </div>
+        </div>
+      </div>
+    </div>
 </el-tooltip>
 
 </template>
@@ -19,13 +39,18 @@
 export default {
   name: 'Progress',
   props: ['used', 'planned', 'width'],
+  data() {
+    return {
+      type: 'line'
+    }
+  },
   computed: {
     percentage() {
       if (!this.used) return 0
       if (!this.planned) return 100
       const progress = this.used<this.planned 
         ? this.used / this.planned
-        : this.planned / this.used
+        : ((this.used-this.planned) / this.used)
       return Math.round(100.0 * progress)
     },
     status() {
@@ -35,8 +60,28 @@ export default {
       if (progress <= 0.8) return 'success'
       if (progress <= 1.0) return 'warning'
       return 'exception'
-    }
-  },
+    },
+    barStyle() {
+      const style = {};
+      style.width = this.percentage + '%';
+      if (this.used > this.planned) {
+        style.marginLeft = (100-this.percentage) + '%'
+      }
+//      style.backgroundColor = this.getCurrentColor(this.percentage);
+      return style;
+    },
+
+  }
 }
 </script>
 
+<style>
+@keyframes blink {
+  50% { opacity: 0.0; } }
+@-webkit-keyframes blink {
+  50% { opacity: 0.0; } }
+.is-exception {
+    animation: blink 2s  infinite;
+    -webkit-animation: blink 2s infinite;
+}
+</style>

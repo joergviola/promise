@@ -40,6 +40,7 @@
             v-model="row[col.name]"
             :type="col.type"
             :disabled="!editable(row, col)"
+            format="yyyy-MM-dd hh:mm"
             value-format="yyyy-MM-dd hh:mm"
             @blur="save(row, col.name)"
           />
