@@ -34,6 +34,13 @@ export default {
             user: api.user()
         }
     },
+    computed: {
+        avatar() {
+            const docs = this.user.documents.filter(doc => doc.path=='avatar')
+            if (docs.length>0) return docs[0]
+            else return null
+        }
+    },
     methods: {
         async logout() {
             await api.logout()
@@ -62,3 +69,11 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+header .el-avatar {
+    margin-top: 10px;
+    margin-right: 10px;
+    vertical-align: -40%;
+}
+</style>
