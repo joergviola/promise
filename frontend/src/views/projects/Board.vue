@@ -64,7 +64,23 @@ export default {
           type: 'DEV'
         },
         with: {
-          user: { one: 'users', this: 'user_id' }
+          user: { 
+            one: 'users', 
+            this: 'user_id',
+            query: {
+              with: {
+                documents: {
+                  many: 'document',
+                  that: 'item_id',
+                  query: {
+                    and: {
+                      type: 'users',
+                    },
+                  }
+                }
+              }
+            }
+          }
         },
         order: {
           finished_at: 'DESC'

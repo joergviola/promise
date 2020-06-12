@@ -23,23 +23,23 @@ export default {
       w: { },
       type: 'allocation',
       users: [],
+      columns: [],
       roles: ['Sales', 'Mgmt', 'Dev', 'QA', 'Customer']
     }
   },
-  computed: {
-    columns() {
-      return [
+  async created() {
+    const project = await api.get('project', this.id)
+    this.users = await api.find('users', {
+      and: {organisation_id: {in: [api.user().organisation_id, project.customer_id]}}
+    })
+    this.columns = [
         { name: 'user_id', label: 'Responsible', editable: true, type: 'select', options: this.users, display: 'name', id: 'id' },
         { name: 'role', label: 'Role', editable: true, type: 'select', options: this.roles },
         { name: 'parttime', label: 'Part[%]', editable: true, postfix: '%' },
         { name: 'from', label: 'From', editable: true, type: 'date' },
         { name: 'to', label: 'To', editable: true, type: 'date' },
         { name: 'comment', label: 'Comment', editable: true },
-      ]
-    }
-  },
-  async created() {
-    this.users = await api.find('users', {})
+    ]
   }
 
 }

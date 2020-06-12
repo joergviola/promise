@@ -11,7 +11,11 @@
       @change="onChange"
     >
       <div v-for="element in items" :key="element.id" class="board-item" @click="$emit('click', element)">
-        {{ element.name }}
+        <div>
+          <avatar :user="element.user" :size="25"/>
+          <span class="due">{{element.due_at | dateHuman}}</span>
+        </div>
+        <div>{{ element.name }}</div>
       </div>
     </draggable>
   </div>
@@ -20,11 +24,12 @@
 <script>
 import draggable from 'vuedraggable'
 import api from '@/api'
+import Avatar from '@/components/generic/Avatar'
 
 export default {
   name: 'DragKanbanDemo',
   components: {
-    draggable
+    draggable, Avatar
   },
   props: {
     headerText: {
@@ -68,6 +73,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.due {
+  color: #BBBBBB;
+  font-size: 80%;
+  vertical-align: 60%;
+  margin-left: 10px;
+}
+
 .board-column {
   min-width: 300px;
   min-height: 100px;

@@ -1,7 +1,7 @@
 <template>
   <span :class="cls">
-    <el-avatar v-if="avatar" :size="40" :src="avatar.url"></el-avatar>
-    <el-avatar v-if="!avatar" :size="40" >{{avatarText}}</el-avatar>
+    <el-avatar v-if="avatar" :size="size || 40" :src="avatar.url"></el-avatar>
+    <el-avatar v-if="!avatar" :size="size || 40" >{{avatarText}}</el-avatar>
   </span>
 </template>
 
@@ -10,8 +10,8 @@
 import api from '@/api'
 
 export default {
-    name: "AvatarPicture",
-    props: ['user', 'cls'],
+    name: "Avatar",
+    props: ['user', 'cls', 'size'],
     computed: {
         avatar() {
             const docs = this.user.documents.filter(doc => doc.path=='avatar')
