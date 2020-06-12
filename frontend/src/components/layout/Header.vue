@@ -11,6 +11,7 @@
             >{{m.name}}</el-breadcrumb-item>
         </el-breadcrumb>            
         <el-dropdown style="height: 60px; line-height: 60px; margin-left: auto;margin-right: 25px">
+            <avatar :user="user" cls="header-avatar"/>
             <span class="el-dropdown-link text-right">
                 {{user.name}}
                 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -24,11 +25,12 @@
 </template>
 
 <script>
-
+import Avatar from '@/components/generic/Avatar'
 import api from '@/api'
 
 export default {
     name: "Header",
+    components: {Avatar},
     data() {
         return {
             user: api.user()
@@ -39,6 +41,12 @@ export default {
             const docs = this.user.documents.filter(doc => doc.path=='avatar')
             if (docs.length>0) return docs[0]
             else return null
+        },
+        avatarText() {
+            return this.user.name
+                .split(' ')
+                .map(name => name.substring(0, 1).toUpperCase())
+                .join('')
         }
     },
     methods: {
@@ -71,9 +79,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-header .el-avatar {
+.el-dropdown-menu {
+    padding: 10px 20px;
+}
+
+header .header-avatar {
     margin-top: 10px;
     margin-right: 10px;
-    vertical-align: -40%;
+    vertical-align: -70%;
 }
 </style>
