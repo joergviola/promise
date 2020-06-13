@@ -2,9 +2,9 @@
    <div :style="styles">
       <el-menu
          default-active="2"
-         background-color="#545c64"
+         background-color="#666666"
          text-color="#fff"
-         active-text-color="#ffd04b"
+         active-text-color="#00A4FF"
          style="width: 100%"
       >
          <el-menu-item 
