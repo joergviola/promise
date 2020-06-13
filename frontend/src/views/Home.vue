@@ -30,7 +30,7 @@
               <progress-bar
                 :used="task.used"
                 :planned="task.planned"
-                :width="5"
+                :width="2"
               />
             </div>
           </draggable>
@@ -52,7 +52,7 @@
               <progress-bar
                 :used="task.used"
                 :planned="task.planned"
-                :width="5"
+                :width="2"
               />
             </div>
           </draggable>
@@ -86,7 +86,7 @@
             <progress-bar
               :used="allocation.project.used"
               :planned="allocation.project.planned"
-              :width="5"
+              :width="2"
             />
           </div>
         </el-card>
