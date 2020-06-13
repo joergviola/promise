@@ -27,11 +27,10 @@
                   &gt;
                 </router-link>
               </div>
-              <el-progress
-                :show-text="false"
-                :stroke-width="5"
-                :percentage="percentage(task)"
-                status="success"
+              <progress-bar
+                :used="task.used"
+                :planned="task.planned"
+                :width="5"
               />
             </div>
           </draggable>
@@ -50,11 +49,10 @@
                     &gt;
                 </router-link>
               </div>
-              <el-progress
-                :show-text="false"
-                :stroke-width="5"
-                :percentage="percentage(task)"
-                status="success"
+              <progress-bar
+                :used="task.used"
+                :planned="task.planned"
+                :width="5"
               />
             </div>
           </draggable>
@@ -85,11 +83,10 @@
                   &gt;
                 </router-link>
             </div>
-            <el-progress
-              :show-text="false"
-              :stroke-width="5"
-              :percentage="percentage(allocation.project)"
-              status="success"
+            <progress-bar
+              :used="allocation.project.used"
+              :planned="allocation.project.planned"
+              :width="5"
             />
           </div>
         </el-card>
@@ -100,13 +97,14 @@
 
 <script>
 import GenericList from '@/components/generic/List'
+import ProgressBar from '@/components/generic/Progress'
 import TaskTimeline from '@/views/commons/Timeline'
 import Draggable from 'vuedraggable'
 import api from '@/api'
 
 export default {
   name: 'Dashboard',
-  components: { GenericList, TaskTimeline, Draggable },
+  components: { GenericList, TaskTimeline, Draggable, ProgressBar },
   data() {
     return {
       user: api.user(),
