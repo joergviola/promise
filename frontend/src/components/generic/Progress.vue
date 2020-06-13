@@ -16,7 +16,7 @@
       class="el-progress"
       :class="[
         'el-progress--' + type,
-        status ? 'is-' + status : '',
+        {'blink': status=='exception'},
         'el-progress--without-text',
       ]"
       role="progressbar"
@@ -25,7 +25,7 @@
       aria-valuemax="100"
     >
       <div class="el-progress-bar" v-if="type === 'line'">
-        <div class="el-progress-bar__outer" :style="{height: (width||12) + 'px'}">
+        <div class="el-progress-bar__outer" :style="backStyle">
           <div class="el-progress-bar__inner" :style="barStyle">
           </div>
         </div>
@@ -50,7 +50,7 @@ export default {
       if (!this.planned) return 100
       const progress = this.used<this.planned 
         ? this.used / this.planned
-        : ((this.used-this.planned) / this.used)
+        : 1-((this.used-this.planned) / this.used)
       return Math.round(100.0 * progress)
     },
     status() {
@@ -64,13 +64,21 @@ export default {
     barStyle() {
       const style = {};
       style.width = this.percentage + '%';
-      if (this.used > this.planned) {
-        style.marginLeft = (100-this.percentage) + '%'
-      }
+      // if (this.used > this.planned) {
+      //  style.marginLeft = (100-this.percentage) + '%'
+      // }
 //      style.backgroundColor = this.getCurrentColor(this.percentage);
       return style;
     },
-
+    backStyle() {
+      const style = {};
+      style.height = (this.width||12) + 'px';
+      if (this.used > this.planned) {
+        style.backgroundColor = '#CC8844';
+      }
+      return style;
+    },
+  
   }
 }
 </script>
@@ -80,8 +88,8 @@ export default {
   50% { opacity: 0.0; } }
 @-webkit-keyframes blink {
   50% { opacity: 0.0; } }
-.is-exception {
-    animation: blink 2s  infinite;
-    -webkit-animation: blink 2s infinite;
+.blink {
+    animation: blink 2s  5;
+    -webkit-animation: blink 2s 5;
 }
 </style>
