@@ -20,7 +20,7 @@ class CreateRoles extends Migration
 
         Schema::create('role', function (Blueprint $table) {
             $this->standard($table);
-            $table->string('name')->unique()->comment('Name of the role.');
+            $table->string('name')->comment('Name of the role.');
         });
 
         /*

@@ -88,8 +88,8 @@ const theAPI = {
   logout: function() {
     storage.remove('user')
   },
-  register: function(email, password, name) {
-    return call('POST', '/user', { email, password, name })
+  register: function(orgname, name, email, password) {
+    return call('POST', '/../../register', { orgname, name, email, password })
   },
   find: function(type, query) {
     return call('POST', '/' + type + '/query', query)

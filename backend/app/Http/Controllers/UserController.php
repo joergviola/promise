@@ -8,6 +8,7 @@ use App\User;
 use App\Events\ApiAfterLoginEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -46,5 +47,42 @@ class UserController extends Controller
         }
     }
 
+    public function register(Request $request) {
+        return DB::transaction(function() use ($request) {
+            $orgname = $request->input('orgname');
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $pwd = $request->input('password');
+
+            $client = API::provider('client')->insertGetId([
+                'name' => $orgname
+            ]);
+            $role = API::provider('role')->insertGetId([
+                'name' => 'Admin',
+                'client_id' => $client,
+            ]);
+            API::provider('right')->insertGetId([
+                'role_id' => $role,
+                'client_id' => $client,
+                "tables" => "*",
+                "columns" => "*",
+                "where" => "all",
+                "actions" => "CRUD",
+            ]);
+            $org = API::provider('organisation')->insertGetId([
+                'name' => $orgname,
+                'client_id' => $client,
+            ]);
+            API::provider('users')->insertGetId([
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make($pwd),
+                'client_id' => $client,
+                'role_id' => $role,
+                'organisation_id' => $org,
+            ]);
+            return response()->json(['success'=>true]);
+        });
+    }
 }
 

@@ -236,5 +236,15 @@ export default [
       hidden: true,
       noAuth: true
     }
-  }
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('../views/auth/Register.vue'),
+    meta: {
+      layout: 'no-sidebar',
+      hidden: true,
+      noAuth: true
+    }
+  },
 ]

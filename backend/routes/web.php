@@ -14,5 +14,6 @@
 Route::get('/', function() {return redirect('/login');});
 Route::get('/login', "UserController@index");
 Route::post('/login', "UserController@login");
+Route::post('/register', "UserController@register");
 
 Route::get('/schema', 'SchemaController@index');
