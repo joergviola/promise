@@ -65,7 +65,7 @@
           </div>
             <h4 v-if="selected">{{selected.name}}</h4>
             <h4 v-if="!selected">Select a task of today</h4>
-          <task-timeline v-if="selected" :task="selected" />
+          <task-timeline v-if="selected" :tid="selected.id" />
         </el-card>
       </el-col>
       <el-col :span="8">
@@ -79,7 +79,10 @@
             </div>
             <div class="body pull-clear">
                 {{allocation.project.name}} 
-                <router-link :to="`/projects/project/${allocation.project.id}/detail`">
+                <router-link v-if="allocation.project.state=='LEAD'" :to="`/leads/lead/${allocation.project.id}/detail`">
+                  &gt;
+                </router-link>
+                <router-link v-else :to="`/projects/project/${allocation.project.id}/detail`">
                   &gt;
                 </router-link>
             </div>

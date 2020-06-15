@@ -48,6 +48,7 @@ export default {
   props: ['tid'],
   data() {
     return {
+      task: {},
       action: {},
       actions: [],
       logs: [],
@@ -60,7 +61,7 @@ export default {
     this.reload()
   },
   watch: {
-    task() {
+    tid() {
       this.reload()
     }
   },
