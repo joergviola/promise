@@ -169,21 +169,42 @@ export default {
       row.estimation = { project_id: this.id, task_id: row.id, user_id: api.user().id, planned: null, comment: null }
     },
     async saveEstimation(task, attr) {
-      if (!task.estimation.id) {
-        task.estimation.project_id = task.project_id
-        task.estimation.task_id = task.id
-        task.estimation.user_id = api.user().id
-        const result = await api.create('estimation', task.estimation)
-        task.estimation.id = result.id
-      } else {
-        // Wenn null, wird das nicht in data übernommen ???!
-        task.estimation[attr] = task.estimation[attr] || ''
-        const data = {}
-        data[attr] = task.estimation[attr]
-        await api.update('estimation', task.estimation.id, data)
+      if (attr=='planned') this.repairPlanned(task.estimation)
+      try {
+        if (!task.estimation.id) {
+          task.estimation.project_id = task.project_id
+          task.estimation.task_id = task.id
+          task.estimation.user_id = api.user().id
+          const result = await api.create('estimation', task.estimation)
+          task.estimation.id = result.id
+        } else {
+          // Wenn null, wird das nicht in data übernommen ???!
+          task.estimation[attr] = task.estimation[attr] || ''
+          const data = {}
+          data[attr] = task.estimation[attr]
+          await api.update('estimation', task.estimation.id, data)
+        }
+        const changed = await api.get('task', task.id)      
+        task.planned = changed.planned
+      } catch (error) {
+        this.$notify({
+          title: 'Error',
+          message: error.message,
+          type: 'error',
+          duration: 5000
+        })
       }
-      const changed = await api.get('task', task.id)
-      task.planned = changed.planned
+    },
+    repairPlanned(estimation) {
+      if (typeof estimation.planned == 'string') {
+        const comps = estimation.planned.split(':')
+        if (comps.length==2) {
+          // HH:MM
+          estimation.planned = parseFloat(comps[0]) + Math.round(parseFloat(comps[1])/60*100)/100
+        } else {
+          estimation.planned = parseFloat(comps[0])
+        }
+      }
     },
     deviating(estimations) {
       if (estimations.length==0) return null
