@@ -281,8 +281,8 @@ export default {
       if (task.project) {
         if (!this.modified.projects) this.modified.projects = {}
         this.modified.projects[task.project.id] = {
-          starts_at: api.datetime(start),
-          ends_at: api.datetime(end)
+          starts_at: api.date(start),
+          ends_at: api.date(end)
         }
         task.project.starts_at = start
         task.project.ends_at = end
@@ -303,8 +303,8 @@ export default {
         user.allocations.push(allocation)
       } else {
         const data = {
-          from: api.datetime(allocation.from),
-          to: api.datetime(allocation.to),
+          from: api.date(allocation.from),
+          to: api.date(allocation.to),
           parttime: allocation.parttime,
         } 
         if (this.modified.created && this.modified.created.allocations) {
@@ -331,8 +331,8 @@ export default {
               project_id: allocation.project_id,
               type: allocation.type,
               role: allocation.role,
-              from: api.datetime(allocation.from),
-              to: api.datetime(allocation.to),
+              from: api.date(allocation.from),
+              to: api.date(allocation.to),
               parttime: allocation.parttime,
             }))
             await api.create('allocation', data)

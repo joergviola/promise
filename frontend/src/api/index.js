@@ -163,6 +163,15 @@ const theAPI = {
   removeDocs: function(type, id, docIds) {
     return call('DELETE', '/' + type + '/' + id + '/documents/' + docIds)
   },
+  // -> 2020-06-15 00:00:00
+  date: function(value = null) {
+    if (!value) return null
+    return `${value.getFullYear()}-${pad(value.getMonth()+1)}-${pad(value.getDate())} 00:00:00`
+    function pad(value) {
+      if (value < 10) return "0"+value
+      else return value
+    }
+  },
   datetime: function(value = null) {
     if (!value) return null
     return value.toISOString().slice(0, 19).replace('T', ' ')
