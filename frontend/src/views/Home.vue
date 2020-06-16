@@ -156,16 +156,17 @@ export default {
         },
         order: { sort_user: 'ASC' }
       })
-      this.today = tasks.filter(t => t.state=='STARTED')
-      this.current = tasks.filter(t => t.state=='APPROVED' || t.state=='PLANNED')
+      this.today = tasks.filter(t => t.state=='STARTED' && !t.project.template)
+      this.current = tasks.filter(t => (t.state=='APPROVED' || t.state=='PLANNED') && !t.project.template)
     },
     async loadProjects() {
-      this.allocations = await api.find('allocation', {
+      const allocations = await api.find('allocation', {
         and: { user_id: this.user.id, type: 'PROJECT' },
         with: {
           project: { one: 'project' }
         },
       })
+      this.allocations = allocations.filter(a => !a.project.template)
     },
   },
   async mounted() {

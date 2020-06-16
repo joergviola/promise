@@ -400,9 +400,23 @@ export default {
         })
       })
     },
+    // Calc working days between from and to.
+    // Takje into account weekends and holidays and the off allocations.
     workdays(from, to, off) {
         // braindead impl
-        return (to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24) + 1
+        //return (to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24) + 1
+      let date = from
+      let result = 0
+      while (date <= to) {
+        if (!isOff(date)) result += 1
+        date.setDate(date.getDate()+1)
+      }
+        console.log(from, to, result)
+      return result
+
+      function isOff(date) {
+        return date.getDay()==0 || date.getDay()==6
+      }
     }
   },
   beforeRouteLeave (to, from, next) {
