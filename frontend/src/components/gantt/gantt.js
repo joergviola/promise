@@ -171,13 +171,13 @@ export default class Gantt {
 
     refresh(tasks) {
         this.setup_tasks(tasks);
-        this.change_view_mode();
+        this.change_view_mode(this.options.view_mode, false);
     }
 
-    change_view_mode(mode = this.options.view_mode) {
+    change_view_mode(mode = this.options.view_mode, scroll=true) {
         this.update_view_scale(mode);
         this.setup_dates();
-        this.render();
+        this.render(scroll);
         // fire viewmode_change event
         this.trigger_event('view_change', [mode]);
     }
@@ -278,7 +278,8 @@ export default class Gantt {
         this.bind_bar_events();
     }
 
-    render() {
+    render(scroll=true) {
+        const oldPos = this.set_scroll_position();
         this.clear();
         this.setup_layers();
         this.make_grid();
@@ -287,7 +288,7 @@ export default class Gantt {
         this.make_arrows();
         this.map_arrows_on_bars();
         this.set_width();
-        this.set_scroll_position();
+        this.set_scroll_position(scroll ? null : oldPos);
     }
 
     setup_layers() {
@@ -450,15 +451,11 @@ export default class Gantt {
                 date_utils.diff(date_utils.today(), this.gantt_start, 'hour') /
                 this.options.step *
                 this.options.column_width;
-            const y = 0;
 
             const width = this.day_width();
-            const height =
-                (this.options.bar_height + this.options.padding) *
-                    this.tasks.length +
-                this.options.header_height +
-                this.options.padding / 2;
-
+            const height = (this.options.bar_height + this.options.padding) * this.options.rows
+            const y = this.options.header_height + this.options.padding / 2
+    
             createSVG('rect', {
                 x,
                 y,
@@ -474,11 +471,9 @@ export default class Gantt {
         let cur_date = null;
         let x=0
         const width = this.day_width()
-        const height =
-            (this.options.bar_height + this.options.padding) *
-                (this.tasks.length-3) +
-                this.options.header_height +
-                this.options.padding / 2;
+        if (this.options.view_mode=='Quarter Day') x -= width/2
+        const height = (this.options.bar_height + this.options.padding) * this.options.rows
+        const y = this.options.header_height + this.options.padding / 2
 
         while (cur_date === null || cur_date < this.gantt_end) {
             if (!cur_date) {
@@ -489,7 +484,7 @@ export default class Gantt {
             if (this.isOff(cur_date)) {
                 createSVG('rect', {
                     x: x,
-                    y: 0,
+                    y: y,
                     width: width,
                     height: height,
                     class: 'day-is-off',
@@ -691,7 +686,7 @@ export default class Gantt {
         }
     }
 
-    set_scroll_position() {
+    set_scroll_position(pos=null) {
         const parent_element = this.$svg.parentElement;
         if (!parent_element) return;
 
@@ -702,12 +697,15 @@ export default class Gantt {
         );
 
         const scroll_pos =
-            hours_before_first_task /
+            pos ||
+            (hours_before_first_task /
                 this.options.step *
                 this.options.column_width -
-            this.options.column_width;
-
+            this.options.column_width);
+        const oldPos = parent_element.scrollLeft;
         parent_element.scrollLeft = scroll_pos;
+        
+        return oldPos;
     }
 
     bind_grid_click() {

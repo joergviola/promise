@@ -1,6 +1,8 @@
 <template>
   <div v-loading="loading" class="components-container">
-    <gantt :rows="data.rows.map(r => r.name)" :tasks="data.tasks" :view_mode="view_mode" @update="update" @click="onClick" @clickBack="onClickBack"/>
+    <div v-if="users.length>0">
+      <gantt :rows="data.rows.map(r => r.name)" :tasks="data.tasks" :view_mode="view_mode" @update="update" @click="onClick" @clickBack="onClickBack"/>
+    </div>
     <div class="text-right">
       <el-radio-group v-model="view_mode" size="small" class="pull-left">
         <el-radio-button label="Quarter Day">Hourly</el-radio-button>
@@ -59,7 +61,7 @@ import api from '@/api'
 
 export default {
   name: 'Planning',
-  components: { Gantt },
+  components: { Gantt: () => import('@/components/gantt/Index') },
   data() {
     return {
       projects: [],
@@ -254,8 +256,13 @@ export default {
           a.project_id = this.selected.type
           a.project = this.projects.find(p => p.id == a.project_id)
       }
-      a.from = this.selected.date[0]=='' ? null : new Date(this.selected.date[0])
-      a.to = this.selected.date[1]=='' ? null : new Date(this.selected.date[1])
+      if (Array.isArray(this.selected.data)) {
+        a.from = this.selected.date[0]=='' ? null : new Date(this.selected.date[0])
+        a.to = this.selected.date[1]=='' ? null : new Date(this.selected.date[1])
+      } else {
+        a.from = null
+        a.to = null
+      }
       console.log(this.selected.date, a)
       this.allocationModified(a, create)
       this.selected = {}
@@ -405,13 +412,13 @@ export default {
     workdays(from, to, off) {
         // braindead impl
         //return (to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24) + 1
-      let date = from
+      let date = new Date(); 
+      date.setTime(from.getTime())
       let result = 0
       while (date <= to) {
         if (!isOff(date)) result += 1
         date.setDate(date.getDate()+1)
       }
-        console.log(from, to, result)
       return result
 
       function isOff(date) {
@@ -434,7 +441,7 @@ export default {
       });
     }
   },
-  async mounted() {
+  async created() {
     this.loading = true
     await this.loadProjects()
     await this.loadUsers()    

@@ -58,8 +58,8 @@ export default {
         }
     },
     watch: {
-        tasks() { this.reload() },
-        rows() { this.options.rows = this.rows.length; this.reload() },
+        tasks() { this.gantt.refresh(this.tasks) },
+        rows() { this.options.rows = this.rows.length; this.gantt.refresh(this.tasks) },
         view_mode() {
             this.gantt.change_view_mode(this.view_mode)
         }
@@ -74,6 +74,9 @@ export default {
             this.gantt = new Gantt('#gantt', this.tasks, this.options)
             this.gantt.change_view_mode(this.view_mode)
         }
+    },
+    mounted() {
+        this.reload()
     }
 
 }
@@ -84,7 +87,7 @@ export default {
     border:1px solid #eeeeee; 
     padding: 5px; 
     font-size: 12px;
-    padding-top: 37px;
+    padding-top: 36px;
 }
 
 .row-legend {
