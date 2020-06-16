@@ -308,6 +308,7 @@ export default class Gantt {
         this.make_grid_header();
         this.make_grid_ticks();
         this.make_grid_highlights();
+        this.make_off_dates();
     }
 
     make_grid_background() {
@@ -444,14 +445,14 @@ export default class Gantt {
 
     make_grid_highlights() {
         // highlight today's date
-        if (this.view_is(VIEW_MODE.DAY)) {
+        //if (this.view_is(VIEW_MODE.DAY)) {
             const x =
                 date_utils.diff(date_utils.today(), this.gantt_start, 'hour') /
                 this.options.step *
                 this.options.column_width;
             const y = 0;
 
-            const width = this.options.column_width;
+            const width = this.day_width();
             const height =
                 (this.options.bar_height + this.options.padding) *
                     this.tasks.length +
@@ -466,8 +467,44 @@ export default class Gantt {
                 class: 'today-highlight',
                 append_to: this.layers.grid
             });
+        //}
+    }
+
+    make_off_dates() {
+        let cur_date = null;
+        let x=0
+        const width = this.day_width()
+        const height =
+            (this.options.bar_height + this.options.padding) *
+                (this.tasks.length-3) +
+                this.options.header_height +
+                this.options.padding / 2;
+
+        while (cur_date === null || cur_date < this.gantt_end) {
+            if (!cur_date) {
+                cur_date = date_utils.clone(this.gantt_start);
+            } else {
+                cur_date = date_utils.add(cur_date, 1, 'day');
+            }
+            if (this.isOff(cur_date)) {
+                createSVG('rect', {
+                    x: x,
+                    y: 0,
+                    width: width,
+                    height: height,
+                    class: 'day-is-off',
+                    append_to: this.layers.grid
+                });
+            }
+            x += width
         }
     }
+
+    isOff(date) {
+        const day = date.getDay()
+        return day==0 || day==6
+    }
+
 
     make_dates() {
         for (let date of this.get_dates_to_draw()) {
@@ -583,6 +620,7 @@ export default class Gantt {
         };
 
         return {
+            date: date,
             upper_text: date_text[`${this.options.view_mode}_upper`],
             lower_text: date_text[`${this.options.view_mode}_lower`],
             upper_x: base_pos.x + x_pos[`${this.options.view_mode}_upper`],
@@ -590,6 +628,17 @@ export default class Gantt {
             lower_x: base_pos.x + x_pos[`${this.options.view_mode}_lower`],
             lower_y: base_pos.lower_y
         };
+    }
+
+    day_width() {
+        switch(this.options.view_mode) {
+            case "Quarter Day": return this.options.column_width * 4
+            case "Half Day": return this.options.column_width *4
+            case "Day": return this.options.column_width 
+            case "Week": return this.options.column_width / 7
+            case "Month": return this.options.column_width / 30
+            case "Year": return this.options.column_width / 365
+        }
     }
 
     make_bars() {
@@ -647,7 +696,7 @@ export default class Gantt {
         if (!parent_element) return;
 
         const hours_before_first_task = date_utils.diff(
-            this.get_oldest_starting_date(),
+            date_utils.now(),
             this.gantt_start,
             'hour'
         );

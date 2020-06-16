@@ -38,6 +38,7 @@
             v-model="selected.date"
             type="daterange"
             value-format="yyyy-MM-dd"
+            :pickerOptions="{firstDayOfWeek: 1}"
           />
         </el-form-item>
       </el-form>
