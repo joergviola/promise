@@ -14,6 +14,13 @@ On bulk operation, these events are fired for each item.
 An exception is the `bulkUpdateOrCreate` API method, with does not fire any events 
 (because the decision is made on lower layers of the framework).
 
+Learn more about Events and Listeners by the excellent 
+[Laravel documentation](https://laravel.com/docs/7.x/events).
+
+Since gluon is a Laravel application, it is of course possible to extend
+the business logic by adding new specific routes and calling these servies directly
+from the frontend.
+
 ## Login
 
 ```handleLogin(ApiAfterLoginEvent $event)``` is called after 
@@ -25,6 +32,18 @@ information:
 |user|User logged in|
 
 You are allowed to change the user.  
+
+## Authentication
+
+Every time, an API request is successfully authenticated, an `ApiAfterAuthenticatedEvent`is thrown 
+that you can handle like ```handleAuthentication(ApiAfterAuthenticatedEvent $event)```:
+
+|Field|Content|
+|---|---|
+|user|Authenticated user|
+
+This event can be used to add context information to the user that can be checked during permission checks,
+(see Users)[Users.md].
 
 ## Read
 
