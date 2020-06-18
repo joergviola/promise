@@ -14,6 +14,6 @@ class AuthenticatedEventSubscriber
             ->where('user_id', $user->id)
             ->pluck('project_id')
             ->toArray();
-        $user->projects = implode(',', $project_ids);
+        $user->projects = array_values(array_filter($project_ids));
     }
 }

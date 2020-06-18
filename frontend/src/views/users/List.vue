@@ -7,6 +7,7 @@
       :with="w"
       :template="template"
       create-by="button"
+      :allowDelete="true"
     />
   </div>
 </template>
