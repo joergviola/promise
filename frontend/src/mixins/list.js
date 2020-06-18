@@ -22,7 +22,7 @@ export default {
         .filter(right => right.tables=='*' || right.tables.search(this.type)!=-1)
     },
     readonly() {
-      return !this.userCan(['CRUD', 'R'])
+      return !this.userCan('U')
     }
   },
   watch: {
@@ -174,8 +174,8 @@ export default {
         })
       }
     },
-    userCan(actions) {
-      const rights = this.rights.filter(right => actions.indexOf(right.actions)!=-1)
+    userCan(action) {
+      const rights = this.rights.filter(right => right.actions.indexOf(action)!=-1)
       return rights.length!=0
     }
   },

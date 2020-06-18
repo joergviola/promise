@@ -21,7 +21,7 @@
             v-if="editable(row, col) && !col.type"
             class="no-border"
             v-model="row[col.name]"
-            :disabled="!editable(row, col)"
+            :disabled="!editable(row, col) || readonly"
             @blur="save(row, col.name)"
             :placeholder="col.placeholder"
             :ref="`field-${$index}-${i}`"

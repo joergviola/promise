@@ -114,10 +114,10 @@ export default {
   },
   computed: {
     readonly() {
-      const actions = ['CRUD', 'U']
       const rights = api.user().role.rights
-        .filter(right => right.tables=='*' || right.tables.search(this.type)!=-1)
-        .filter(right => actions.indexOf(right.actions)!=-1)
+        .filter(right => right.tables=='*' || right.tables.search('project')!=-1)
+        .filter(right => right.actions.indexOf('U')!=-1)
+        console.log(rights)
       return rights.length==0
     }
   },
