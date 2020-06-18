@@ -18,7 +18,7 @@ export default {
     buttons() {
       const workflow = {
         'NEW': ['Send', 'Copy'],
-        'SENT': ['Accepted', 'Rejected', 'Reset', 'Copy'],
+        'SENT': ['Accept', 'Reject', 'Reset', 'Copy'],
         'ACCEPTED': ['Reset', 'Copy'],
         'REJECTED': ['Reset', 'Copy'],
       }
@@ -47,8 +47,8 @@ export default {
       allButtons: [
         {label: 'Reset', action: item => item.state='NEW', shown: item => item.state === 'NEW', andSave: true },
         {label: 'Send', action: item => item.state='SENT', andSave: true },
-        {label: 'Accepted', action: item => item.state='ACCEPTED', andSave: true },
-        {label: 'Rejected', action: item => item.state='REJECTED', andSave: true },
+        {label: 'Accept', action: item => item.state='ACCEPTED', andSave: true },
+        {label: 'Reject', action: item => item.state='REJECTED', andSave: true },
         {label: 'Copy', action: this.copy, andSave: false }
       ]
     }

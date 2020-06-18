@@ -6,6 +6,7 @@
     :template="template"
     createBy="row"
     :allowDelete="true"
+    sort="no"
   />
 </template>
 
@@ -23,7 +24,7 @@ export default {
       w: { },
       type: 'position',
       columns: [
-        { name: 'no', label: 'No', editable: true, placeholder: "New Position..."},
+        { name: 'no', label: 'No', width: 40, placeholder: "New Position..."},
         { name: 'name', label: 'Name', editable: true },
         { name: 'comment', label: 'Comment', editable: true },
         { name: 'planned', label: 'Effort', editable: false },

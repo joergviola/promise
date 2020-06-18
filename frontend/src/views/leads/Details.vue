@@ -103,7 +103,7 @@ export default {
   data() {
     return {
       item: { customer: {}, contact: { user: {} } },
-      sources: ['Web', 'Phone', 'Chat', '???'],
+      sources: ['Web', 'Phone', 'Chat', 'E-Mail', '???'],
       units: ['Hour', 'Point', 'Euro', ''],
       showCustomer: false,
       customers: [],
