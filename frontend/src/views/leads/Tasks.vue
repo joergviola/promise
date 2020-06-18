@@ -16,7 +16,7 @@
             :rows="2" type="textarea" 
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="More info..." 
-            @blur="save(row, 'description')"
+            @change="save(row, 'description')"
           />
         </template>
       </el-table-column>
@@ -25,7 +25,7 @@
           <el-input
             class="no-border"
             v-model="row.name"
-            @blur="save(row, 'name')"
+            @change="save(row, 'name')"
             placeholder="New task..."
             :ref="`field-${$index}-0`"
             @keyup.enter.native="onEnter(row, 0, $index)"
@@ -73,7 +73,7 @@
             class="no-border pull-left"
             v-model="row.estimation.planned"
             :disabled="row.position_id!=null"
-            @blur="saveEstimation(row, 'planned')"
+            @change="saveEstimation(row, 'planned')"
             placeholder="Your estimation..."
             :ref="`field-${$index}-3`"
             @keyup.enter.native="onEnter(row, 3, $index)"
@@ -100,7 +100,7 @@
             v-if="row.id"
             class="no-border"
             v-model="row.estimation.comment"
-            @blur="saveEstimation(row, 'comment')"
+            @change="saveEstimation(row, 'comment')"
             :ref="`field-${$index}-4`"
             @keyup.enter.native="onEnter(row, 4, $index)"
             @keyup.up.native="onArrow(4, $index, -1)"
