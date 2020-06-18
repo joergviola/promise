@@ -139,7 +139,7 @@ export default {
   data() {
     return {
       type: 'task',
-      template: { project_id: this.id, state: 'NEW', type: 'DEV', estimation: {}, planned: null },
+      template: { project_id: this.id, state: 'NEW', type: 'DEV', estimation: {}, estimations: [], planned: null },
       query: { project_id: this.id, type: 'DEV' },
       with: {
         estimation: {

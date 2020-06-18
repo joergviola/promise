@@ -1,7 +1,7 @@
 <template>
   <el-timeline>
-    <el-timeline-item v-for="(t,i) in open" :key="'open-'+i" timestamp="You, Now" placement="top">
-      <el-card>
+    <el-timeline-item v-for="(t,i) in open" :key="'open-'+i" :timestamp="t.created_at">
+      <el-card v-loading="loading">
         <el-form>
           <el-form-item>
             <el-input v-model="t.name" type="text" placeholder="New Task..."/>
@@ -18,11 +18,19 @@
             />
           </el-form-item>
           <el-form-item>
-            <el-button v-loading="loading" type="danger" @click="close(t)">
+            <el-select v-model="t.user_id">
+              <el-option v-for="u in users" :key="u.id" :label="u.name" :value="u.id" />
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="danger" @click="close(t)">
               Done
             </el-button>
-            <el-button v-loading="loading" type="primary" @click="save(t)">
+            <el-button type="primary" @click="save(t)">
               Save
+            </el-button>
+            <el-button type="primary" @click="newTask">
+              New task
             </el-button>
           </el-form-item>
         </el-form>
@@ -49,7 +57,8 @@ export default {
       template: {project_id: this.id, type: 'SALES', state: 'APPROVED'},
       open: [],
       closed: [],
-      loading: null
+      loading: null,
+      users: [],
     }
   },
   async created() {
@@ -75,12 +84,19 @@ export default {
         const task = Object.assign({}, this.template)
         this.save(task)
       }
+      this.users = await api.find('users', {
+        and: {organisation_id: {in: [api.user().organisation_id]}}
+      })
     },
     close(task) {
       task.state = 'CLOSED'
       task.finished_at = api.datetime(new Date())
       task.finished_by = api.user().id
       this.save(task)
+    },
+    newTask() {
+        const task = Object.assign({}, this.template)
+        this.save(task)
     },
     async save(task) {
       console.log('Saving', task)

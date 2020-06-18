@@ -41,6 +41,9 @@ export default {
       if (this.createBy == 'row' || this.createBy==null) {
         const item = Object.assign({}, this.template)
         item._meta = this.meta
+        if (this.sort) {
+          item[this.sort] = this.list.length+1
+        }
         this.list.push(item)
       }
     },
