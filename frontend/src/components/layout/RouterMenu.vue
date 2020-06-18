@@ -1,5 +1,5 @@
 <template>
-   <div :style="styles">
+   <div v-if="user" :style="styles">
       <el-menu
          default-active="2"
          background-color="#666666"
