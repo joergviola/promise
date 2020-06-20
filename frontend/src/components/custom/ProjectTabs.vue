@@ -23,8 +23,9 @@ export default {
   async mounted() {
     this.project = await api.findFirst('project', { 
       and: { id: this.$route.params.id },
+      with: { customer: {one: 'organisation', this: 'customer_id'} }
     })
-    this.store.breadcrumbs = [null, this.project.name, null]
+    this.store.breadcrumbs = [null, `${this.project.customer.name}: ${this.project.name}`, null]
   },
   destroyed() {
     this.store.breadcrumbs = []
