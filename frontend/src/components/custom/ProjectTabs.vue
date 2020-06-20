@@ -1,6 +1,6 @@
 <template>
   <div>
-    <tabs component="ProjectTabs" />
+    <tabs component="ProjectTabs" :attrs="$attrs"/>
   </div>
 </template>
 
