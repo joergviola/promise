@@ -111,10 +111,8 @@
 
       <el-table-column align="right" label="Actions" fixed="right">
         <template slot-scope="{row}">
-          <el-button v-if="row.id" class="filter-item pull-right" type="danger" icon="el-icon-remove" @click="remove(row)">
-          </el-button>
-          <el-button v-if="!row.id" class="filter-item pull-right" type="primary" icon="el-icon-plus" @click="createWithEstimation(row)">
-          </el-button>
+          <i v-if="row.id" class="action el-icon-remove-outline" @click="remove(row)" title="Delete this line"/> 
+          <i v-if="!row.id" class="action el-icon-circle-plus-outline" @click="createWithEstimation(row)"  title="Create a new line"/> 
         </template>
       </el-table-column>
     </el-table>
@@ -238,6 +236,13 @@ export default {
 </script>
 
 <style scoped>
+i.action {
+  color: #AAAAAA;
+  cursor: pointer;
+  font-size: 150%;
+  margin-top: 10px;
+  margin-left: 10px;
+}
 i.grab {
   color: #EEEEEE;
   cursor: grab;
