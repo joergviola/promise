@@ -22,7 +22,7 @@
 <script>
 
 import TaskDetails from './Details'
-import TaskTimeline from '@/views/commons/Timeline'
+import TaskTimeline from '@/components/custom/Timeline'
 import image from '@/assets/img/undraw_task_31wc.svg'
 
 export default {

@@ -5,7 +5,7 @@ import Sortable from 'sortablejs'
 export default {
   data() {
     return {
-      list: null,
+      list: [],
       loading: true,
     }
   },

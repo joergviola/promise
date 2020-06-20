@@ -117,14 +117,7 @@ export default {
       const rights = api.user().role.rights
         .filter(right => right.tables=='*' || right.tables.search('project')!=-1)
         .filter(right => right.actions.indexOf('U')!=-1)
-        console.log(rights)
       return rights.length==0
-    }
-  },
-  watch: {
-    item() {
-      this.$route.matched[1].meta.title = this.item.name
-      this.$emit('update', this.item)
     }
   },
   methods: {

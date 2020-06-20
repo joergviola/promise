@@ -21,7 +21,10 @@ import api from '@/api'
 
 export default {
   name: 'Tabs',
-  props: {},
+  props: {
+    component: {type: String, default: 'Tabs'},
+    attrs: {type: Object, default: null},
+  },
   computed: {
     childRoutes() {
       const route = this.findRoute(this.$router.options.routes)
@@ -46,7 +49,7 @@ export default {
         const match = this.$route.matched[i]
         route = routes.find(r => (r.path.startsWith('/') ? r.path : path+'/'+r.path)==match.path)
         if (!route) return null
-        if (route.component.name=='Tabs') return route
+        if (route.component.name==this.component) return route
         routes = route.children
         if (!routes) return null
         path = route.path.startsWith('/') ? route.path : path+'/'+route.path
@@ -58,8 +61,9 @@ export default {
         if (!this.showItem(route)) return false
       }
       let path = route.path
-      for (let key in this.$attrs) {
-        path = path.replace(':'+key, this.$attrs[key])
+      const attrs = this.attrs || this.$attrs
+      for (let key in attrs) {
+        path = path.replace(':'+key, attrs[key])
       }
       return path.indexOf(':')==-1
     },
@@ -75,7 +79,7 @@ export default {
       }
       return !meta.hidden
     }
-  }
+  },
 }
 </script>
 

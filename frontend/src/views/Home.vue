@@ -101,7 +101,7 @@
 <script>
 import GenericList from '@/components/generic/List'
 import ProgressBar from '@/components/generic/Progress'
-import TaskTimeline from '@/views/commons/Timeline'
+import TaskTimeline from '@/components/custom/Timeline'
 import Draggable from 'vuedraggable'
 import api from '@/api'
 

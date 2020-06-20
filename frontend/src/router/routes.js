@@ -4,6 +4,9 @@ import Tabs from '@/components/layout/Tabs.vue'
 import List from '@/components/generic/List.vue'
 import Details from '@/components/generic/Details.vue'
 
+import ProjectTabs from '@/components/custom/ProjectTabs'
+
+
 export default [
   {
     path: '/',
@@ -38,7 +41,7 @@ export default [
   {
     path: '/leads',
     component: Parent,
-    name: 'Leads',
+    name: 'Sales',
     meta: {
       icon: 'el-icon-shopping-cart-2'
     },
@@ -47,11 +50,11 @@ export default [
       {
         path: 'all',
         component: () => import('@/views/leads/List'),
-        name: 'All',
+        name: 'Leads',
       },
       {
         path: 'lead/:id',
-        component: Tabs,
+        component: ProjectTabs,
         name: 'Lead',
         props: true,
         redirect: 'detail',
@@ -150,7 +153,7 @@ export default [
       },
       {
         path: 'project/:id',
-        component: Tabs,
+        component: ProjectTabs,
         props: true,
         name: 'Project',
         redirect: 'detail',
@@ -181,7 +184,7 @@ export default [
           },
           {
             path: 'task/:tid/timeline',
-            component: () => import('@/views/commons/Timeline'),
+            component: () => import('@/components/custom/Timeline'),
             props: true,
             name: 'Work',
           },
