@@ -39,7 +39,7 @@
             v-if="col.type=='date' || col.type=='datetime'"
             v-model="row[col.name]"
             :type="col.type"
-            :disabled="!editable(row, col)"
+            :disabled="!editable(row, col) || readonly"
             format="yyyy-MM-dd hh:mm"
             value-format="yyyy-MM-dd hh:mm"
             @blur="save(row, col.name)"
