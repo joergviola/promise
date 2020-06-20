@@ -141,15 +141,17 @@ export default {
             cancelButtonText: 'Cancel',
             type: 'warning'
           })
-          await api.delete(this.type, row.id)
-          this.getList()
-        } catch (cancel) {}
+        } catch (cancel) {
+          return
+        }
+        await api.delete(this.type, row.id)
+        this.getList()
       } catch (error) {
         this.$notify({
           title: 'Error',
           message: error.message,
           type: 'error',
-          duration: 5000
+          duration: 15000
         })
       }
     },
