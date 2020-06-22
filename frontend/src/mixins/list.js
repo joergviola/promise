@@ -138,16 +138,18 @@ export default {
         }
       }
     },
-    async remove(row) {
+    async remove(row, ask=true) {
       try {
-        try {
-          await this.$confirm('Are you sure?', 'Warning', {
-            confirmButtonText: 'OK',
-            cancelButtonText: 'Cancel',
-            type: 'warning'
-          })
-        } catch (cancel) {
-          return
+        if (ask) {
+          try {
+            await this.$confirm('Are you sure?', 'Warning', {
+              confirmButtonText: 'OK',
+              cancelButtonText: 'Cancel',
+              type: 'warning'
+            })
+          } catch (cancel) {
+            return
+          }
         }
         await api.delete(this.type, row.id)
         this.getList()

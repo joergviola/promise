@@ -28,13 +28,13 @@
             @change="saveWithEstimation(row, 'name')"
             placeholder="New task..."
             :ref="`field-${$index}-0`"
-            @keyup.enter.native="onEnter(row, 0, $index)"
-            @keyup.up.native="onArrow(0, $index, -1)"
-            @keyup.down.native="onArrow(0, $index, +1)"
+            @keydown.enter.native="onEnter(row, 0, $index)"
+            @keydown.up.native="onArrow(0, $index, -1)"
+            @keydown.down.native="onArrow(0, $index, +1)"
           />
         </template>
       </el-table-column>
-      <el-table-column label="Position">
+      <el-table-column label="Position" min-width="50">
         <template slot-scope="{row, $index}">
           <el-select class="no-border" v-model="row.position" filterable allow-create @change="save(row, 'position')" >
             <el-option v-for="(name, i) in positionNames" :value="name" :key="i" :label="name" />
@@ -72,7 +72,7 @@
       </el-table-column>
 
 
-      <el-table-column label="Estimation" >
+      <el-table-column label="Estimation" min-width="50">
         <template slot-scope="{row, $index}">
           <el-input
             v-if="row.id"
@@ -82,9 +82,9 @@
             @change="saveEstimation(row, 'planned')"
             placeholder="Your estimation..."
             :ref="`field-${$index}-3`"
-            @keyup.enter.native="onEnter(row, 3, $index)"
-            @keyup.up.native="onArrow(3, $index, -1)"
-            @keyup.down.native="onArrow(3, $index, +1)"
+            @keydown.enter.native="onEnter(row, 3, $index)"
+            @keydown.up.native="onArrow(3, $index, -1)"
+            @keydown.down.native="onArrow(3, $index, +1)"
           >
            <el-popover
             v-if="row.position_id" 
@@ -111,16 +111,16 @@
             v-model="row.estimation.comment"
             @change="saveEstimation(row, 'comment')"
             :ref="`field-${$index}-4`"
-            @keyup.enter.native="onEnter(row, 4, $index)"
-            @keyup.up.native="onArrow(4, $index, -1)"
-            @keyup.down.native="onArrow(4, $index, +1)"
+            @keydown.enter.native="onEnter(row, 4, $index)"
+            @keydown.up.native="onArrow(4, $index, -1)"
+            @keydown.down.native="onArrow(4, $index, +1)"
           />
         </template>
       </el-table-column>
 
       <el-table-column align="right" label="" width="40">
         <template slot-scope="{row}">
-          <i v-if="row.id" class="action el-icon-remove-outline" @click="remove(row)" title="Delete this line"/> 
+          <i v-if="row.id && (row.estimations.length==0 || (row.estimations.length==1 && row.estimations[0].user_id==user.id))" class="action el-icon-remove-outline" @click="removeWithEstimation(row)" title="Delete this line"/> 
           <i v-if="!row.id" class="action el-icon-circle-plus-outline" @click="createWithEstimation(row)"  title="Create a new line"/> 
         </template>
       </el-table-column>
@@ -147,6 +147,7 @@ export default {
   data() {
     return {
       type: 'task',
+      user: api.user(),
       template: { project_id: this.id, state: 'NEW', type: 'DEV', estimation: {}, estimations: [], planned: null },
       query: { project_id: this.id, type: 'DEV' },
       with: {
@@ -234,6 +235,30 @@ export default {
       if (data.length==0) return 0
       const sum = data.reduce((s, c) => s + c.planned, 0)
       return sum/data.length
+    },
+    async removeWithEstimation(row) {
+      if (row.estimations.length>1) return
+      if (row.estimations.length==1 && row.estimations[0].user_id != api.user().id) return;
+      try {
+        try {
+          await this.$confirm('Are you sure?', 'Warning', {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning'
+          })
+        } catch (cancel) {
+          return
+        }
+        await api.delete('estimation', row.estimation.id)
+        await this.remove(row, false)
+      } catch (error) {
+        this.$notify({
+          title: 'Error',
+          message: error.message,
+          type: 'error',
+          duration: 15000
+        })
+      }
     }
   },
   async created() {
@@ -249,7 +274,7 @@ export default {
         }
       })
     })
-  }
+  },
 }
 </script>
 
