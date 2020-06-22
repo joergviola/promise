@@ -46,8 +46,12 @@ input, select, textarea {
   clear: both;
 }
 
-.no-border .el-input__inner {
+.no-border .el-input__inner, .no-border .el-textarea__inner {
   border: none;
+}
+
+.no-border .el-textarea__inner {
+  resize: none;
 }
 
 .el-input.is-disabled.no-border .el-input__inner {

@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <el-table ref="theTable" v-loading="loading" :data="list" row-key="id">
+    <el-table ref="theTable" v-loading="loading" :data="list" row-key="id" fit>
       <!--
       <el-table-column v-if="sort" label="" width="25">
         <template slot-scope="{row, $index}">
@@ -20,7 +20,7 @@
           />
         </template>
       </el-table-column>
-      <el-table-column label="Name">
+      <el-table-column label="Name" min-width="200">
         <template slot-scope="{row, $index}">
           <el-input
             class="no-border"
@@ -34,7 +34,6 @@
           />
         </template>
       </el-table-column>
-
       <el-table-column label="Position">
         <template slot-scope="{row, $index}">
           <el-select class="no-border" v-model="row.position" filterable allow-create @change="save(row, 'position')" >
@@ -43,7 +42,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Planned" align="right">
+      <el-table-column label="Planned" align="right" min-width="50">
         <template slot-scope="{row, $index}">
           <span v-if="row.id" class="estimation el-input el-input--small">
             <el-popover
@@ -52,10 +51,16 @@
               title="Estimations"
               width="200"
               trigger="click">
-              <el-table :data="row.estimations" :summary-method="getEstSummaries" show-summary >
-                <el-table-column prop="user.name" label="By"/>
-                <el-table-column prop="planned" label="Estimated" align="right"/>
-              </el-table>
+              <table class="est-table">
+                <tr v-for="e in row.estimations" :key="e.id">
+                  <td>{{e.user.name}}</td>
+                  <td align="right">{{e.planned}}</td>
+                </tr>
+                <tr>
+                  <td>Summary</td>
+                  <td align="right">{{getEstSummaries(row.estimations)}}</td>
+                </tr>
+              </table>
               <span slot="reference">
                 <i v-if="deviating(row.estimations)" class="warning el-icon-warning"></i>
                 {{row.planned}}
@@ -65,6 +70,7 @@
           
         </template>
       </el-table-column>
+
 
       <el-table-column label="Estimation" >
         <template slot-scope="{row, $index}">
@@ -94,10 +100,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="Comment">
+      <el-table-column label="Comment" min-width="200">
         <template slot-scope="{row, $index}">
           <el-input
             v-if="row.id"
+            type="textarea"
+            :rows="1" 
+            autosize 
             class="no-border"
             v-model="row.estimation.comment"
             @change="saveEstimation(row, 'comment')"
@@ -109,12 +118,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="right" label="Actions" fixed="right">
+      <el-table-column align="right" label="" width="40">
         <template slot-scope="{row}">
           <i v-if="row.id" class="action el-icon-remove-outline" @click="remove(row)" title="Delete this line"/> 
           <i v-if="!row.id" class="action el-icon-circle-plus-outline" @click="createWithEstimation(row)"  title="Create a new line"/> 
         </template>
       </el-table-column>
+
     </el-table>
   </div>
 </template>
@@ -220,10 +230,10 @@ export default {
       if ((max-min) / av > 0.2) return {min, max}
       else return null
     },
-    getEstSummaries(param) {
-      if (param.data.length==0) return ['', '']
-      const sum = param.data.reduce((s, c) => s + c.planned, 0)
-      return ['Estimation', sum/param.data.length]
+    getEstSummaries(data) {
+      if (data.length==0) return 0
+      const sum = data.reduce((s, c) => s + c.planned, 0)
+      return sum/data.length
     }
   },
   async created() {
@@ -264,6 +274,12 @@ i.grab {
 .estimation .warning {
   margin-left: 10px;
   color: red;
+}
+.est-table {
+  width: 100%;
+}
+.est-table td {
+  border-bottom: 1px solid #DDDDDD;
 }
 
 </style>
