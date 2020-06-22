@@ -16,7 +16,7 @@
             :rows="2" type="textarea" 
             :autosize="{ minRows: 2, maxRows: 4}"
             placeholder="More info..." 
-            @change="save(row, 'description')"
+            @change="saveWithEstimation(row, 'description')"
           />
         </template>
       </el-table-column>
@@ -25,7 +25,7 @@
           <el-input
             class="no-border"
             v-model="row.name"
-            @change="save(row, 'name')"
+            @change="saveWithEstimation(row, 'name')"
             placeholder="New task..."
             :ref="`field-${$index}-0`"
             @keyup.enter.native="onEnter(row, 0, $index)"
@@ -165,6 +165,14 @@ export default {
     async createWithEstimation(row) {
       await this.create(row)
       row.estimation = { project_id: this.id, task_id: row.id, user_id: api.user().id, planned: null, comment: null }
+    },
+    async saveWithEstimation(row, field) {
+      if (row.id) {
+        await this.save(row, field)
+      } else {
+        await this.save(row, field)
+        row.estimation = { project_id: this.id, task_id: row.id, user_id: api.user().id, planned: null, comment: null }
+      }
     },
     async saveEstimation(task, attr) {
       if (attr=='planned') this.repairPlanned(task.estimation)
