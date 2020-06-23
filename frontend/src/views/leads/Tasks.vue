@@ -249,7 +249,9 @@ export default {
         } catch (cancel) {
           return
         }
-        await api.delete('estimation', row.estimation.id)
+        if (row.estimation.id) {
+          await api.delete('estimation', row.estimation.id)
+        }
         await this.remove(row, false)
       } catch (error) {
         this.$notify({

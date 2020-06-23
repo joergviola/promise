@@ -37,14 +37,18 @@ export default {
     this.getList()
   },
   methods: {
-    addNew() {
+    addNew(pos = null) {
       if (this.createBy == 'row' || this.createBy==null) {
         const item = Object.assign({}, this.template)
         item._meta = this.meta
         if (this.sort) {
           item[this.sort] = this.list.length+1
         }
-        this.list.push(item)
+        if (pos==null) {
+          this.list.push(item)
+        } else {
+          this.list.splice(pos, 0, item)
+        }
       }
     },
     async getList() {
@@ -126,6 +130,7 @@ export default {
       try {
         const result = await api.create(this.type, row)
         row.id = result.id
+        await this.updateSort()
         this.addNew()
       } catch (error) {
         if (showError) {
@@ -165,12 +170,15 @@ export default {
     async onEnter(row, column, index) {
       if (!row.id) {
         await this.create(row)
+        return
+      } else {
+        this.addNew(index+1)
       }
-      const key = `field-${index + 1}-0`
-      let ref = this.$refs[key]
-      if (Array.isArray(ref)) ref = ref[0]
       this.$nextTick(() => {
-        ref.focus()
+        const key = `field-${index+1}-${column}`
+        let ref = this.$refs[key]
+        if (Array.isArray(ref)) ref = ref[0]
+          ref.focus()
       })
     },
     onArrow(column, index, dir) {
