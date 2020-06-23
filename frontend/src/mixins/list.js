@@ -131,7 +131,7 @@ export default {
         const result = await api.create(this.type, row)
         row.id = result.id
         await this.updateSort()
-        this.addNew()
+        //this.addNew()
       } catch (error) {
         if (showError) {
           this.$notify({
@@ -177,7 +177,7 @@ export default {
         this.addNew(index+1)
       }
       this.$nextTick(() => {
-        const key = `field-${index+1}-${column}`
+        const key = `field-${index+1}-${0}`
         let ref = this.$refs[key]
         if (Array.isArray(ref)) ref = ref[0]
           ref.focus()

@@ -112,7 +112,6 @@
             v-model="row.estimation.comment"
             @change="saveEstimation(row, 'comment')"
             :ref="`field-${$index}-4`"
-            @keydown.enter.native="onEnter(row, 4, $index)"
             @keydown.up.native="onArrow(4, $index, -1)"
             @keydown.down.native="onArrow(4, $index, +1)"
           />
@@ -149,7 +148,7 @@ export default {
     return {
       type: 'task',
       user: api.user(),
-      template: { project_id: this.id, state: 'NEW', type: 'DEV', estimation: {}, estimations: [], planned: null },
+      template: { id: null, project_id: this.id, state: 'NEW', type: 'DEV', estimation: {}, estimations: [], planned: null },
       query: { project_id: this.id, type: 'DEV' },
       with: {
         estimation: {
