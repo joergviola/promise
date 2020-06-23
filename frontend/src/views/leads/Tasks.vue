@@ -126,6 +126,14 @@
       </el-table-column>
 
     </el-table>
+
+    <el-row style="margin-top: 20px">
+      <el-col align="right">
+        <el-button type="default" @click="exportCSV('Tasks.csv', ['id', 'name', 'position', 'planned', 'estimation.id', 'estimation.planned', 'estimation.comment'])">
+            Export
+        </el-button>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

@@ -212,6 +212,32 @@ export default {
     userCan(action) {
       const rights = this.rights.filter(right => right.actions.indexOf(action)!=-1)
       return rights.length!=0
+    },
+    exportCSV(name, columns) {
+      const data = []
+      data.push(columns.join(','))
+      this.list.forEach(row => {
+        if (!row.id) return
+        const line = columns.map(col => encode(_.get(row, col)))
+        data.push(line.join(','))
+      });
+
+      const csv = data.join('\r\n')
+   
+      let anchor = document.createElement('a');
+      anchor.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+      anchor.target = '_blank';
+      anchor.download = name;
+      anchor.click();      
+
+      function encode(s) {
+        if (!s) return ""
+        s = ""+s
+        return s
+        .replace(',', ' ')
+        .replace('\r', '\\r')
+        .replace('\n', '\\n')
+      }
     }
   },
 }
