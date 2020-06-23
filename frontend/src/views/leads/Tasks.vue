@@ -31,6 +31,7 @@
             @keydown.enter.native="onEnter(row, 0, $index)"
             @keydown.up.native="onArrow(0, $index, -1)"
             @keydown.down.native="onArrow(0, $index, +1)"
+            @keydown.delete.native="event=>onDelete(event, row, 0, $index, row.name)"
           />
         </template>
       </el-table-column>
@@ -44,7 +45,7 @@
 
       <el-table-column label="Planned" align="right" min-width="50">
         <template slot-scope="{row, $index}">
-          <span v-if="row.id" class="estimation el-input el-input--small">
+          <span v-if="row.id" class="no-border estimation el-input el-input--small">
             <el-popover
               slot="suffix" 
               placement="bottom"

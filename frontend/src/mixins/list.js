@@ -157,7 +157,9 @@ export default {
           }
         }
         await api.delete(this.type, row.id)
-        this.getList()
+        const index = this.list.indexOf(row)
+        this.list.splice(index, 1)
+        //this.getList()
       } catch (error) {
         this.$notify({
           title: 'Error',
@@ -180,6 +182,22 @@ export default {
         if (Array.isArray(ref)) ref = ref[0]
           ref.focus()
       })
+    },
+    async onDelete(event, row, column, index, value) {
+      if (value || column!=0) return
+      if (!row.id) {
+        const index = this.list.indexOf(row)
+        this.list.splice(index, 1)
+      } else {
+        this.remove(row)
+      }
+      this.$nextTick(() => {
+        const key = `field-${index-1}-${column}`
+        let ref = this.$refs[key]
+        if (Array.isArray(ref)) ref = ref[0]
+          ref.focus()
+      })
+      event.preventDefault()
     },
     onArrow(column, index, dir) {
       if (0 <= index + dir && index + dir < this.list.length) {
