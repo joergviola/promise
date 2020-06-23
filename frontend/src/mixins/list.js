@@ -238,6 +238,83 @@ export default {
         .replace('\r', '\\r')
         .replace('\n', '\\n')
       }
-    }
+    },
+    // async importCSV(file) {
+    //   const self = this
+    //   const reader = new FileReader();
+    //   reader.onload = async function(e) {
+    //     const data = parse(e.target.result)
+    //     const json = toData(data)
+    //     const update = toUpdate(json)
+    //     const create = toCreate(json)
+    //     console.log(json)
+    //     await api.updateBulk(self.type, update)
+    //     await api.create(self.type, create)
+    //     self.getList()
+    //   };
+    //   reader.readAsText(file.raw)
+
+    //   function parse(text) {
+    //     const data = []
+    //     text.split("\n").forEach((line,i) => {
+    //       if (line=="") return
+    //       const item = line.split(',')
+    //       data.push(line.split(','))
+    //     })
+    //     return data
+    //   }
+
+    //   function toData(data) {
+
+
+    //     const columns = data[0]
+    //     const json = []
+    //     data.forEach((line,i) =>{
+    //       if (i==0) return
+    //       const item = Object.assign({}, self.template)
+    //       columns.forEach((col,j) => {
+    //         const path = col.split('.')
+    //         let o = item
+    //         let type = self.type
+    //         path.forEach((name, n) => {
+    //           if (n<path.length-1) {
+    //             if (!o._meta) o._meta = {}
+    //             if (!o[name]) {
+    //               o[name] = { }
+    //             } else {
+    //               o[name] = Object.assign({}, o[name])
+    //             }
+    //             o._meta[name] = {
+    //               one: name,
+    //               that: type+"_id",
+    //               ignore: false
+    //             }
+    //             type = name
+    //             o = o[name]
+    //           } else {
+    //             o[name] = line[j]
+    //           }
+    //           console.log(i, name, item, o, line[j])
+    //         })
+    //       })
+    //       if (item.id=="") item[self.sort] = self.list.length+i
+    //       json.push(item)
+    //     })
+    //     return json
+    //   }
+
+    //   function toUpdate(json) {
+    //     const data = {}
+    //     json.forEach(row => {
+    //       if (!row.id) return
+    //       data[row.id] = row
+    //     })
+    //     return data
+    //   }
+
+    //   function toCreate(json) {
+    //     return json.filter(row => !row.id)
+    //   }
+    // }
   },
 }
