@@ -5,7 +5,7 @@ import Sortable from 'sortablejs'
 export default {
   data() {
     return {
-      list: [],
+      lists: [],
       loading: true,
     }
   },
@@ -23,7 +23,7 @@ export default {
     },
     readonly() {
       return !this.userCan('U')
-    }
+    },
   },
   watch: {
     query() {
@@ -64,8 +64,9 @@ export default {
         query.order[this.sort] = 'ASC'
       }
       try {
-        this.list = await api.find(this.type, query)
-        this.addNew()
+        const list = await api.find(this.type, query)
+        //this.addNew()
+        this.lists = this.doGroupBy(list)
         if (this.sort) {
           this.$nextTick(() => {
             this.setSort()
@@ -81,9 +82,52 @@ export default {
       }
       this.loading = false
     },
+    doGroupBy(list) {
+      if (this.groupBy) {
+        const result = []
+        const cache = {}
+        list.forEach(item => {
+          const value = item[this.groupBy.field] || "None"
+          if (cache[value]) {
+            cache[value].push(item)
+          } else {
+            cache[value] = [item]
+            result.push({group:value, list: cache[value], show: true, header: true})
+          }
+        })
+        return result
+      } else {
+        return [{group:'default', list: list, show: true, header: false}]
+      }
+    },
     setSort() {
-      const el = this.$refs.theTable.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
-      this.sortable = Sortable.create(el, {
+      const tables = this.$refs.theTable
+      if (tables.length==1) tables = [tables]
+      tables.forEach(table => {
+        const group = table.$el.dataset.group
+        const el = table.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
+        el.dataset.group = group
+        this.sortable = Sortable.create(el, {
+          dataGroup: group,
+          group: "group",
+          ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+          setData: function(dataTransfer) {
+            // to avoid Firefox bug
+            // Detail see : https://github.com/RubaXa/Sortable/issues/1012
+            dataTransfer.setData('Text', '')
+          },
+          onEnd: async evt => {
+            const from = this.lists.find(l => l.group == evt.from.dataset.group)
+            const to = this.lists.find(l => l.group == evt.to.dataset.group)
+            const row = from.list.splice(evt.oldIndex, 1)[0]
+            row[this.groupBy.field] = to.group
+            to.list.splice(evt.newIndex, 0, row)
+            await this.updateSort()
+          }
+        })
+      })
+      const el = this.$refs.groupedTable
+      Sortable.create(el, {
         ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
         setData: function(dataTransfer) {
           // to avoid Firefox bug
@@ -91,20 +135,27 @@ export default {
           dataTransfer.setData('Text', '')
         },
         onEnd: async evt => {
-          const targetRow = this.list.splice(evt.oldIndex, 1)[0]
-          this.list.splice(evt.newIndex, 0, targetRow)
+          const group = this.lists.splice(evt.oldIndex, 1)[0]
+          this.lists.splice(evt.newIndex, 0, group)
           await this.updateSort()
         }
       })
     },
     async updateSort() {
       const data = {}
-      this.list.forEach((item, i) => {
-        if (item.id) {
-          data[item.id] = {}
-          data[item.id][this.sort] = i+1
-          item[this.sort] = i+1
-        }
+      let i=1
+      this.lists.forEach(list => {
+        list.list.forEach(item => {
+          if (item.id) {
+            data[item.id] = {}
+            data[item.id][this.sort] = i
+            if (this.groupBy) {
+              data[item.id][this.groupBy.field] = item[this.groupBy.field]
+            }
+            item[this.sort] = i
+            i++
+          }
+        })
       })
       api.updateBulk(this.type, data)
     },
@@ -143,7 +194,7 @@ export default {
         }
       }
     },
-    async remove(row, ask=true) {
+    async remove(groupIndex, row, ask=true) {
       try {
         if (ask) {
           try {
@@ -157,8 +208,9 @@ export default {
           }
         }
         await api.delete(this.type, row.id)
-        const index = this.list.indexOf(row)
-        this.list.splice(index, 1)
+        const list = this.lists[groupIndex].list
+        const index = list.indexOf(row)
+        list.splice(index, 1)
         //this.getList()
       } catch (error) {
         this.$notify({
@@ -169,44 +221,54 @@ export default {
         })
       }
     },
-    async onEnter(row, column, index) {
+    async onEnter(groupIndex, row, column, index) {
       if (!row.id) {
         await this.create(row)
         return
       } else {
-        this.addNew(index+1)
+        this.addNew(groupIndex, index+1)
       }
       this.$nextTick(() => {
-        const key = `field-${index+1}-${0}`
+        const key = `field-${groupIndex}-${index+1}-${0}`
         let ref = this.$refs[key]
         if (Array.isArray(ref)) ref = ref[0]
           ref.focus()
       })
     },
-    async onDelete(event, row, column, index, value) {
+    async onDelete(event, row, groupIndex, column, index, value) {
       if (value || column!=0) return
       if (!row.id) {
-        const index = this.list.indexOf(row)
-        this.list.splice(index, 1)
+        const list = this.lists[groupIndex].list
+        const index = list.indexOf(row)
+        list.splice(index, 1)
       } else {
         this.remove(row)
       }
       this.$nextTick(() => {
-        const key = `field-${index-1}-${column}`
+        const key = `field-${groupIndex}-${index-1}-${column}`
         let ref = this.$refs[key]
         if (Array.isArray(ref)) ref = ref[0]
           ref.focus()
       })
       event.preventDefault()
     },
-    onArrow(column, index, dir) {
-      if (0 <= index + dir && index + dir < this.list.length) {
-        const key = `field-${index + dir}-${column}`
-        let ref = this.$refs[key]
-        if (Array.isArray(ref)) ref = ref[0]
-        this.$nextTick(() => {
-          ref.focus()
-        })
+    onArrow(groupIndex, column, index, dir) {
+      const list = this.lists[groupIndex].list
+      if (index + dir < 0 && groupIndex>0) {
+        index = this.lists[groupIndex-1].list.length
+        this.onArrow(groupIndex-1, column, index, dir)
+      } else if(index + dir >= list.length && groupIndex < this.lists.length-1) {
+        index = -1
+        this.onArrow(groupIndex+1, column, index, dir)
+      } else {
+        if (0 <= index + dir && index + dir < list.length) {
+          const key = `field-${groupIndex}-${index + dir}-${column}`
+          let ref = this.$refs[key]
+          if (Array.isArray(ref)) ref = ref[0]
+          this.$nextTick(() => {
+            ref.focus()
+          })
+        }
       }
     },
     userCan(action) {

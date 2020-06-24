@@ -1,132 +1,137 @@
 <template>
-  <div>
+  <div ref="groupedTable">
+    <div v-for="(group,groupIndex) in lists" :key="group.group" class="group">
+      <h4 v-if="group.header" @click="group.show = !group.show">
+        <i v-if="group.show" class="el-icon-caret-bottom" />
+        <i v-if="!group.show" class="el-icon-caret-right" />
+        {{group.group}}
+      </h4>
+      <el-table v-if="group.show" :data-group="group.group" ref="theTable" v-loading="loading" :show-header="groupIndex==0" :data="group.list" row-key="id" fit>
+        <!--
+        <el-table-column v-if="sort" label="" width="25">
+          <template slot-scope="{row, $index}">
+            <i class="grab el-icon-menu"></i>
+          </template>
+        </el-table-column>
+        -->
+        <el-table-column type="expand">
+          <template slot-scope="{row}">
+            <el-input 
+              v-model="row.description" 
+              :rows="2" type="textarea" 
+              :autosize="{ minRows: 2, maxRows: 4}"
+              placeholder="More info..." 
+              @change="saveWithEstimation(row, 'description')"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="Name" min-width="200">
+          <template slot-scope="{row, $index}">
+            <el-input
+              class="no-border"
+              v-model="row.name"
+              @change="saveWithEstimation(row, 'name')"
+              placeholder="New task..."
+              :ref="`field-${groupIndex}-${$index}-0`"
+              @keydown.enter.native="onEnter(row, groupIndex, 0, $index)"
+              @keydown.up.native="onArrow(groupIndex, 0, $index, -1)"
+              @keydown.down.native="onArrow(groupIndex, 0, $index, +1)"
+              @keydown.delete.native="event=>onDelete(event, row, groupIndex, 0, $index, row.name)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="Position" min-width="50">
+          <template slot-scope="{row, $index}">
+            <el-select class="no-border" v-model="row.position" filterable allow-create @change="save(row, 'position')" >
+              <el-option v-for="(name, i) in positionNames" :value="name" :key="i" :label="name" />
+            </el-select>
+          </template>
+        </el-table-column>
 
-    <el-table ref="theTable" v-loading="loading" :data="list" row-key="id" fit>
-      <!--
-      <el-table-column v-if="sort" label="" width="25">
-        <template slot-scope="{row, $index}">
-          <i class="grab el-icon-menu"></i>
-        </template>
-      </el-table-column>
-      -->
-      <el-table-column type="expand">
-        <template slot-scope="{row}">
-          <el-input 
-            v-model="row.description" 
-            :rows="2" type="textarea" 
-            :autosize="{ minRows: 2, maxRows: 4}"
-            placeholder="More info..." 
-            @change="saveWithEstimation(row, 'description')"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column label="Name" min-width="200">
-        <template slot-scope="{row, $index}">
-          <el-input
-            class="no-border"
-            v-model="row.name"
-            @change="saveWithEstimation(row, 'name')"
-            placeholder="New task..."
-            :ref="`field-${$index}-0`"
-            @keydown.enter.native="onEnter(row, 0, $index)"
-            @keydown.up.native="onArrow(0, $index, -1)"
-            @keydown.down.native="onArrow(0, $index, +1)"
-            @keydown.delete.native="event=>onDelete(event, row, 0, $index, row.name)"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column label="Position" min-width="50">
-        <template slot-scope="{row, $index}">
-          <el-select class="no-border" v-model="row.position" filterable allow-create @change="save(row, 'position')" >
-            <el-option v-for="(name, i) in positionNames" :value="name" :key="i" :label="name" />
-          </el-select>
-        </template>
-      </el-table-column>
+        <el-table-column label="Planned" align="right" min-width="50">
+          <template slot-scope="{row, $index}">
+            <span v-if="row.id" class="no-border estimation el-input el-input--small">
+              <el-popover
+                slot="suffix" 
+                placement="bottom"
+                title="Estimations"
+                width="200"
+                trigger="click">
+                <table class="est-table">
+                  <tr v-for="e in row.estimations" :key="e.id">
+                    <td>{{e.user.name}}</td>
+                    <td align="right">{{e.planned}}</td>
+                  </tr>
+                  <tr>
+                    <td>Summary</td>
+                    <td align="right">{{getEstSummaries(row.estimations)}}</td>
+                  </tr>
+                </table>
+                <span slot="reference">
+                  <i v-if="deviating(row.estimations)" class="warning el-icon-warning"></i>
+                  {{row.planned}}
+                </span>
+              </el-popover>
+            </span>
+            
+          </template>
+        </el-table-column>
 
-      <el-table-column label="Planned" align="right" min-width="50">
-        <template slot-scope="{row, $index}">
-          <span v-if="row.id" class="no-border estimation el-input el-input--small">
+
+        <el-table-column label="Estimation" min-width="50">
+          <template slot-scope="{row, $index}">
+            <el-input
+              v-if="row.id"
+              class="no-border pull-left"
+              v-model="row.estimation.planned"
+              :disabled="row.position_id!=null"
+              @change="saveEstimation(row, 'planned')"
+              placeholder="Your estimation..."
+              :ref="`field-${groupIndex}-${$index}-3`"
+              @keydown.enter.native="onEnter(row, groupIndex, 3, $index)"
+              @keydown.up.native="onArrow(groupIndex, 3, $index, -1)"
+              @keydown.down.native="onArrow(groupIndex, 3, $index, +1)"
+            >
             <el-popover
+              v-if="row.position_id" 
               slot="suffix" 
               placement="bottom"
-              title="Estimations"
+              title="Offer already sent"
               width="200"
-              trigger="click">
-              <table class="est-table">
-                <tr v-for="e in row.estimations" :key="e.id">
-                  <td>{{e.user.name}}</td>
-                  <td align="right">{{e.planned}}</td>
-                </tr>
-                <tr>
-                  <td>Summary</td>
-                  <td align="right">{{getEstSummaries(row.estimations)}}</td>
-                </tr>
-              </table>
-              <span slot="reference">
-                <i v-if="deviating(row.estimations)" class="warning el-icon-warning"></i>
-                {{row.planned}}
-              </span>
+              trigger="click"
+              content="This task is already offered to the customer.">
+              <i slot="reference" class="el-icon-remove-outline"></i>
             </el-popover>
-          </span>
-          
-        </template>
-      </el-table-column>
+            </el-input>
+          </template>
+        </el-table-column>
 
+        <el-table-column label="Comment" min-width="200">
+          <template slot-scope="{row, $index}">
+            <el-input
+              v-if="row.id"
+              type="textarea"
+              :rows="1" 
+              autosize 
+              class="no-border"
+              v-model="row.estimation.comment"
+              @change="saveEstimation(row, 'comment')"
+              :ref="`field-${groupIndex}-${$index}-4`"
+              @keydown.up.native="onArrow(groupIndex, 4, $index, -1)"
+              @keydown.down.native="onArrow(groupIndex, 4, $index, +1)"
+            />
+          </template>
+        </el-table-column>
 
-      <el-table-column label="Estimation" min-width="50">
-        <template slot-scope="{row, $index}">
-          <el-input
-            v-if="row.id"
-            class="no-border pull-left"
-            v-model="row.estimation.planned"
-            :disabled="row.position_id!=null"
-            @change="saveEstimation(row, 'planned')"
-            placeholder="Your estimation..."
-            :ref="`field-${$index}-3`"
-            @keydown.enter.native="onEnter(row, 3, $index)"
-            @keydown.up.native="onArrow(3, $index, -1)"
-            @keydown.down.native="onArrow(3, $index, +1)"
-          >
-           <el-popover
-            v-if="row.position_id" 
-            slot="suffix" 
-            placement="bottom"
-            title="Offer already sent"
-            width="200"
-            trigger="click"
-            content="This task is already offered to the customer.">
-            <i slot="reference" class="el-icon-remove-outline"></i>
-          </el-popover>
-          </el-input>
-        </template>
-      </el-table-column>
+        <el-table-column align="right" label="" width="40">
+          <template slot-scope="{row}">
+            <i v-if="row.id && (row.estimations.length==0 || (row.estimations.length==1 && row.estimations[0].user_id==user.id))" class="action el-icon-remove-outline" @click="removeWithEstimation(groupIndex, row)" title="Delete this line"/> 
+            <i v-if="!row.id" class="action el-icon-circle-plus-outline" @click="createWithEstimation(groupIndex, row)"  title="Create a new line"/> 
+          </template>
+        </el-table-column>
 
-      <el-table-column label="Comment" min-width="200">
-        <template slot-scope="{row, $index}">
-          <el-input
-            v-if="row.id"
-            type="textarea"
-            :rows="1" 
-            autosize 
-            class="no-border"
-            v-model="row.estimation.comment"
-            @change="saveEstimation(row, 'comment')"
-            :ref="`field-${$index}-4`"
-            @keydown.up.native="onArrow(4, $index, -1)"
-            @keydown.down.native="onArrow(4, $index, +1)"
-          />
-        </template>
-      </el-table-column>
-
-      <el-table-column align="right" label="" width="40">
-        <template slot-scope="{row}">
-          <i v-if="row.id && (row.estimations.length==0 || (row.estimations.length==1 && row.estimations[0].user_id==user.id))" class="action el-icon-remove-outline" @click="removeWithEstimation(row)" title="Delete this line"/> 
-          <i v-if="!row.id" class="action el-icon-circle-plus-outline" @click="createWithEstimation(row)"  title="Create a new line"/> 
-        </template>
-      </el-table-column>
-
-    </el-table>
-
+      </el-table>
+    </div>
     <el-row style="margin-top: 20px">
       <el-col align="right">
         <el-button type="default" @click="exportCSV('Tasks.csv', ['id', 'name', 'position', 'planned', 'estimation.id', 'estimation.planned', 'estimation.comment'])">
@@ -146,15 +151,18 @@ export default {
   mixins: [list],
   props: ['id'],
   watch: {
-    list() {
-      this.list.forEach(task => {
-        if (!task.estimation) task.estimation = { project_id: this.id, task_id: task.id, user_id: api.user().id }
-      });
+    lists() {
+      this.lists.forEach(list => {
+        list.list.forEach(task => {
+          if (!task.estimation) task.estimation = { project_id: this.id, task_id: task.id, user_id: api.user().id }
+        })
+      })
     }
   },
   data() {
     return {
       type: 'task',
+      groupBy: {field: 'position'},
       user: api.user(),
       template: { id: null, project_id: this.id, state: 'NEW', type: 'DEV', estimation: {}, estimations: [], planned: null, _meta: {estimation: {ignore: true}, estimations: {ignore: true}} },
       query: { project_id: this.id, type: 'DEV' },
@@ -181,8 +189,8 @@ export default {
     }
   },
   methods: {
-    async createWithEstimation(row) {
-      await this.create(row)
+    async createWithEstimation(groupIndex, row) {
+      await this.create(groupIndex, row)
       row.estimation = { project_id: this.id, task_id: row.id, user_id: api.user().id, planned: null, comment: null }
     },
     async saveWithEstimation(row, field) {
