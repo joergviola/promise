@@ -37,17 +37,21 @@ export default {
     this.getList()
   },
   methods: {
-    addNew(pos = null) {
+    addNew(groupIndex, pos = null) {
       if (this.createBy == 'row' || this.createBy==null) {
         const item = Object.assign({}, this.template)
         item._meta = this.meta
+        const list = this.lists[groupIndex].list
         if (this.sort) {
-          item[this.sort] = this.list.length+1
+          item[this.sort] = list.length+1
+        }
+        if (this.groupBy) {
+          item[this.groupBy.field] = this.lists[groupIndex].group
         }
         if (pos==null) {
-          this.list.push(item)
+          list.push(item)
         } else {
-          this.list.splice(pos, 0, item)
+          list.splice(pos, 0, item)
         }
       }
     },
@@ -221,7 +225,7 @@ export default {
         })
       }
     },
-    async onEnter(groupIndex, row, column, index) {
+    async onEnter(row, groupIndex, column, index) {
       if (!row.id) {
         await this.create(row)
         return
