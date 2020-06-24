@@ -104,6 +104,12 @@ export default {
         return [{group:'default', list: list, show: true, header: false, key:0}]
       }
     },
+    addGroup() {
+      if (this.groupBy) {
+        this.lists.splice(0, 0, {group:'New...', list: [], show: true, header: true, key:this.lists.length})
+        this.addNew(0)
+      }
+    },
     groupChanged(group) {
       if (this.groupBy) {
         group.list.forEach(item => {
