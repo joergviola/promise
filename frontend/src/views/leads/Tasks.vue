@@ -1,11 +1,11 @@
 <template>
   <div ref="groupedTable">
-    <div v-for="(group,groupIndex) in lists" :key="group.group" class="group">
-      <h4 v-if="group.header" @click="group.show = !group.show">
-        <i v-if="group.show" class="el-icon-caret-bottom" />
-        <i v-if="!group.show" class="el-icon-caret-right" />
-        {{group.group}}
-      </h4>
+    <div v-for="(group,groupIndex) in lists" :key="group.key" class="group">
+      <div v-if="group.header">
+        <i v-if="group.show" class="el-icon-caret-bottom"  @click="group.show = !group.show"/>
+        <i v-if="!group.show" class="el-icon-caret-right"  @click="group.show = !group.show"/>
+        <el-input v-model="group.group" class="no-border heading" @change="groupChanged(group)"/>
+      </div>
       <el-table v-if="group.show" :data-group="group.group" ref="theTable" v-loading="loading" :show-header="groupIndex==0" :data="group.list" row-key="id" fit>
         <!--
         <el-table-column v-if="sort" label="" width="25">
@@ -183,7 +183,6 @@ export default {
         }
       },
       loading: false,
-      list: [],
       sort: 'sort_project',
       positionNames: [],
     }
@@ -252,7 +251,7 @@ export default {
       const sum = data.reduce((s, c) => s + c.planned, 0)
       return sum/data.length
     },
-    async removeWithEstimation(row) {
+    async removeWithEstimation(groupIndex, row) {
       if (row.estimations.length>1) return
       if (row.estimations.length==1 && row.estimations[0].user_id != api.user().id) return;
       try {
@@ -268,7 +267,7 @@ export default {
         if (row.estimation.id) {
           await api.delete('estimation', row.estimation.id)
         }
-        await this.remove(row, false)
+        await this.remove(groupIndex, row, false)
       } catch (error) {
         this.$notify({
           title: 'Error',
@@ -296,7 +295,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 i.action {
   color: #AAAAAA;
   cursor: pointer;
@@ -324,5 +323,15 @@ i.grab {
 .est-table td {
   border-bottom: 1px solid #DDDDDD;
 }
-
+.group {
+  margin-top: 10px;
+}
+.heading {
+  display: inline;
+}
+.heading input {
+  font-size: 120%;
+  font-weight: bold;
+  width: 80%;
+}
 </style>

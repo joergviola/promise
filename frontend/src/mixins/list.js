@@ -90,18 +90,26 @@ export default {
       if (this.groupBy) {
         const result = []
         const cache = {}
-        list.forEach(item => {
+        list.forEach((item,i) => {
           const value = item[this.groupBy.field] || "None"
           if (cache[value]) {
             cache[value].push(item)
           } else {
             cache[value] = [item]
-            result.push({group:value, list: cache[value], show: true, header: true})
+            result.push({group:value, list: cache[value], show: true, header: true, key:i})
           }
         })
         return result
       } else {
-        return [{group:'default', list: list, show: true, header: false}]
+        return [{group:'default', list: list, show: true, header: false, key:0}]
+      }
+    },
+    groupChanged(group) {
+      if (this.groupBy) {
+        group.list.forEach(item => {
+          item[this.groupBy.field] = group.group
+        })        
+        this.updateSort()
       }
     },
     setSort() {
