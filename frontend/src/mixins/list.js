@@ -119,11 +119,12 @@ export default {
       }
     },
     setSort() {
-      const tables = this.$refs.theTable
+      let tables = this.$refs.theTable
       if (tables.length==1) tables = [tables]
       tables.forEach(table => {
-        const group = table.$el.dataset.group
-        const el = table.$el.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
+        const tableEl = Array.isArray(table) ? table[0].$el : table.$el
+        const group = tableEl.dataset.group
+        const el = tableEl.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
         el.dataset.group = group
         this.sortable = Sortable.create(el, {
           dataGroup: group,
@@ -138,7 +139,9 @@ export default {
             const from = this.lists.find(l => l.group == evt.from.dataset.group)
             const to = this.lists.find(l => l.group == evt.to.dataset.group)
             const row = from.list.splice(evt.oldIndex, 1)[0]
-            row[this.groupBy.field] = to.group
+            if (this.groupBy) {
+              row[this.groupBy.field] = to.group
+            }
             to.list.splice(evt.newIndex, 0, row)
             await this.updateSort()
           }
