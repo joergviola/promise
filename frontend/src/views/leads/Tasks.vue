@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row style="margin-top: 20px">
+    <el-row v-if="groupBy" style="margin-top: 20px">
       <el-col align="right">
         <el-button type="default" @click="addGroup()">
             New group
@@ -26,7 +26,8 @@
             <template slot-scope="{row}">
               <el-input 
                 v-model="row.description" 
-                :rows="2" type="textarea" 
+                type="textarea" 
+                :rows="2" 
                 :autosize="{ minRows: 2, maxRows: 4}"
                 placeholder="More info..." 
                 @change="saveWithEstimation(row, 'description')"
