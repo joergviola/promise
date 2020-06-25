@@ -97,7 +97,7 @@
                 @change="saveEstimation(row, 'planned')"
                 placeholder="Your estimation..."
                 :ref="`field-${groupIndex}-${$index}-3`"
-                @keydown.enter.native="onEnter(row, groupIndex, 3, $index)"
+                @keydown.enter.native="onEnter(row, groupIndex, 0, $index)"
                 @keydown.up.native="onArrow(groupIndex, 3, $index, -1)"
                 @keydown.down.native="onArrow(groupIndex, 3, $index, +1)"
               >

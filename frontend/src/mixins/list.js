@@ -25,6 +25,7 @@ export default {
       return !this.userCan('U')
     },
     firstFocusable() {
+      if (!this.columns) return null
       for (let i=0; i<this.columns.length; i++) {
         const col = this.columns[i]
         if (col.editable && !col.type) return i // Does not support editable functions
@@ -258,7 +259,7 @@ export default {
       } else {
         this.addNew(groupIndex, index+1)
       }
-      const i = this.firstFocusable
+      const i = this.firstFocusable || column
       if (i==null) return
       this.$nextTick(() => {
         const key = `field-${groupIndex}-${index+1}-${i}`
@@ -267,11 +268,10 @@ export default {
         ref.focus()
       })
     },
-    async onDelete(event, row, groupIndex, column, index) {
-      const i = this.firstFocusable
-      if (i==null) return
+    async onDelete(event, row, groupIndex, column, index, val=null) {
+      const i = this.firstFocusable || column
 
-      const value = row[this.columns[column].name]
+      const value = this.columns ? row[this.columns[column].name] : val
       if (value || column!=i) return
       if (!row.id) {
         const list = this.lists[groupIndex].list
