@@ -1,13 +1,59 @@
 <template>
-  <generic-list
-    type="position"
-    :columns="columns"
-    :with="w"
-    :template="template"
-    createBy="row"
-    :allowDelete="true"
-    sort="no"
-  />
+  <div>
+    <generic-list
+      type="position"
+      :columns="columns"
+      :with="w"
+      :template="template"
+      createBy="row"
+      :allowDelete="true"
+      sort="no"
+      @loaded="data => lists = data"
+    />
+    <el-row type="flex" >
+      <el-col :span="24" class="text-right">
+        <el-button type="secondary" @click="showExport=true">
+          Export
+        </el-button>
+      </el-col>
+    </el-row>
+    <el-dialog
+      title="Export to Word"
+      :visible.sync="showExport"
+      width="70%"
+      :before-close="()=>showExport=false">
+      <table class="export" width="100%">
+        <tr class="header">
+          <td>No.</td>
+          <td>Position</td>
+          <td>Optional</td>
+          <td>Accepted</td>
+          <td align="right">Price</td>
+        </tr>
+        <tr v-for="(pos,i) in positions" :key="pos.id" v-align="top">
+          <td>{{pos.no}}</td>
+          <td>
+              <b>{{pos.name}}</b><br>
+              {{pos.comment}}
+          </td>
+          <td>
+            <span v-if="pos.optional">&#x2713;</span>
+          </td>
+          <td>
+            <span v-if="pos.optional">&#x25A2;</span>
+          </td>
+          <td align="right"> {{pos.price | currency }} </td>
+        </tr>
+        <tr class="footer">
+          <td colspan="4">Total</td>
+          <td align="right">{{total}}</td>
+        </tr>
+      </table>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="showExport = false">Close</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -18,8 +64,19 @@ export default {
   name: 'OfferPositionList',
   components: { GenericList },
   props: ['id', 'oid'],
+  computed: {
+    positions() {
+      if (this.lists.length==0) return []
+      return this.lists[0].list
+    },
+    total() {
+      return 0
+    }
+  },
   data() {
     return {
+      lists: [],
+      showExport: false,
       template: { accounting_id: this.oid  },
       w: { },
       type: 'position',
@@ -39,4 +96,16 @@ export default {
 </script>
 
 <style scoped type="sass">
+.export {
+  border-collapse: collapse;
+}
+.export td {
+  border: 1px solid #444444;
+  padding: 10px;
+}
+.export .header, .export .footer {
+  background-color: #00A4FF;
+  color: #FFFFFF;
+}
+
 </style>

@@ -85,6 +85,7 @@ export default {
             this.setSort()
           })
         }
+        this.$emit('loaded', this.lists)
       } catch (error) {
         this.$notify({
           title: 'Error',

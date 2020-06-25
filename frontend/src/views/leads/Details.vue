@@ -71,6 +71,12 @@
               <el-form-item label="Phone">
                 <el-input v-model="item.contact.user.phone" type="text" :disabled="readonly" />
               </el-form-item>
+              <el-form-item label="Mobile">
+                <el-input v-model="item.contact.user.mobile" type="text" :disabled="readonly" />
+              </el-form-item>
+              <el-form-item label="Comment">
+                <el-input v-model="item.contact.user.comment" type="textarea" :rows="{minRows:2, maxRows:4}" :disabled="readonly" />
+              </el-form-item>
             </el-card>
           </el-collapse-transition>
         </el-form>
