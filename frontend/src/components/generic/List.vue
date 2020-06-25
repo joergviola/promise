@@ -22,7 +22,7 @@
           <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :prop="col.name" :minWidth="col.width" sortable>
             <template slot-scope="{row, $index}">
               <el-input
-                v-if="editable(row, col) && !col.type"
+                v-if="editable(row, col) && (!col.type || col.type=='text')"
                 class="no-border"
                 v-model="row[col.name]"
                 :disabled="!editable(row, col) || readonly"
@@ -31,6 +31,22 @@
                 :ref="`field-${groupIndex}-${$index}-${i}`"
                 :data-r="`field-${groupIndex}-${$index}-${i}`"
                 @keydown.enter.native="onEnter(row, groupIndex, i, $index)"
+                @keydown.up.native="onArrow(groupIndex, i, $index, -1)"
+                @keydown.down.native="onArrow(groupIndex, i, $index, +1)"
+                @keydown.delete.native="event=>onDelete(event, row, groupIndex, i, $index)"
+              />
+              <el-input
+                v-if="editable(row, col) && col.type=='textarea'"
+                class="no-border"
+                v-model="row[col.name]"
+                type="textarea"
+                :rows="1" 
+                autosize 
+                :disabled="!editable(row, col) || readonly"
+                @change="save(row, col.name)"
+                :placeholder="col.placeholder"
+                :ref="`field-${groupIndex}-${$index}-${i}`"
+                :data-r="`field-${groupIndex}-${$index}-${i}`"
                 @keydown.up.native="onArrow(groupIndex, i, $index, -1)"
                 @keydown.down.native="onArrow(groupIndex, i, $index, +1)"
                 @keydown.delete.native="event=>onDelete(event, row, groupIndex, i, $index)"

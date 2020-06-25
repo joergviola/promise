@@ -26,7 +26,7 @@ export default {
       columns: [
         { name: 'no', label: 'No', width: 40, placeholder: "New Position..."},
         { name: 'name', label: 'Name', editable: true },
-        { name: 'comment', label: 'Comment', editable: true },
+        { name: 'comment', type: 'textarea', label: 'Comment', editable: true, width: 200 },
         { name: 'planned', label: 'Effort', editable: false },
         { name: 'price', label: 'Price', editable: false },
       ],
