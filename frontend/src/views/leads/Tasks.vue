@@ -172,7 +172,7 @@ export default {
   data() {
     return {
       type: 'task',
-      groupBy: {field: 'position'},
+      groupBy: {field: 'category'},
       user: api.user(),
       template: { id: null, project_id: this.id, state: 'NEW', type: 'DEV', estimation: {}, estimations: [], planned: null, _meta: {estimation: {ignore: true}, estimations: {ignore: true}} },
       query: { project_id: this.id, type: 'DEV' },
