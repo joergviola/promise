@@ -17,7 +17,7 @@ import GenericList from '@/components/generic/List'
 import api from '@/api'
 
 export default {
-  name: 'ProjetTaskList',
+  name: 'ProjectTaskList',
   components: { GenericList },
   props: ['id'],
   data() {

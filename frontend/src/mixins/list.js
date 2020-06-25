@@ -47,6 +47,7 @@ export default {
     addNew(groupIndex, pos = null) {
       if (this.createBy == 'row' || this.createBy==null) {
         const item = Object.assign({}, this.template)
+        item.id = null // make it reactive
         item._meta = this.meta
         const list = this.lists[groupIndex].list
         if (this.sort) {
@@ -170,6 +171,7 @@ export default {
       })
     },
     async updateSort() {
+      if (!this.sort) return
       const data = {}
       let i=1
       this.lists.forEach(list => {
