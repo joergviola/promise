@@ -24,6 +24,13 @@ export default {
     readonly() {
       return !this.userCan('U')
     },
+    firstFocusable() {
+      for (let i=0; i<this.columns.length; i++) {
+        const col = this.columns[i]
+        if (col.editable && !col.type) return i // Does not support editable functions
+      }
+      return null
+    }
   },
   watch: {
     query() {
@@ -249,21 +256,27 @@ export default {
       } else {
         this.addNew(groupIndex, index+1)
       }
+      const i = this.firstFocusable
+      if (i==null) return
       this.$nextTick(() => {
-        const key = `field-${groupIndex}-${index+1}-${0}`
+        const key = `field-${groupIndex}-${index+1}-${i}`
         let ref = this.$refs[key]
         if (Array.isArray(ref)) ref = ref[0]
-          ref.focus()
+        ref.focus()
       })
     },
-    async onDelete(event, row, groupIndex, column, index, value) {
-      if (value || column!=0) return
+    async onDelete(event, row, groupIndex, column, index) {
+      const i = this.firstFocusable
+      if (i==null) return
+
+      const value = row[this.columns[column].name]
+      if (value || column!=i) return
       if (!row.id) {
         const list = this.lists[groupIndex].list
         const index = list.indexOf(row)
         list.splice(index, 1)
       } else {
-        this.remove(row)
+        this.remove(groupIndex, row)
       }
       this.$nextTick(() => {
         const key = `field-${groupIndex}-${index-1}-${column}`

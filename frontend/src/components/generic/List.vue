@@ -19,11 +19,6 @@
           <el-input v-model="group.group" class="no-border heading" @change="groupChanged(group)"/>
         </div>
         <el-table v-if="group.show" :data-group="group.group" ref="theTable" v-loading="loading" :show-header="groupIndex==0" :data="group.list" row-key="id" fit>
-          <el-table-column v-if="sort" label="" width="25">
-            <template slot-scope="{row, $index}">
-              <i class="el-icon-menu"></i>
-            </template>
-          </el-table-column>
           <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :prop="col.name" :minWidth="col.width" sortable>
             <template slot-scope="{row, $index}">
               <el-input
@@ -33,12 +28,19 @@
                 :disabled="!editable(row, col) || readonly"
                 @change="save(row, col.name)"
                 :placeholder="col.placeholder"
-                :ref="`field-${$index}-${i}`"
-                @keydown.enter.native="onEnter(row, i, $index)"
-                @keydown.up.native="onArrow(i, $index, -1)"
-                @keydown.down.native="onArrow(i, $index, +1)"
+                :ref="`field-${groupIndex}-${$index}-${i}`"
+                :data-r="`field-${groupIndex}-${$index}-${i}`"
+                @keydown.enter.native="onEnter(row, groupIndex, i, $index)"
+                @keydown.up.native="onArrow(groupIndex, i, $index, -1)"
+                @keydown.down.native="onArrow(groupIndex, i, $index, +1)"
+                @keydown.delete.native="event=>onDelete(event, row, groupIndex, i, $index)"
               />
-              <span v-if="!editable(row, col) && !col.type" class="input-disabled">{{typeof col.name === 'string' ? _.get(row, col.name) : col.name(row) }}</span>
+              <span 
+                v-if="!editable(row, col) && !col.type" 
+                class="input-disabled"
+              >
+                {{typeof col.name === 'string' ? _.get(row, col.name) : col.name(row) }}
+              </span>
               <el-select v-if="col.type=='select'" class="no-border" v-model="row[col.name]" @change="save(row, col.name)"  :placeholder="col.placeholder">
                 <el-option v-for="(o, i) in col.options" :key="i" :label="col.display ? _.get(o, col.display) : o" :value="col.id ? _.get(o, col.id) : o" />
               </el-select>
@@ -61,9 +63,9 @@
             </template>
           </el-table-column>
 
-          <el-table-column align="right" label="Actions" fixed="right">
+          <el-table-column align="right" label="Actions" >
             <template slot-scope="{row}">
-              <i v-if="row.id && allowDelete" class="action el-icon-remove-outline" @click="remove(row)" title="Delete this line"/> 
+              <i v-if="row.id && allowDelete" class="action el-icon-remove-outline" @click="remove(groupIndex, row)" title="Delete this line"/> 
               <i v-if="row.id && detail" class="action el-icon-arrow-right" @click="detailClicked(row)"  title="Edit details"/> 
               <i v-if="!row.id" class="action el-icon-circle-plus-outline" @click="create(row)"  title="Create a new line"/> 
             </template>
