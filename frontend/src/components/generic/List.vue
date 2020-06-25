@@ -36,12 +36,26 @@
                 @keydown.delete.native="event=>onDelete(event, row, groupIndex, i, $index)"
               />
               <el-input
-                v-if="editable(row, col) && col.type=='textarea'"
+                v-if="col.type=='textarea'"
                 class="no-border"
                 v-model="row[col.name]"
                 type="textarea"
                 :rows="1" 
                 autosize 
+                :disabled="!editable(row, col) || readonly"
+                @change="save(row, col.name)"
+                :placeholder="col.placeholder"
+                :ref="`field-${groupIndex}-${$index}-${i}`"
+                :data-r="`field-${groupIndex}-${$index}-${i}`"
+                @keydown.up.native="onArrow(groupIndex, i, $index, -1)"
+                @keydown.down.native="onArrow(groupIndex, i, $index, +1)"
+                @keydown.delete.native="event=>onDelete(event, row, groupIndex, i, $index)"
+              />
+              <el-checkbox
+                v-if="col.type=='checkbox'"
+                class="no-border"
+                :value="!!row[col.name]"
+                @input="value => row[col.name] = value"
                 :disabled="!editable(row, col) || readonly"
                 @change="save(row, col.name)"
                 :placeholder="col.placeholder"

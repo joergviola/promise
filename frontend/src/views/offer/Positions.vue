@@ -29,6 +29,8 @@ export default {
         { name: 'comment', type: 'textarea', label: 'Comment', editable: true, width: 200 },
         { name: 'planned', label: 'Effort', editable: false },
         { name: 'price', label: 'Price', editable: false },
+        { name: 'optional', type: 'checkbox', label: 'Optional', editable: true },
+        { name: 'accepted', type: 'checkbox', label: 'Accepted', editable: row => row.optional },
       ],
       planned: {}
     }
