@@ -276,8 +276,8 @@ export default {
         _meta: { user: { ignore: true } }
       }
       this.customerChanged()
-      this.loading = false
     }
+    this.loading = false
   }
 
 }

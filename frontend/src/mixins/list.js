@@ -80,6 +80,8 @@ export default {
         const list = await api.find(this.type, query)
         //this.addNew()
         this.lists = this.doGroupBy(list)
+        if (this.lists.length==0) this.addGroup()
+        if (!this.groupBy && this.lists[0].list.length==0) this.addNew(0)
         if (this.sort) {
           this.$nextTick(() => {
             this.setSort()

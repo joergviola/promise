@@ -30,7 +30,7 @@
           <td>Accepted</td>
           <td align="right">Price</td>
         </tr>
-        <tr v-for="(pos,i) in positions" :key="pos.id" v-align="top">
+        <tr v-for="(pos,i) in positions" :key="pos.id">
           <td>{{pos.no}}</td>
           <td>
               <b>{{pos.name}}</b><br>
