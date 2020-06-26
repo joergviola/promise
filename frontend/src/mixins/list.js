@@ -270,6 +270,7 @@ export default {
         if (Array.isArray(ref)) ref = ref[0]
         ref.focus()
       })
+      event.preventDefault()
     },
     async onDelete(event, row, groupIndex, column, index, val=null) {
       const i = this.firstFocusable || column
