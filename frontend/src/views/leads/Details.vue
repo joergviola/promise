@@ -1,5 +1,5 @@
 <template>
-  <div class="components-container">
+  <div class="components-container" v-loading="loading">
     <el-row :gutter="20">
       <el-col :span="12">
         <el-form label-position="left" label-width="120px" >
@@ -8,6 +8,17 @@
           </el-form-item>
           <el-form-item label="Description">
             <el-input v-model="item.description" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" :disabled="readonly" />
+          </el-form-item>
+          <el-form-item label="Links">
+            <el-input v-if="linksEdit" v-model="item.links" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" :disabled="readonly" />
+            <div v-if="!linksEdit">
+            <span v-for="(link,i) in links" :key="link.url" >
+              <span v-if="i>0"> - </span>
+              <a :href="link.url" target="_blank">{{link.label}}</a>
+            </span>
+            </div>
+            <el-button v-if="!linksEdit" @click="linksEdit=true">Edit</el-button>
+            <el-button v-if="linksEdit" @click="linksEdit=false">Save</el-button>
           </el-form-item>
           <el-form-item label="Source">
             <el-select v-model="item.source" :disabled="readonly">
@@ -115,7 +126,9 @@ export default {
       customers: [],
       showContact: false,
       contacts: [],
-      image: image
+      image: image,
+      linksEdit: false,
+      loading: false,
     }
   },
   computed: {
@@ -124,6 +137,14 @@ export default {
         .filter(right => right.tables=='*' || right.tables.search('project')!=-1)
         .filter(right => right.actions.indexOf('U')!=-1)
       return rights.length==0
+    },
+    links() {
+      if (!this.item?.links) return []
+      return this.item.links.split("\n").map(line => {
+        const comp = line.split("@")
+        if (comp.length==2) return {label:comp[0], url:comp[1]}
+        else return {label:line, url:line}
+      })
     }
   },
   methods: {
@@ -131,8 +152,7 @@ export default {
       if (!this.item.customer_id) {
         this.contacts = []
         this.item.customer = {}
-        this.item.contact = { type: 'PROJECT', role: 'Customer', user: {},  _meta: { user: { ignore: true }, }
- }
+        this.item.contact = { type: 'PROJECT', role: 'Customer', user: {},  _meta: { user: { ignore: true }, } }
         this.showCustomer = true
         this.showContact = true
 
@@ -158,6 +178,7 @@ export default {
       this.save()
     },
     async save(state = null) {
+      this.loading = true
       if (state) {
         this.item.state = state
       }
@@ -200,9 +221,11 @@ export default {
 
       this.customers = await api.find('organisation', {})
       this.customerChanged()
+      this.loading = false
     }
   },
   async mounted() {
+    this.loading = true
     const id = this.$route.params.id
     this.customers = await api.find('organisation', {})
     if (id === 'new') {
@@ -252,6 +275,7 @@ export default {
         _meta: { user: { ignore: true } }
       }
       this.customerChanged()
+      this.loading = false
     }
   }
 
