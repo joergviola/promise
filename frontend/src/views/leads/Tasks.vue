@@ -24,14 +24,48 @@
           -->
           <el-table-column type="expand">
             <template slot-scope="{row}">
-              <el-input 
-                v-model="row.description" 
-                type="textarea" 
-                :rows="2" 
-                :autosize="{ minRows: 2, maxRows: 4}"
-                placeholder="More info..." 
-                @change="saveWithEstimation(row, 'description')"
-              />
+              <el-form label-position="left" label-width="120px" >
+                <el-form-item label="Description">
+                  <el-input 
+                    v-model="row.description" 
+                    type="textarea" 
+                    :rows="2" 
+                    :autosize="{ minRows: 2, maxRows: 4}"
+                    placeholder="More info..." 
+                    @change="saveWithEstimation(row, 'description')"
+                  />
+                </el-form-item>
+                <el-form-item label="Effort type">
+                  <el-checkbox
+                    label="Planned effort in %"
+                    :value="!!row.percent"
+                    @input="value => row.percent = value"
+                    @change="saveWithEstimation(row, 'percent')"
+                  />
+                </el-form-item>
+                <el-form-item label="Purchase">
+                  <el-checkbox
+                    label="This is a purchased item"
+                    :value="!!row.purchased"
+                    @input="value => row.purchased = value"
+                    @change="saveWithEstimation(row, 'purchased')"
+                  />
+                </el-form-item>
+                <el-form-item v-if="row.purchased" label="Purchase price">
+                  <el-input
+                    type="text"
+                    v-model="row.price"
+                    @change="saveWithEstimation(row, 'price')"
+                  />
+                </el-form-item>
+                <el-form-item v-if="row.purchased" label="Supplier">
+                  <el-input
+                    type="text"
+                    v-model="row.supplier"
+                    @change="saveWithEstimation(row, 'supplier')"
+                  />
+                </el-form-item>
+              </el-form>
             </template>
           </el-table-column>
           <el-table-column label="Name" min-width="200">
@@ -59,7 +93,7 @@
 
           <el-table-column label="Planned" align="right" min-width="50">
             <template slot-scope="{row, $index}">
-              <span v-if="row.id" class="no-border estimation el-input el-input--small">
+              <span v-if="row.id && !row.purchased" class="no-border estimation el-input el-input--small">
                 <el-popover
                   slot="suffix" 
                   placement="bottom"
@@ -78,11 +112,13 @@
                   </table>
                   <span slot="reference">
                     <i v-if="deviating(row.estimations)" class="warning el-icon-warning"></i>
-                    {{row.planned}}
+                    {{row.planned}} {{ row.percent?'%':'' }}
                   </span>
                 </el-popover>
               </span>
-              
+              <span v-if="row.id && row.purchased" class="no-border estimation el-input el-input--small">
+                {{row.price  || 0}} EUR
+              </span>
             </template>
           </el-table-column>
 
@@ -90,7 +126,7 @@
           <el-table-column label="Estimation" min-width="50">
             <template slot-scope="{row, $index}">
               <el-input
-                v-if="row.id"
+                v-if="row.id && !row.purchased"
                 class="no-border pull-left"
                 v-model="row.estimation.planned"
                 :disabled="row.position_id!=null"
@@ -112,13 +148,16 @@
                 <i slot="reference" class="el-icon-remove-outline"></i>
               </el-popover>
               </el-input>
+              <span v-if="row.id && row.purchased" class="no-border estimation el-input el-input--small">
+                Purchased from {{row.supplier || '??'}}
+              </span>
             </template>
           </el-table-column>
 
           <el-table-column label="Comment" min-width="200">
             <template slot-scope="{row, $index}">
               <el-input
-                v-if="row.id"
+                v-if="row.id  && !row.purchased"
                 type="textarea"
                 :rows="1" 
                 autosize 

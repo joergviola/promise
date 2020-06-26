@@ -29,6 +29,7 @@
             <el-select v-model="item.effort_unit" :disabled="readonly">
               <el-option v-for="(o, i) in units" :key="i" :label="o" :value="o" />
             </el-select>
+            (Currently planned: {{item.planned}})
           </el-form-item>
           <el-form-item v-if="item.state=='REJECTED'" label="Lost reason">
             <el-input v-model="item.lost_reason" type="text" :disabled="readonly" />

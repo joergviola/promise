@@ -19,7 +19,7 @@
           <el-input v-model="group.group" class="no-border heading" @change="groupChanged(group)"/>
         </div>
         <el-table v-if="group.show" :data-group="group.group" ref="theTable" v-loading="loading" :show-header="groupIndex==0" :data="group.list" row-key="id" fit>
-          <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :prop="col.name" :minWidth="col.width" sortable>
+          <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :prop="col.name" :align="col.align" :minWidth="col.width" sortable>
             <template slot-scope="{row, $index}">
               <el-input
                 v-if="editable(row, col) && (!col.type || col.type=='text')"
