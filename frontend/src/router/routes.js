@@ -250,4 +250,12 @@ export default [
       noAuth: true
     }
   },
+  {
+    path: '/version',
+    name: 'Version',
+    component: () => import('../views/Version.vue'),
+    meta: {
+      hidden: true,
+    }
+  },
 ]

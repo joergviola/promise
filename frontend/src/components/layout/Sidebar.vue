@@ -1,7 +1,10 @@
 <template>
-   <div style="display: flex; flex-direction: column; height: 100%;">
+   <div style="display: flex; flex-direction: column; height: 100%; background-color:#666666">
       <router-menu />
       <router-menu :bottom="true" />
+      <div style="text-align: center; font-size: 70%; padding-bottom: 10px">
+         <router-link to="/version"><span>gluon 23.06.20</span></router-link>
+      </div>
    </div>
 </template>
 
