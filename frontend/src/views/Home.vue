@@ -18,7 +18,7 @@
                   </router-link>
                 </span>
                 <span v-if="task.due_at" class="pull-right">
-                  {{task.due_at}}
+                  {{task.due_at | dateHuman}}
                 </span>
               </div>
               <div class="body pull-clear">
@@ -42,6 +42,9 @@
                 <router-link :to="`/projects/project/${task.project.id}/detail`">
                     &gt;
                 </router-link>
+                <span v-if="task.due_at" class="pull-right">
+                  {{task.due_at | dateHuman}}
+                </span>
               </div>
               <div class="body">
                 {{task.name}} 
@@ -75,7 +78,10 @@
           </div>
           <div v-for="allocation in allocations" class="task" :key="allocation.id">
             <div class="header">
-              {{allocation.role}} {{allocation.project.starts_at}} - {{allocation.project.ends_at}}
+              {{allocation.role}}
+              <span class="pull-right"> 
+                {{allocation.project.starts_at}} - {{allocation.project.ends_at}}
+              </span>
             </div>
             <div class="body pull-clear">
                 {{allocation.project.name}} 

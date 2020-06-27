@@ -9,20 +9,21 @@
     </el-row>
     <div ref="groupedTable">
       <div v-for="(group,groupIndex) in lists" :key="group.key" class="group">
-        <div v-if="group.header">
-          <i v-if="group.show" class="el-icon-caret-bottom"  @click="group.show = !group.show"/>
-          <i v-if="!group.show" class="el-icon-caret-right"  @click="group.show = !group.show"/>
+        <div v-if="group.header" class="grouped-header">
+          <i class="group-handle grab el-icon-menu"></i>
+          <i v-if="group.show" class="el-icon-arrow-down"  @click="group.show = !group.show"/>
+          <i v-if="!group.show" class="el-icon-arrow-right"  @click="group.show = !group.show"/>
           <el-input v-model="group.group" class="no-border heading" @change="groupChanged(group)"/>
         </div>
         <el-table v-if="group.show" :data-group="group.group" ref="theTable" v-loading="loading" :show-header="groupIndex==0" :data="group.list" row-key="id" fit>
-          <!--
+          
           <el-table-column v-if="sort" label="" width="25">
             <template slot-scope="{row, $index}">
-              <i class="grab el-icon-menu"></i>
+              <i class="handle grab el-icon-menu"></i>
             </template>
           </el-table-column>
-          -->
-          <el-table-column type="expand">
+          
+          <el-table-column type="expand"  width="25">
             <template slot-scope="{row}">
               <el-form label-position="left" label-width="120px" >
                 <el-form-item label="Description">
@@ -37,7 +38,7 @@
                 </el-form-item>
                 <el-form-item label="Effort type">
                   <el-checkbox
-                    label="Planned effort in %"
+                    label="Planned effort in %, added to ALL offer positions"
                     :value="!!row.percent"
                     @input="value => row.percent = value"
                     @change="saveWithEstimation(row, 'percent')"
@@ -93,7 +94,7 @@
 
           <el-table-column label="Planned" align="right" min-width="50">
             <template slot-scope="{row, $index}">
-              <span v-if="row.id && !row.purchased" class="no-border estimation el-input el-input--small">
+              <span v-if="!row.purchased" class="no-border estimation el-input el-input--small">
                 <el-popover
                   slot="suffix" 
                   placement="bottom"
@@ -116,7 +117,7 @@
                   </span>
                 </el-popover>
               </span>
-              <span v-if="row.id && row.purchased" class="no-border estimation el-input el-input--small">
+              <span v-if="row.purchased" class="no-border estimation el-input el-input--small">
                 {{row.price  || 0}} EUR
               </span>
             </template>
@@ -126,7 +127,7 @@
           <el-table-column label="Estimation" min-width="50">
             <template slot-scope="{row, $index}">
               <el-input
-                v-if="row.id && !row.purchased"
+                v-if="!row.purchased"
                 class="no-border pull-left"
                 v-model="row.estimation.planned"
                 :disabled="row.position_id!=null"
@@ -154,7 +155,7 @@
           <el-table-column label="Comment" min-width="200">
             <template slot-scope="{row, $index}">
               <el-input
-                v-if="row.id  && !row.purchased"
+                v-if="!row.purchased"
                 type="textarea"
                 :rows="1" 
                 autosize 
@@ -165,7 +166,7 @@
                 @keydown.up.native="onArrow(groupIndex, 4, $index, -1)"
                 @keydown.down.native="onArrow(groupIndex, 4, $index, +1)"
               />
-              <span v-if="row.id && row.purchased" class="no-border estimation el-input el-input--small">
+              <span v-if="row.purchased" class="no-border estimation el-input el-input--small">
                 Purchased from {{row.supplier || '??'}}
               </span>
             </template>
@@ -238,6 +239,10 @@ export default {
     }
   },
   methods: {
+    stopEvent(event) {
+      console.log(event)
+      event.stopPropagation();
+    },
     async createWithEstimation(groupIndex, row) {
       await this.create(groupIndex, row)
       row.estimation = { project_id: this.id, task_id: row.id, user_id: api.user().id, planned: null, comment: null }
@@ -356,6 +361,8 @@ i.action {
 i.grab {
   color: #EEEEEE;
   cursor: grab;
+  font-size: 17px;
+  vertical-align: -3px;
 }
 
 .estimation .count {
@@ -383,5 +390,12 @@ i.grab {
   font-size: 120%;
   font-weight: bold;
   width: 80%;
+}
+.grouped-header .handle {
+  padding-left: 10px;
+  padding-right: 5px;
+}
+.el-table .cell {
+  text-overflow: clip;
 }
 </style>

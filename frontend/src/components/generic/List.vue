@@ -13,12 +13,18 @@
     </div>
     <div ref="groupedTable">
       <div v-for="(group,groupIndex) in lists" :key="group.key" class="group">
-        <div v-if="group.header">
+        <div v-if="group.header" class="grouped-header">
+          <i class="group-handle grab el-icon-menu"></i>
           <i v-if="group.show" class="el-icon-caret-bottom"  @click="group.show = !group.show"/>
           <i v-if="!group.show" class="el-icon-caret-right"  @click="group.show = !group.show"/>
           <el-input v-model="group.group" class="no-border heading" @change="groupChanged(group)"/>
         </div>
         <el-table v-if="group.show" :data-group="group.group" ref="theTable" v-loading="loading" :show-header="groupIndex==0" :data="group.list" row-key="id" fit>
+          <el-table-column v-if="sort" label="" width="25">
+            <template slot-scope="{row, $index}">
+              <i class="handle grab el-icon-menu"></i>
+            </template>
+          </el-table-column>
           <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :prop="col.name" :align="col.align" :minWidth="col.width" sortable>
             <template slot-scope="{row, $index}">
               <el-input
@@ -81,8 +87,8 @@
                 v-model="row[col.name]"
                 :type="col.type"
                 :disabled="!editable(row, col) || readonly"
-                format="yyyy-MM-dd hh:mm"
-                value-format="yyyy-MM-dd hh:mm"
+                :format="dateFormat(col.type)"
+                :value-format="dateFormat(col.type)"
                 @change="save(row, col.name)"
               />
               <progress-bar
@@ -128,11 +134,15 @@ export default {
         this.detail(row)
       }
     },
+    dateFormat(type) {
+      if (type=='date') return 'yyyy-MM-dd'
+      else return 'yyyy-MM-dd hh:mm'
+    }
   }
 }
 </script>
 
-<style scoped type="sass">
+<style type="sass">
 .input-disabled {
   padding: 0 15px;
 }
@@ -143,8 +153,14 @@ i.action {
   margin-top: 10px;
   margin-left: 10px;
 }
-i {
+i.grab {
   color: #EEEEEE;
   cursor: grab;
+  font-size: 17px;
+  vertical-align: -3px;
 }
+.el-table .cell {
+  text-overflow: clip;
+}
+
 </style>

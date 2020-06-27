@@ -35,6 +35,7 @@ export default {
       fields: [
         { name: 'name', label: 'Name' },
         { name: 'description', label: 'Description', type: 'textarea' },
+        { name: 'due_at', label: 'Due', type: 'date' },
         { name: 'planned', label: 'Planned', disabled: true, postfix: "Hours" },
         { name: 'used', label: 'Used', disabled: true, postfix: "Hours" },
         { name: 'state', disabled: true, label: 'State' },

@@ -7,10 +7,22 @@
           <div slot="header" class="clearfix">
             New in current release
           </div>
-          23.06.20
+          <h4> 28.06.20</h4>
+          This release focusses around tasks and offers, trying to make input 
+          of many tasks a breeze.
+          <small>
           <ul>
-            <li>Everything ;-)</li>
+            <li>Task categories, group on them and drag/drop</li>
+            <li>Task effort in %</li>
+            <li>Comment on offer positions more prominent</li>
+            <li>Optional and if so, accepted offer positions</li>
+            <li>Export offer positions as HTML table</li>
+            <li>Link to MS Team etc</li>
+            <li>Mobile & comment for contact</li>
+            <li>Take offer position from current task when creating a new one with enter</li>
+            <li>Line dragged on input selection, drag handles</li>
           </ul>
+          </small>
         </el-card>
       </el-col>
       <el-col :span="8">
@@ -18,19 +30,18 @@
           <div slot="header" class="clearfix">
             Next tasks
           </div>
+          <h4>Planned</h4>
+          <small>
           <ul>
-            <li>Letzte Angebots-/Schätzposition übernehmen</li>
-            <li>Cursor dragged on selection</li>
-            <li>Task: Name eingeben - select blitzt auf</li>
+            <li>Manage supplier organisations</li>
+            <li>Task: Position select looses focus after create</li>
           </ul>
-          Done
+          </small>
+          <h4>Done</h4>
+          <small>
           <ul>
-            <li>Schätzposition</li>
-            <li>Aufgaben mit %-Aufwand</li>
-            <li>Beschreibung von Angebotspositionen</li>
-            <li>Angebotspositionen optional/beauftragt</li>
-            <li>Darstellung Angebot als HTML-Tabelle</li>
           </ul>
+          </small>
         </el-card>
       </el-col>
       <el-col :span="8">
@@ -38,9 +49,12 @@
           <div slot="header" class="clearfix">
             History
           </div>
+          <h4>23.06.20</h4>
+          <small>
           <ul>
-            <li>hmmm</li>
+            <li>Everything ;-)</li>
           </ul>
+          </small>
         </el-card>
       </el-col>
     </el-row>

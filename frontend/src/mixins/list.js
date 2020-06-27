@@ -142,6 +142,7 @@ export default {
         el.dataset.group = group
         this.sortable = Sortable.create(el, {
           dataGroup: group,
+          handle: ".handle",
           group: "group",
           ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
           setData: function(dataTransfer) {
@@ -164,6 +165,7 @@ export default {
       const el = this.$refs.groupedTable
       Sortable.create(el, {
         ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
+        handle: ".group-handle",
         setData: function(dataTransfer) {
           // to avoid Firefox bug
           // Detail see : https://github.com/RubaXa/Sortable/issues/1012
@@ -211,7 +213,7 @@ export default {
             duration: 15000
           })
         }
-        }
+      }
     },
     async create(row, showError=true) {
       try {

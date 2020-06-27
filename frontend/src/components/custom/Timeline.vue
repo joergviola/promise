@@ -117,7 +117,8 @@ export default {
       this.loading = false
     },
     timestamp(action) {
-      let result = `${action.user.name}, ${action.to}`
+      const fromNow = moment(action.to).fromNow()
+      let result = `${action.user.name}, ${fromNow}`
       if (action.$log) {
         for (let key in action.diff) {
           result += `, ${key}: ${action.diff[key]}`

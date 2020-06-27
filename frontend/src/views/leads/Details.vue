@@ -10,7 +10,7 @@
             <el-input v-model="item.description" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" :disabled="readonly" />
           </el-form-item>
           <el-form-item label="Links">
-            <el-input v-if="linksEdit" v-model="item.links" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" :disabled="readonly" />
+            <el-input v-if="linksEdit" v-model="item.links" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" :disabled="readonly" placeholder="One Title@URL per line"/>
             <div v-if="!linksEdit">
             <span v-for="(link,i) in links" :key="link.url" >
               <span v-if="i>0"> - </span>
