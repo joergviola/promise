@@ -62,7 +62,9 @@ export default {
         } else {
           list.splice(pos, 0, item)
         }
+        return item
       }
+      return null
     },
     async getList() {
       this.loading = true
@@ -260,7 +262,8 @@ export default {
         await this.create(row)
         return
       } else {
-        this.addNew(groupIndex, index+1)
+        const newItem = this.addNew(groupIndex, index+1)
+        if (this.copyOnEnter) this.copyOnEnter.forEach(name => newItem[name] = row[name])
       }
       const i = this.firstFocusable || column
       if (i==null) return

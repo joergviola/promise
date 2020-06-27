@@ -148,9 +148,6 @@
                 <i slot="reference" class="el-icon-remove-outline"></i>
               </el-popover>
               </el-input>
-              <span v-if="row.id && row.purchased" class="no-border estimation el-input el-input--small">
-                Purchased from {{row.supplier || '??'}}
-              </span>
             </template>
           </el-table-column>
 
@@ -168,6 +165,9 @@
                 @keydown.up.native="onArrow(groupIndex, 4, $index, -1)"
                 @keydown.down.native="onArrow(groupIndex, 4, $index, +1)"
               />
+              <span v-if="row.id && row.purchased" class="no-border estimation el-input el-input--small">
+                Purchased from {{row.supplier || '??'}}
+              </span>
             </template>
           </el-table-column>
 
@@ -215,6 +215,7 @@ export default {
       user: api.user(),
       template: { id: null, project_id: this.id, state: 'NEW', type: 'DEV', estimation: {}, estimations: [], planned: null, _meta: {estimation: {ignore: true}, estimations: {ignore: true}} },
       query: { project_id: this.id, type: 'DEV' },
+      copyOnEnter: ['position'],
       with: {
         estimation: {
           one: 'estimation',
