@@ -15,13 +15,13 @@
       </el-button>
     </div>
     <el-dialog
-      :title="`Edit allocation for ${selected.task ? selected.task.allocation.user.name : '?'}`"
+      :title="dialogTitle"
       :visible.sync="selected.task!=null"
       width="50%"
       center>
       <el-form label-position="top">
-        <el-form-item v-if="selected.task && !selected.task.allocation.id" label="Type">
-          <el-select v-model="selected.type" placeholder="Type...">
+        <el-form-item v-if="selected.task" label="Type or project">
+          <el-select v-model="selected.type" placeholder="Type..." :disabled="selected.task.allocation.id!=null">
             <el-option-group label="Standard">
               <el-option value="HOLIDAY" label="Holiday" />
               <el-option value="ILL" label="Ill" />
@@ -30,7 +30,6 @@
               <el-option v-for="p in projects" :key="p.id" :value="p.id" :label="p.name" />
             </el-option-group>
           </el-select>
-
         </el-form-item>
         <el-form-item label="Part time">
           <el-slider v-model="selected.parttime" :step="10" show-stops show-input />
@@ -74,31 +73,32 @@ export default {
     }
   },
   computed: {
+    dialogTitle() {
+      if (!this.selected.task) return 'No task selected'
+      const user = this.selected.task.allocation.user.name
+      if (this.selected.task.allocation.id) {
+        return `Edit allocation for ${user}`
+      } else {
+        return `Create allocation for ${user}`
+      }
+    },
     data() {
       let row = 0
       const tasks = []
       this.projects.forEach((p,i) => {
 
-        let allocated = 0
-        this.users.forEach((u,i) => {
-            const off = u.allocations
-                .filter(a => a.type=='ILL' || a.type=='HOLIDAY')
-            u.allocations.forEach((a,j) =>  {
-                if (a.project_id == p.id && a.role=='Dev') {
-                    allocated += (a.parttime || 100)/100 * this.workdays(a.from || p.starts_at, a.to || p.ends_at, off)        
-                }
-            })
-        })
-
-        const buffer = Math.round(((allocated / (p.planned/8)) - 1) * 100)
-
-        let cl = null
-        if (buffer>=20) cl = 'gantt-normal'
-        else if (buffer>=0) cl = 'gantt-warn'
-        else cl = 'gantt-critical'
+        let cl = 'gantt-normal'
+        let title = p.name
+        if (p.starts_at && p.ends_at) {
+          console.log(p.name)
+          const buffer = this.calcBuffer(p)
+          if (buffer>=0 && buffer<20) cl = 'gantt-warn'
+          else if (buffer < 0) cl = 'gantt-critical'
+          title += ` [${buffer}%]`
+        }
         tasks.push({
           id: 'Project-' + i,
-          name: `${p.name} [${buffer}%]`,
+          name: title,
           start: p.starts_at,
           end: p.ends_at,
           custom_class: cl,
@@ -158,7 +158,7 @@ export default {
       const rows = []
       tasks.sort((a,b) => a.start - b.start)
       tasks.forEach(t => {
-        let row = rows.find(r => t.start && r.date < t.start)
+        let row = rows.find(r => t.start && r.date && r.date < t.start)
         if (!row) {
           row = {
             no: rows.length + firstRow,
@@ -175,12 +175,35 @@ export default {
       if (rows.length==0) rows.push({no: rows.length + firstRow, name: rowname, user: user})
       return rows
     },
+    calcBuffer(p) {
+        let allocated = 0
+        this.users.forEach((u,i) => {
+            const off = u.allocations
+                .filter(a => a.type=='ILL' || a.type=='HOLIDAY')
+            u.allocations.forEach((a,j) =>  {
+                if (a.project_id == p.id && a.role=='Dev') {
+                    allocated += (a.parttime || 100)/100 * this.workdays(a.from || p.starts_at, a.to || p.ends_at, off)        
+                }
+            })
+        })
+
+        return Math.round(((allocated / (p.planned/8)) - 1) * 100)
+    },
+    overlap(t1, t2) {
+      return endAfterStart(t1, t2) && endAfterStart(t2, t1)
+
+      function endAfterStart(t1, t2) {
+        if (t1.end==null) return true
+        if (t2.start==null) return true
+        return t1.end>=t2.start
+      }
+    },
     checkTasks(tasks) {
       const usertasks = tasks.filter(t => t.allocation)
       usertasks.forEach(t => {
         const simultan = usertasks
           .filter(o => t.allocation.user_id==o.allocation.user_id)
-          .filter(o => t.end>=o.start && t.start<=o.end) // Must be dates!
+          .filter(o => this.overlap(t, o)) // Must be dates!
         let load = 0
         let start = null
         let end = null
@@ -216,8 +239,6 @@ export default {
         user_id: row.user.id,
         parttime: 100,
         role: 'Dev',
-        from: click.date,
-        to: click.date,
       }
 
       const task = {
@@ -359,25 +380,20 @@ export default {
         });
       }
     },
-    dateOrFromNow(date, days) {
-      let mom = 0
-      if (date) {
-        mom = moment(date)
-      } else {
-        mom = moment()
-        mom.add(days, 'days')
-      }
-      return mom.toDate()
+    ensureDate(value) {
+      if (value==null) return null
+      if (value instanceof Date) return value
+      else return new Date(value);
     },
     async loadProjects() {
       this.projects = await api.find('project', {
         and: {
-          state: 'ACCEPTED'
+          state: 'ACCEPTED',
         },
       })
       this.projects.forEach( p => {
-          p.starts_at = this.dateOrFromNow(p.starts_at, 0)
-          p.ends_at = this.dateOrFromNow(p.ends_at, Math.max(5, p.planned/8))
+          p.starts_at = this.ensureDate(p.starts_at)
+          p.ends_at = this.ensureDate(p.ends_at)
       } )
     },
     async loadUsers() {
@@ -408,7 +424,7 @@ export default {
       })
     },
     // Calc working days between from and to.
-    // Takje into account weekends and holidays and the off allocations.
+    // Take into account weekends and holidays and the off allocations.
     workdays(from, to, off) {
         // braindead impl
         //return (to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24) + 1

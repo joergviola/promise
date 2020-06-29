@@ -254,6 +254,7 @@ export default {
         const list = this.lists[groupIndex].list
         const index = list.indexOf(row)
         list.splice(index, 1)
+        if (list.length==0) this.addNew(groupIndex)
         //this.getList()
       } catch (error) {
         this.$notify({

@@ -7,20 +7,12 @@
           <div slot="header" class="clearfix">
             New in current release
           </div>
-          <h4> 28.06.20</h4>
-          This release focusses around tasks and offers, trying to make input 
-          of many tasks a breeze.
+          <h4> 29.06.20</h4>
+          Release for ressource planning.
           <small>
           <ul>
-            <li>Task categories, group on them and drag/drop</li>
-            <li>Task effort in %</li>
-            <li>Comment on offer positions more prominent</li>
-            <li>Optional and if so, accepted offer positions</li>
-            <li>Export offer positions as HTML table</li>
-            <li>Link to MS Team etc</li>
-            <li>Mobile & comment for contact</li>
-            <li>Take offer position from current task when creating a new one with enter</li>
-            <li>Line dragged on input selection, drag handles</li>
+            <li>New project fixed</li>
+            <li>Planning of unterminated projects</li>
           </ul>
           </small>
         </el-card>
@@ -49,6 +41,24 @@
           <div slot="header" class="clearfix">
             History
           </div>
+
+          <h4> 28.06.20</h4>
+          This release focusses around tasks and offers, trying to make input 
+          of many tasks a breeze.
+          <small>
+          <ul>
+            <li>Task categories, group on them and drag/drop</li>
+            <li>Task effort in %</li>
+            <li>Comment on offer positions more prominent</li>
+            <li>Optional and if so, accepted offer positions</li>
+            <li>Export offer positions as HTML table</li>
+            <li>Link to MS Team etc</li>
+            <li>Mobile & comment for contact</li>
+            <li>Take offer position from current task when creating a new one with enter</li>
+            <li>Line dragged on input selection, drag handles</li>
+          </ul>
+          </small>
+
           <h4>23.06.20</h4>
           <small>
           <ul>

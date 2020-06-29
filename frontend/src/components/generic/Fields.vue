@@ -4,9 +4,8 @@
       <el-input 
         v-if="field.type=='textarea'" 
         v-model="item[field.name]" 
-        :rows="1" 
         type="textarea" 
-        autosize 
+        :autosize="{minRows:2, maxRows: field.maxRows || 4}"
         :placeholder="field.placeholder" 
         :disabled="readonly"
       />

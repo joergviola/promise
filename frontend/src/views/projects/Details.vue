@@ -17,7 +17,7 @@ export default {
     return {
       item: null,
       image: image,
-      template: { project_id: this.id,  },
+      template: { state: 'ACCEPTED' },
       fields: [
         { name: 'name', label: 'Name' },
         { name: 'description', type: 'textarea', label: 'Description' },

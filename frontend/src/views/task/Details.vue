@@ -34,7 +34,7 @@ export default {
       template: { project_id: this.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: 10 },
       fields: [
         { name: 'name', label: 'Name' },
-        { name: 'description', label: 'Description', type: 'textarea' },
+        { name: 'description', label: 'Description', type: 'textarea', maxRows: 1000 },
         { name: 'due_at', label: 'Due', type: 'date' },
         { name: 'planned', label: 'Planned', disabled: true, postfix: "Hours" },
         { name: 'used', label: 'Used', disabled: true, postfix: "Hours" },

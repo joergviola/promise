@@ -26,7 +26,10 @@ export default {
         and: { id: this.$route.params.id },
         with: { customer: {one: 'organisation', this: 'customer_id'} }
       })
-      this.store.breadcrumbs = [null, `${this.project.customer.name}: ${this.project.name}`, null]
+      const breadcrumb = this.project.customer 
+        ? `${this.project.customer.name}: ${this.project.name}`
+        : `${this.project.name}`
+      this.store.breadcrumbs = [null, breadcrumb, null]
     }
   },
   destroyed() {

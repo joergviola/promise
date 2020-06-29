@@ -8,6 +8,7 @@
       :template="template"
       :query="query"
       createBy="row"
+      :allowDelete="true"
     />
   </div>
 </template>
