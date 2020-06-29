@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loading" class="components-container">
     <div v-if="users.length>0">
-      <gantt :rows="data.rows.map(r => r.name)" :tasks="data.tasks" :view_mode="view_mode" @update="update" @click="onClick" @clickBack="onClickBack"/>
+      <gantt :rows="data.rows.map(r => r.name)" :tasks="data.tasks" :view_mode="view_mode" @update="update" @click="onClick" @clickBackground="onClickBackground"/>
     </div>
     <div class="text-right">
       <el-radio-group v-model="view_mode" size="small" class="pull-left">
@@ -15,8 +15,8 @@
       </el-button>
     </div>
     <el-dialog
-      title="Edit allocation"
-      :visible.sync="selected.task"
+      :title="`Edit allocation for ${selected.task ? selected.task.allocation.user.name : '?'}`"
+      :visible.sync="selected.task!=null"
       width="50%"
       center>
       <el-form label-position="top">
@@ -207,16 +207,17 @@ export default {
         }
       })
     },
-    onClickBack(rowNo) {
-      const row = this.data.rows[rowNo]
-      console.log(row)
+    onClickBackground(click) {
+      const row = this.data.rows[click.row]
       if (!row.user) return
 
       const allocation = {
         user: row.user,
         user_id: row.user.id,
         parttime: 100,
-        role: 'Dev'
+        role: 'Dev',
+        from: click.date,
+        to: click.date,
       }
 
       const task = {
@@ -256,14 +257,13 @@ export default {
           a.project_id = this.selected.type
           a.project = this.projects.find(p => p.id == a.project_id)
       }
-      if (Array.isArray(this.selected.data)) {
+      if (Array.isArray(this.selected.date)) {
         a.from = this.selected.date[0]=='' ? null : new Date(this.selected.date[0])
         a.to = this.selected.date[1]=='' ? null : new Date(this.selected.date[1])
       } else {
         a.from = null
         a.to = null
       }
-      console.log(this.selected.date, a)
       this.allocationModified(a, create)
       this.selected = {}
     },

@@ -717,9 +717,17 @@ export default class Gantt {
                 if (this.options.on_click_back) {
                     const headerHeight = this.options.header_height + this.options.padding / 2
                     const rowHeight = this.options.bar_height + this.options.padding
+                    const columnWidth = this.options.column_width
+                    
+                    // 
+                    const rect = element.getBoundingClientRect()
+                    const mouseX = e.clientX - rect.left
+                    const x = mouseX / columnWidth
+                    const date = date_utils.add(this.gantt_start, x * this.options.step, 'hour' );
+
                     const y = element.getY()
                     const row = Math.round((y - headerHeight) / rowHeight)
-                    this.options.on_click_back(row)
+                    this.options.on_click_back({row: row, date:date})
                 }
                 this.unselect_all();
                 this.hide_popup();

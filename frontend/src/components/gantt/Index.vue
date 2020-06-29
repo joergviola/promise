@@ -38,7 +38,7 @@ export default {
                 date_format: 'YYYY-MM-DD',
                 custom_popup_html: "",
                 on_click_back: function (event) {
-                    self.$emit('clickBack', event);
+                    self.$emit('clickBackground', event);
                 },
                 on_click: function (task) {
                     self.$emit('click', task);
