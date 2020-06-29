@@ -122,6 +122,10 @@ export default {
       if (this.groupBy) {
         this.lists.splice(0, 0, {group:'New...', list: [], show: true, header: true, key:this.lists.length})
         this.addNew(0)
+        this.$nextTick(() => {
+          let tables = this.$refs.theTable
+          this.createGroupSortable(tables[tables.length-1])
+        })
       }
     },
     groupChanged(group) {
@@ -134,34 +138,8 @@ export default {
     },
     setSort() {
       let tables = this.$refs.theTable
-      if (tables.length==1) tables = [tables]
-      tables.forEach(table => {
-        const tableEl = Array.isArray(table) ? table[0].$el : table.$el
-        const group = tableEl.dataset.group
-        const el = tableEl.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
-        el.dataset.group = group
-        this.sortable = Sortable.create(el, {
-          dataGroup: group,
-          handle: ".handle",
-          group: "group",
-          ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
-          setData: function(dataTransfer) {
-            // to avoid Firefox bug
-            // Detail see : https://github.com/RubaXa/Sortable/issues/1012
-            dataTransfer.setData('Text', '')
-          },
-          onEnd: async evt => {
-            const from = this.lists.find(l => l.group == evt.from.dataset.group)
-            const to = this.lists.find(l => l.group == evt.to.dataset.group)
-            const row = from.list.splice(evt.oldIndex, 1)[0]
-            if (this.groupBy) {
-              row[this.groupBy.field] = to.group
-            }
-            to.list.splice(evt.newIndex, 0, row)
-            await this.updateSort()
-          }
-        })
-      })
+      if (!Array.isArray(tables)) tables = [tables]
+      tables.forEach(table => this.createGroupSortable(table))
       const el = this.$refs.groupedTable
       Sortable.create(el, {
         ghostClass: 'sortable-ghost', // Class name for the drop placeholder,
@@ -174,6 +152,33 @@ export default {
         onEnd: async evt => {
           const group = this.lists.splice(evt.oldIndex, 1)[0]
           this.lists.splice(evt.newIndex, 0, group)
+          await this.updateSort()
+        }
+      })
+    },
+    createGroupSortable(table) {
+      const tableEl = Array.isArray(table) ? table[0].$el : table.$el
+      const group = tableEl.dataset.group
+      const el = tableEl.querySelectorAll('.el-table__body-wrapper > table > tbody')[0]
+      el.dataset.group = group
+      return Sortable.create(el, {
+        dataGroup: group,
+        handle: ".handle",
+        group: "group",
+        ghostClass: 'sortable-ghost',
+        setData: function (dataTransfer) {
+          // to avoid Firefox bug
+          // Detail see : https://github.com/RubaXa/Sortable/issues/1012
+          dataTransfer.setData('Text', '')
+        },
+        onEnd: async (evt) => {
+          const from = this.lists.find(l => l.group == evt.from.dataset.group)
+          const to = this.lists.find(l => l.group == evt.to.dataset.group)
+          const row = from.list.splice(evt.oldIndex, 1)[0]
+          if (this.groupBy) {
+            row[this.groupBy.field] = to.group
+          }
+          to.list.splice(evt.newIndex, 0, row)
           await this.updateSort()
         }
       })
@@ -425,3 +430,4 @@ export default {
     // }
   },
 }
+
