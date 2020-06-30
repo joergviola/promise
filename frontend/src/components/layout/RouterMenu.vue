@@ -14,7 +14,7 @@
          :index="'item-'+i">
             <router-link :to="route.path">
                <i v-if="route.meta.icon" :class="route.meta.icon"></i>
-               <span>{{ route.name }}</span>
+               <span>{{$t('route.'+route.name)}}</span>
                </router-link>
          </el-menu-item>
       </el-menu>

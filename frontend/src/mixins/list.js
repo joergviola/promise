@@ -336,6 +336,8 @@ export default {
         .filter(o => o.type=='textarea')
         .map(o => o.index)
     },
+    // Somehow - when using el-input with type='textarea' in an el-table, the height is not correctly calculated.
+    // Repair it after loading the data.
     repairTextAreas() {
       this.lists.forEach((group,g) => {
         group.list.forEach((row, r) => {

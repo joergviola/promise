@@ -4,10 +4,10 @@
       <el-col :span="24" type="flex" align="right">
         <slot name="header"></slot>
         <el-button v-if="groupBy" type="default" @click="addGroup()">
-            New group
+            {{$t('ui.list.addGroup')}}
         </el-button>
         <el-button v-if="createBy=='button'" class="filter-item pull-right" style="margin-right: 10px;" type="primary" icon="el-icon-edit" @click="$router.push(detail + '/new/detail')">
-          Add
+          {{$t('ui.list.add')}}
         </el-button>
       </el-col>
     </div>
@@ -25,7 +25,7 @@
               <i class="handle grab el-icon-menu"></i>
             </template>
           </el-table-column>
-          <el-table-column v-for="(col,i) in columns" :key="i" :label="col.label" :prop="col.name" :align="col.align" :minWidth="col.width" sortable>
+          <el-table-column v-for="(col,i) in columns" :key="i" :label="$t('type.'+type+'.'+ col.name)" :prop="col.name" :align="col.align" :minWidth="col.width" sortable>
             <template slot-scope="{row, $index}">
               <el-input
                 v-if="editable(row, col) && (!col.type || col.type=='text')"
@@ -99,7 +99,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column align="right" label="Actions" >
+          <el-table-column align="right" :label="$t('ui.list.actions')" >
             <template slot-scope="{row}">
               <i v-if="row.id && allowDelete" class="action el-icon-remove-outline" @click="remove(groupIndex, row)" title="Delete this line"/> 
               <i v-if="row.id && detail" class="action el-icon-arrow-right" @click="detailClicked(row)"  title="Edit details"/> 
@@ -109,7 +109,7 @@
         </el-table>
 
         <el-button v-if="showAddButton" class="filter-item pull-right" style="margin-right: 10px;" type="default" icon="el-icon-circle-plus-outline" @click="addNew(0)">
-          Add
+          {{$t('ui.list.add')}}
         </el-button>
 
       </div>

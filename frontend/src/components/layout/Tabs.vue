@@ -7,7 +7,7 @@
         :key="route.name" 
         :route="{name: route.name}" 
         :index="route.name" 
-      >{{(route.meta && route.meta.title) || route.name}}</el-menu-item>
+      >{{$t('route.'+route.name)}}</el-menu-item>
     </el-menu>
     <div class="padd">
       <router-view ></router-view>

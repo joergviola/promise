@@ -19,9 +19,18 @@ Vue.use(ElementUI, {
   size: 'small'
 });
 
+const i18n = new VueI18n({
+  locale: 'de',
+  messages: {
+    'de': localeDE
+  }
+})
+
+
 Vue.config.productionTip = false
 
 new Vue({
   router,
+  i18n,
   render: h => h(App)
 }).$mount('#app')

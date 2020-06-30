@@ -3,7 +3,7 @@
     <el-row v-if="groupBy" style="margin-top: 20px">
       <el-col align="right">
         <el-button type="default" @click="addGroup()">
-            New group
+            {{$t('ui.list.addGroup')}}
         </el-button>
       </el-col>
     </el-row>

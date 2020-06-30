@@ -9,7 +9,7 @@
                     v-for="(m,i) in breadcrumbs"
                     :to="m.path"
                     :key="i"
-                >{{m.name}}</el-breadcrumb-item>
+                >{{$t('route.'+m.name)}}</el-breadcrumb-item>
             </el-breadcrumb>            
             <div v-if="user" style="text-align: right;">
                 <avatar :user="user" cls="header-avatar"/>
@@ -19,8 +19,8 @@
                         <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item><a @click.prevent="profile">Profile</a></el-dropdown-item>
-                        <el-dropdown-item><a @click.prevent="logout">Logout</a></el-dropdown-item>
+                        <el-dropdown-item><a @click.prevent="profile">{{$t('ui.auth.profile')}}</a></el-dropdown-item>
+                        <el-dropdown-item><a @click.prevent="logout">{{$t('ui.auth.logout')}}</a></el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </div>
