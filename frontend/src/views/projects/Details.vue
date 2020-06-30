@@ -21,6 +21,7 @@ export default {
       fields: [
         { name: 'name', label: 'Name' },
         { name: 'description', type: 'textarea', label: 'Description' },
+        { name: 'links', type: 'links', label: 'Links' },
         { name: 'starts_at', type: 'date', label: 'Starts' },
         { name: 'ends_at', type: 'date', label: 'Ends' },
         { name: 'planned', label: 'Planned', disabled: true, postfix: this.item?this.item.effort_unit:'' },

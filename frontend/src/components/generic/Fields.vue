@@ -36,6 +36,11 @@
         @docs-added="docs => $emit('docs-added', docs)"
         @docs-removed="docs => $emit('docs-removed', docs)"
       />
+      <link-editor 
+        v-else-if="field.type=='links'"
+        v-model="item[field.name]" 
+        :disabled="readonly"
+      />
 
       <el-input v-else-if="field.type=='password'" show-password v-model="item[field.name]" :disabled="readonly"/>
       <el-input v-else type="text" :disabled="field.disabled || readonly" v-model="item[field.name]" >
@@ -49,10 +54,11 @@
 
 import ToOne from './ToOne'
 import Upload from './Upload'
+import LinkEditor from '@/components/generic/LinkEditor'
 
 export default {
   name: 'GenericFields',
-  components: { ToOne, Upload },
+  components: { ToOne, Upload, LinkEditor },
   props: ['item', 'fields', 'readonly'],
 }
 </script>

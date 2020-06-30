@@ -10,15 +10,7 @@
             <el-input v-model="item.description" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" :disabled="readonly" />
           </el-form-item>
           <el-form-item label="Links">
-            <el-input v-if="linksEdit" v-model="item.links" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" :disabled="readonly" placeholder="One Title@URL per line"/>
-            <i v-if="linksEdit" class="el-icon-lock" @click="linksEdit=false" />
-            <div v-if="!linksEdit">
-              <span v-for="(link,i) in links" :key="link.url" >
-                <a :href="link.url" target="_blank">{{link.label}}</a>
-                -
-              </span>
-              <i v-if="!linksEdit" class="el-icon-unlock" @click="linksEdit=true" />
-            </div>
+            <link-editor v-model="item.links" :disabled="readonly"/>
           </el-form-item>
           <el-form-item label="Source">
             <el-select v-model="item.source" :disabled="readonly">
@@ -111,13 +103,14 @@
 </template>
 
 <script>
-
+import LinkEditor from '@/components/generic/LinkEditor'
 import image from '@/assets/img/undraw_unboxing_pbmf.svg'
 import api from '@/api'
 
 export default {
   name: 'LeadDetails',
   props: {},
+  components: {LinkEditor},
   data() {
     return {
       item: { customer: {}, contact: { user: {} } },
@@ -128,7 +121,6 @@ export default {
       showContact: false,
       contacts: [],
       image: image,
-      linksEdit: false,
       loading: false,
     }
   },
@@ -139,18 +131,6 @@ export default {
         .filter(right => right.actions.indexOf('U')!=-1)
       return rights.length==0
     },
-    links() {
-      if (!this.item?.links) return []
-      return this.item.links.split("\n").map(line => {
-        const comp = line.split("@")
-        if (comp.length==2) return {label:comp[0], url:url(comp[1])}
-        else return {label:line, url:url(line)}
-      })
-      function url(s) {
-        if (s.startsWith('http')) return s
-        return 'https://' + s
-      }
-    }
   },
   methods: {
     async customerChanged() {
