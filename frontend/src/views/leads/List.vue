@@ -12,14 +12,14 @@
     >
       <span slot="header">
           <el-select v-if="admin" v-model="show" placeholder="Show..." @change="updateShow">
-            <el-option value="OPEN" label="Open" />
-            <el-option value="ACC" label="Accepted" />
-            <el-option value="REJ" label="Rejected" />
-            <el-option value="TMPL" label="Templates" />
+            <el-option value="OPEN" :label="$t('ui.leads.open')" />
+            <el-option value="ACC" :label="$t('ui.leads.accepted')" />
+            <el-option value="REJ" :label="$t('ui.leads.rejected')" />
+            <el-option value="TMPL" :label="$t('ui.leads.template')" />
           </el-select>
           <el-dropdown  v-if="admin" @command="createFromTmpl">
             <el-button type="primary">
-              Create<i class="el-icon-arrow-down el-icon--right"></i>
+              {{$t('ui.list.add')}} <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item v-for="t in templates" :key="t.id" :command="t.id">{{t.name}}</el-dropdown-item>

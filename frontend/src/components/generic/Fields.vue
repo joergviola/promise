@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form-item v-for="(field,i) in fields" :key="i" :label="field.label">
+    <el-form-item v-for="(field,i) in fields" :key="i" :label="$t('type.'+type+'.'+ field.name)">
       <el-input 
         v-if="field.type=='textarea'" 
         v-model="item[field.name]" 
@@ -59,7 +59,7 @@ import LinkEditor from '@/components/generic/LinkEditor'
 export default {
   name: 'GenericFields',
   components: { ToOne, Upload, LinkEditor },
-  props: ['item', 'fields', 'readonly'],
+  props: ['type', 'item', 'fields', 'readonly'],
 }
 </script>
 

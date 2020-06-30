@@ -3,82 +3,82 @@
     <el-row :gutter="20">
       <el-col :span="12">
         <el-form label-position="left" label-width="120px" >
-          <el-form-item label="Name">
+          <el-form-item :label="$t('type.project.name')">
             <el-input v-model="item.name" type="text" :disabled="readonly"/>
           </el-form-item>
-          <el-form-item label="Description">
+          <el-form-item :label="$t('type.project.description')">
             <el-input v-model="item.description" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" :disabled="readonly" />
           </el-form-item>
-          <el-form-item label="Links">
+          <el-form-item :label="$t('type.project.links')">
             <link-editor v-model="item.links" :disabled="readonly"/>
           </el-form-item>
-          <el-form-item label="Source">
+          <el-form-item :label="$t('type.project.source')">
             <el-select v-model="item.source" :disabled="readonly">
               <el-option v-for="(o, i) in sources" :key="i" :label="o" :value="o" />
             </el-select>
           </el-form-item>
-          <el-form-item label="Effort unit">
+          <el-form-item :label="$t('type.project.effort_unit')">
             <el-select v-model="item.effort_unit" :disabled="readonly">
               <el-option v-for="(o, i) in units" :key="i" :label="o" :value="o" />
             </el-select>
-            <span v-if="item.planned>0">(Currently planned: {{item.planned}})</span>
+            <span v-if="item.planned>0">({{$t('ui.leads.planned')}}: {{item.planned}})</span>
           </el-form-item>
-          <el-form-item v-if="item.state=='REJECTED'" label="Lost reason">
+          <el-form-item v-if="item.state=='REJECTED'" :label="$t('type.project.lost_reason')">
             <el-input v-model="item.lost_reason" type="text" :disabled="readonly" />
           </el-form-item>
-          <el-form-item label="Customer">
+          <el-form-item :label="$t('type.project.customer_id')">
             <el-select v-model="item.customer_id" @change="customerChanged" placeholder="New ..." :disabled="readonly">
               <el-option v-for="(o, i) in customers" :key="i" :label="o.name" :value="o.id" />
-              <el-option key="new" label="New..." :value="null" />
+              <el-option key="new" :label="$t('ui.list.add')" :value="null" />
             </el-select>
             <el-button class="default" @click="showCustomer=!showCustomer">
-              Details
+              {{$t('ui.detail.details')}}
               <i v-show="!showCustomer" class="el-icon-arrow-right"></i>
               <i v-show="showCustomer" class="el-icon-arrow-down"></i>
             </el-button>
           </el-form-item>
           <el-collapse-transition>
             <el-card v-show="showCustomer">
-              <el-form-item label="Name">
+              <el-form-item :label="$t('type.organistion.name')">
                 <el-input v-model="item.customer.name" type="text"  :disabled="readonly"/>
               </el-form-item>
-              <el-form-item label="E-Mail">
+              <el-form-item :label="$t('type.organistion.email')">
                 <el-input v-model="item.customer.email" type="text"  :disabled="readonly"/>
               </el-form-item>
-              <el-form-item label="Phone">
+              <el-form-item :label="$t('type.organistion.phone')">
                 <el-input v-model="item.customer.phone" type="text"  :disabled="readonly"/>
               </el-form-item>
-              <el-form-item label="Website">
+              <el-form-item :label="$t('type.organistion.website')">
                 <el-input v-model="item.customer.website" type="text"  :disabled="readonly"/>
               </el-form-item>
             </el-card>
           </el-collapse-transition>
-          <el-form-item label="Contact">
+          <el-form-item :label="$t('type.project.contact')">
             <el-select v-model="item.contact.user_id" @change="contactChanged" placeholder="New ..." :disabled="readonly">
               <el-option v-for="(o, i) in contacts" :key="i" :label="o.name" :value="o.id" />
-              <el-option key="new" label="New..." :value="null" />
+              <el-option key="new" :label="$t('ui.list.add')" :value="null" />
             </el-select>
             <el-button class="default" @click="showContact=!showContact">
-              Details
+              {{$t('ui.detail.details')}}
               <i v-show="!showContact" class="el-icon-arrow-right"></i>
               <i v-show="showContact" class="el-icon-arrow-down"></i>
             </el-button>
           </el-form-item>
           <el-collapse-transition>
             <el-card v-show="showContact">
-              <el-form-item label="Name">
+              <el-form-item :label="$t('type.users.name')">
                 <el-input v-model="item.contact.user.name" type="text" :disabled="readonly"/>
               </el-form-item>
-              <el-form-item label="E-Mail">
+              <el-form-item :label="$t('type.users.email')">
                 <el-input v-model="item.contact.user.email" type="text" :disabled="readonly" />
               </el-form-item>
-              <el-form-item label="Phone">
+              <el-form-item :label="$t('type.users.phone')">
                 <el-input v-model="item.contact.user.phone" type="text" :disabled="readonly" />
               </el-form-item>
-              <el-form-item label="Mobile">
+              <el-form-item :label="$t('type.users.mobile')">
                 <el-input v-model="item.contact.user.mobile" type="text" :disabled="readonly" />
               </el-form-item>
-              <el-form-item label="Comment">
+              <el-form-item :label="$t('type.users.comment')">
                 <el-input v-model="item.contact.user.comment" type="textarea" :rows="{minRows:2, maxRows:4}" :disabled="readonly" />
               </el-form-item>
             </el-card>
@@ -91,12 +91,12 @@
     </el-row>
     <el-row type="flex">
       <el-col :span="24">
-        <el-button v-if="item.state=='LEAD' && !readonly" type="success" @click="save('ACCEPTED')">Accepted</el-button>
-        <el-button v-if="item.state=='LEAD' && !readonly" type="danger" @click="save('REJECTED')">Rejected</el-button>
-        <el-button v-if="!readonly" type="primary" @click="save()">Save</el-button>
-        <el-button v-if="item.state!='LEAD' && !readonly" type="primary" @click="save('LEAD')">Reset</el-button>
-        <el-button v-if="!item.template && !readonly" type="secondary" @click="saveAsTemplate(true)">Save as template</el-button>
-        <el-button v-if="item.template && !readonly" type="secondary" @click="saveAsTemplate(false)">No template</el-button>
+        <el-button v-if="item.state=='LEAD' && !readonly" type="success" @click="save('ACCEPTED')">{{$t('ui.leads.accepted')}}</el-button>
+        <el-button v-if="item.state=='LEAD' && !readonly" type="danger" @click="save('REJECTED')">{{$t('ui.leads.rejected')}}</el-button>
+        <el-button v-if="!readonly" type="primary" @click="save()">{{$t('ui.detail.save')}}</el-button>
+        <el-button v-if="item.state!='LEAD' && !readonly" type="primary" @click="save('LEAD')">{{$t('ui.leads.reset')}}</el-button>
+        <el-button v-if="!item.template && !readonly" type="secondary" @click="saveAsTemplate(true)">{{$t('ui.leads.istemplate')}}</el-button>
+        <el-button v-if="item.template && !readonly" type="secondary" @click="saveAsTemplate(false)">{{$t('ui.leads.notemplate')}}</el-button>
       </el-col>
     </el-row>
   </div>

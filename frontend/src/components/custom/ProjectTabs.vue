@@ -27,8 +27,8 @@ export default {
         with: { customer: {one: 'organisation', this: 'customer_id'} }
       })
       const breadcrumb = this.project.customer 
-        ? `${this.project.customer.name}: ${this.project.name}`
-        : `${this.project.name}`
+        ? `@${this.project.customer.name}: ${this.project.name}`
+        : `@${this.project.name}`
       this.store.breadcrumbs = [null, breadcrumb, null]
     }
   },

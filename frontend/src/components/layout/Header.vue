@@ -9,7 +9,7 @@
                     v-for="(m,i) in breadcrumbs"
                     :to="m.path"
                     :key="i"
-                >{{$t('route.'+m.name)}}</el-breadcrumb-item>
+                >{{m.name.startsWith('@') ? m.name.substring(1) : $t('route.'+m.name)}}</el-breadcrumb-item>
             </el-breadcrumb>            
             <div v-if="user" style="text-align: right;">
                 <avatar :user="user" cls="header-avatar"/>

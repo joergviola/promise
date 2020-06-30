@@ -3,18 +3,18 @@
     <el-row :gutter="40">
       <el-col :xs="24" :md="image ? 12 : 24">
         <el-form ref="postForm" v-loading="loading" :model="item" label-position="left" label-width="120px" >
-          <fields :item="item" :fields="fields" :readonly="readonly" @docs-added="docsAdded" @docs-removed="docsRemoved"/>
+          <fields :type="type" :item="item" :fields="fields" :readonly="readonly" @docs-added="docsAdded" @docs-removed="docsRemoved"/>
         </el-form>
         <el-row type="flex" >
           <el-col :span="24" class="text-right">
             <el-button type="secondary" @click="$router.go(-1)">
-              Cancel
+              {{$t('ui.detail.cancel')}}
             </el-button>
             <el-button v-for="(button, i) in buttons" :key="i" type="danger" @click="click(button)">
               {{ button.label }}
             </el-button>
             <el-button type="primary" @click="save">
-              Save
+              {{$t('ui.detail.save')}}
             </el-button>
           </el-col>
         </el-row>

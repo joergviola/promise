@@ -3,17 +3,40 @@
 export default {
   'test': "Dies ist ein Test",
   'type': {
+    'users': {
+      'name': 'Name',
+      'email': 'E-Mail',
+      'phone': 'Telefon',
+      'password': 'Kennword',
+      'role_id': 'Rolle',
+      'organisation_id': 'Organisation',
+      'avatar': 'Ihr Bild',
+      'organisation': {
+        'name': 'Organisation',
+      },
+      'role': {
+        'name': 'Role',
+      },
+    },
     'project': {
       'name': 'Name',
-      'comment': 'Kommentar',
-      'planned': 'Geplant',
+      'description': 'Beschreibung',
+      'links': 'Links',
+      'source': 'Quelle',
+      'source': 'Quelle',
+      'effort_unit': 'Aufwandseinheit',
       'used': 'Fortschritt',
       'price': 'Preis',
       'state': 'Zustand',
       'accepted': 'Beauftragt',
+      'customer_id': 'Kunde',
+      'contact': 'Ansprechpartner',
       'customer': {
         'name': 'Name',
-      }
+      },
+      'last_offer': {
+        'price': 'Aktuelles Angebot',
+      },
     },
     'position': {
       'no': 'Nr',
@@ -23,6 +46,17 @@ export default {
       'price': 'Preis',
       'optional': 'Optional',
       'accepted': 'Beauftragt',
+    },
+    'action': {
+      'project': {
+        'name': 'Name',
+      },
+      'task': {
+        'name': 'Name',
+      },
+      'from': 'Begonnen',
+      'used': 'Fortschritt',
+      'comment': 'Kommentar',
     },
   },
   'ui': {
@@ -35,9 +69,26 @@ export default {
       'add': 'Neu',
       'addGroup': 'Neuer Abschnitt',
     },
+    'detail': {
+      'cancel': 'Abbrechen',
+      'save': 'Speichern',
+      'details': 'Mehr',
+    },
+    'leads': {
+      'open': 'In Arbeit',
+      'accepted': 'Angenommen',
+      'rejected': 'Abgelehnt',
+      'template': 'Vorlagen',
+      'reset': 'Zurücksetzen',
+      'istemplate': 'Als Vorlage verwenden',
+      'notemplate': 'Keine Vorlage mehr',
+      'planned': 'Aktuell geplant',
+    }
   },
   'route': {
+    'All': 'Alle',
     'Home': 'Home',
+    'Detail': 'Detail',
     'Users': 'Benutzer',
     'User': 'Person',
     'Sales': 'Vertrieb',
