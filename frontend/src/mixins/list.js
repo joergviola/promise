@@ -40,9 +40,13 @@ export default {
     template() {
       this.getList()
     },
+    lists() {
+      this.repairTextAreas()
+    }
   },
   created() {
     this.getList()
+    this.repairTextAreas()
   },
   methods: {
     addNew(groupIndex, pos = null) {
@@ -325,6 +329,27 @@ export default {
     userCan(action) {
       const rights = this.rights.filter(right => right.actions.indexOf(action)!=-1)
       return rights.length!=0
+    },
+    getTextAreaColumns() {
+      return this.columns
+        .map((c,i) => ({index:i, type:c.type}))
+        .filter(o => o.type=='textarea')
+        .map(o => o.index)
+    },
+    repairTextAreas() {
+      this.lists.forEach((group,g) => {
+        group.list.forEach((row, r) => {
+          this.getTextAreaColumns().forEach(c => {
+            const key=`field-${g}-${r}-${c}`
+            this.$nextTick(() => {
+              let comp = this.$refs[key]
+              if (!comp) return
+              if (Array.isArray(comp)) comp = comp[0]
+              comp.resizeTextarea()
+            })
+          })
+        })
+      })
     },
     exportCSV(name, columns) {
       const data = []

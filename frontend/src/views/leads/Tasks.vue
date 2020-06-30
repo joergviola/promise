@@ -157,8 +157,7 @@
               <el-input
                 v-if="!row.purchased"
                 type="textarea"
-                :rows="1" 
-                autosize 
+                :autosize="{minRows:1, maxRows:4}"
                 class="no-border"
                 v-model="row.estimation.comment"
                 @change="saveEstimation(row, 'comment')"
@@ -331,7 +330,11 @@ export default {
           duration: 15000
         })
       }
-    }
+    },
+    getTextAreaColumns() {
+      return [4]
+    },
+
   },
   async created() {
     const offers = await api.find('accounting', {

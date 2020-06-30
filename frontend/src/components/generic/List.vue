@@ -107,6 +107,11 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <el-button v-if="showAddButton" class="filter-item pull-right" style="margin-right: 10px;" type="default" icon="el-icon-circle-plus-outline" @click="addNew(0)">
+          Add
+        </el-button>
+
       </div>
     </div>
   </div>
@@ -121,6 +126,13 @@ export default {
   mixins: [list],
   components: {ProgressBar},
   props: ['type', 'detail', 'columns', 'with', 'query', 'order', 'template', 'createBy', 'allowDelete', 'sort', 'groupBy'],
+  computed: {
+    showAddButton() {
+      if (this.createBy=='button' || this.groupBy) return false
+      if (this.lists[0].list.some(row => row.id==null)) return false
+      return true
+    }
+  },
   methods: {
     editable(row, col) {
       if (this.readonly) return false
@@ -137,8 +149,8 @@ export default {
     dateFormat(type) {
       if (type=='date') return 'yyyy-MM-dd'
       else return 'yyyy-MM-dd hh:mm'
-    }
-  }
+    },
+  },
 }
 </script>
 
