@@ -5,13 +5,13 @@
     </div>
     <div class="text-right">
       <el-radio-group v-model="view_mode" size="small" class="pull-left">
-        <el-radio-button label="Quarter Day">Hourly</el-radio-button>
-        <el-radio-button label="Day" ></el-radio-button>
-        <el-radio-button label="Week"></el-radio-button>
-        <el-radio-button label="Month"></el-radio-button>
+        <el-radio-button label="Quarter Day">{{$t('ui.planning.quarter')}}</el-radio-button>
+        <el-radio-button label="Day" >{{$t('ui.planning.day')}}</el-radio-button>
+        <el-radio-button label="Week">{{$t('ui.planning.week')}}</el-radio-button>
+        <el-radio-button label="Month">{{$t('ui.planning.month')}}</el-radio-button>
       </el-radio-group>
       <el-button v-if="modified" type="primary" @click="save">
-        Save
+        {{$t('ui.planning.save')}}
       </el-button>
     </div>
     <el-dialog
@@ -20,21 +20,21 @@
       width="50%"
       center>
       <el-form label-position="top">
-        <el-form-item v-if="selected.task" label="Type or project">
-          <el-select v-model="selected.type" placeholder="Type..." :disabled="selected.task.allocation.id!=null">
-            <el-option-group label="Standard">
-              <el-option value="HOLIDAY" label="Holiday" />
-              <el-option value="ILL" label="Ill" />
+        <el-form-item v-if="selected.task" :label="$t('ui.planning.type')">
+          <el-select v-model="selected.type" :placeholder="$t('ui.planning.type')" :disabled="selected.task.allocation.id!=null">
+            <el-option-group :label="$t('ui.planning.standard')">
+              <el-option value="HOLIDAY" :label="$t('ui.planning.holiday')" />
+              <el-option value="ILL" :label="$t('ui.planning.ill')" />
             </el-option-group>
-            <el-option-group label="Projects">
+            <el-option-group :label="$tc('ui.planning.projects', projects.length)">
               <el-option v-for="p in projects" :key="p.id" :value="p.id" :label="p.name" />
             </el-option-group>
           </el-select>
         </el-form-item>
-        <el-form-item label="Part time">
+        <el-form-item :label="$t('ui.planning.parttime')">
           <el-slider v-model="selected.parttime" :step="10" show-stops show-input />
         </el-form-item>
-        <el-form-item label="Date">
+        <el-form-item :label="$t('ui.planning.date')">
           <el-date-picker
             v-model="selected.date"
             type="daterange"
@@ -44,10 +44,10 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="selected = {}">Cancel</el-button>
-        <el-button v-if="!selected.isNew" type="primary" @click="saveSelected(false)">Save</el-button>
-        <el-button v-if="!selected.isNew" type="danger" @click="deleteSelected">Delete</el-button>
-        <el-button v-if="selected.isNew" type="primary" @click="saveSelected(true)">Create</el-button>
+        <el-button @click="selected = {}">{{$t('ui.planning.cancel')}}</el-button>
+        <el-button v-if="!selected.isNew" type="primary" @click="saveSelected(false)">{{$t('ui.planning.save')}}</el-button>
+        <el-button v-if="!selected.isNew" type="danger" @click="deleteSelected">{{$t('ui.planning.delete')}}</el-button>
+        <el-button v-if="selected.isNew" type="primary" @click="saveSelected(true)">{{$t('ui.planning.create')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -77,9 +77,9 @@ export default {
       if (!this.selected.task) return 'No task selected'
       const user = this.selected.task.allocation.user.name
       if (this.selected.task.allocation.id) {
-        return `Edit allocation for ${user}`
+        return this.$t('ui.planning.edit-title', {user})
       } else {
-        return `Create allocation for ${user}`
+        return this.$t('ui.planning.create-title', {user})
       }
     },
     data() {
@@ -106,7 +106,7 @@ export default {
         })
       })
       
-      const rows = this.packTasks("Projects", tasks, 0)
+      const rows = this.packTasks(this.$tc('ui.planning.projects', this.projects.length), tasks, 0)
 
       this.users.forEach((u,i) => {
         const usertasks = []
@@ -446,9 +446,9 @@ export default {
     if (!this.modified) {
       next()
     } else {
-      this.$confirm('You have unsaved changes.', 'Warning', {
-        confirmButtonText: 'Throw them away',
-        cancelButtonText: 'Stay here',
+      this.$confirm(this.$t('ui.planning.exit.title'), this.$t('ui.planning.exit.warning'), {
+        confirmButtonText: this.$t('ui.planning.exit.confirm'),
+        cancelButtonText: this.$t('ui.planning.exit.cancel'),
         type: 'warning'
       }).then(() => {
         next()

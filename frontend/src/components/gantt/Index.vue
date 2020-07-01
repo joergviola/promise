@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="float: left">
-            <div class="title-legend">Date</div>
+            <div class="title-legend">{{$t('ui.gantt.date')}}</div>
             <div v-for="(p,i) in rows" :key="i" class="row-legend">{{p}}</div>
         </div>
         <div ref="gantt"  style="overflow: hidden">
@@ -36,6 +36,7 @@ export default {
                 padding: 18,
                 view_mode: this.view_mode,   
                 date_format: 'YYYY-MM-DD',
+                language: 'de',
                 custom_popup_html: "",
                 on_click_back: function (event) {
                     self.$emit('clickBackground', event);

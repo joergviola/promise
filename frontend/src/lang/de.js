@@ -153,7 +153,35 @@ export default {
       'detail': 'Details',
       'hours': 'Stunde | Stunden'
     },
-  },
+    'planning': {
+      'edit-title': 'Zuordnung für {user} ändern',
+      'create-title': 'Zuordnung für {user} anlegen',
+      'quarter': 'Stunde',
+      'day': 'Tag',
+      'week': 'Woche',
+      'month': 'Monat',
+      'type': 'Art oder Projekt',
+      'standard': 'Art',
+      'projects': 'Projekt|Projekte',
+      'holiday': 'Urlaub',
+      'ill': 'Krankheit',
+      'parttime': 'Zugeordnet in %',
+      'date': 'Von-bis',
+      'cancel': 'Abbrechen',
+      'save': 'Speichern',
+      'delete': 'Löschen',
+      'create': 'Anlegen',
+      'exit': {
+        'title': 'Es sind nicht gespeicherte Änderungen vorhanden.',
+        'warning': 'Warnung!',
+        'confirm': 'Ist okay, Änderungen verwerfen.',
+        'cancel': 'Oh! Zurück zur Planung.',
+      },
+    },
+    'gantt': {
+      'date': 'Datum'
+    },
+},
   'route': {
     'All': 'Alle',
     'Home': 'Home',
