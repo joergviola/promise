@@ -39,16 +39,16 @@
           </el-form-item>
           <el-collapse-transition>
             <el-card v-show="showCustomer">
-              <el-form-item :label="$t('type.organistion.name')">
+              <el-form-item :label="$t('type.organisation.name')">
                 <el-input v-model="item.customer.name" type="text"  :disabled="readonly"/>
               </el-form-item>
-              <el-form-item :label="$t('type.organistion.email')">
+              <el-form-item :label="$t('type.organisation.email')">
                 <el-input v-model="item.customer.email" type="text"  :disabled="readonly"/>
               </el-form-item>
-              <el-form-item :label="$t('type.organistion.phone')">
+              <el-form-item :label="$t('type.organisation.phone')">
                 <el-input v-model="item.customer.phone" type="text"  :disabled="readonly"/>
               </el-form-item>
-              <el-form-item :label="$t('type.organistion.website')">
+              <el-form-item :label="$t('type.organisation.website')">
                 <el-input v-model="item.customer.website" type="text"  :disabled="readonly"/>
               </el-form-item>
             </el-card>
@@ -79,7 +79,7 @@
                 <el-input v-model="item.contact.user.mobile" type="text" :disabled="readonly" />
               </el-form-item>
               <el-form-item :label="$t('type.users.comment')">
-                <el-input v-model="item.contact.user.comment" type="textarea" :rows="{minRows:2, maxRows:4}" :disabled="readonly" />
+                <el-input v-model="item.contact.user.comment" type="textarea" :autosize="{minRows:2}" :disabled="readonly" />
               </el-form-item>
             </el-card>
           </el-collapse-transition>

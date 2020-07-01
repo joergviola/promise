@@ -3,10 +3,18 @@
 export default {
   'test': "Dies ist ein Test",
   'type': {
+    'organisation': {
+      'name': 'Name',
+      'email': 'E-Mail',
+      'website': 'Web-Seite',
+      'phone': 'Telefon',
+    },
     'users': {
       'name': 'Name',
       'email': 'E-Mail',
       'phone': 'Telefon',
+      'mobile': 'Mobil',
+      'comment': 'Notizen',
       'password': 'Kennword',
       'role_id': 'Rolle',
       'organisation_id': 'Organisation',

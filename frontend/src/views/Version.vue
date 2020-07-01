@@ -32,6 +32,8 @@
           <h4>Done</h4>
           <small>
           <ul>
+            <li>German translation</li>
+            <li>Nicer drag handle and group layout</li>
           </ul>
           </small>
         </el-card>
