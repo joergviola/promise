@@ -1,13 +1,13 @@
 <template>
   <div class="components-container">
-    <h2>Welcome, {{user.name}}</h2>
+    <h2>{{$t('ui.home.welcome', {user: user.name}) }}</h2>
     <el-row :gutter="20">
       <el-col :span="8">
         <el-card>
           <div slot="header" class="clearfix">
-            My tasks
+            {{$t('ui.home.tasks')}}
           </div>
-          <h4>Today</h4>
+          <h4>{{$t('ui.home.today')}}</h4>
           <draggable class="list-group" :list="today" group="tasks" @change="dragToday">
             <div v-for="task in today" :class="['task', {selected: selected==task}]" :key="task.id" @click="selected = task">
               <div class="header">
@@ -34,7 +34,7 @@
               />
             </div>
           </draggable>
-          <h4>Upcoming</h4>
+          <h4>{{$t('ui.home.upcoming')}}</h4>
           <draggable class="list-group" :list="current" group="tasks" @change="dragCurrent">
             <div v-for="task in current" :class="['task', {selected: selected==task}]" :key="task.id"  @click="selected = null">
               <div class="header">
@@ -64,23 +64,23 @@
       <el-col :span="8">
         <el-card>
           <div slot="header" class="clearfix">
-            Book time
+            {{$t('ui.home.time')}}
           </div>
             <h4 v-if="selected">{{selected.name}}</h4>
-            <h4 v-if="!selected">Select a task of today</h4>
+            <h4 v-if="!selected">{{$t('ui.home.notask')}}</h4>
           <task-timeline v-if="selected" :tid="selected.id" />
         </el-card>
       </el-col>
       <el-col :span="8">
         <el-card>
           <div slot="header" class="clearfix">
-            Your projects
+            {{$t('ui.home.projects')}}
           </div>
           <div v-for="allocation in allocations" class="task" :key="allocation.id">
             <div class="header">
               {{allocation.role}}
               <span class="pull-right"> 
-                {{allocation.project.starts_at}} - {{allocation.project.ends_at}}
+                {{allocation.project.starts_at | date}} - {{allocation.project.ends_at | date}}
               </span>
             </div>
             <div class="body pull-clear">

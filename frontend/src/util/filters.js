@@ -9,6 +9,14 @@ Vue.filter('dateHuman', function (value) {
   return moment(value).fromNow();
 })
 
+Vue.filter('date', function (value) {
+  if (!value) return ''
+
+  if (!(value instanceof Date) )
+    value = new Date(value);
+  return moment(value).format('L')
+})
+
 Vue.filter('datetime', function (value) {
   if (!value) return ''
   if (!(value instanceof Date) )
@@ -54,43 +62,3 @@ Vue.filter('number', (value) => {
 
   return v.toLocaleString('de-DE', { style: 'decimal' })
 })
-
-Vue.filter('fileSize', size => {
-    if (size < 1024) {
-      return size + ' B'
-    }
-    const i = Math.floor(Math.log(size) / Math.log(1024))
-    let num = (size / Math.pow(1024, i))
-    const round = Math.round(num)
-    num = round < 10 ? num.toFixed(2) : round < 100 ? num.toFixed(1) : round
-    return `${num} ${'KMGTPEZY'[i-1]}B`
-})
-
-Vue.filter('material', mat => {
-  if (mat.variant==null) return mat.mat_no;
-  if (mat.variant.InternalDescription==null) return mat.VariantCode
-  return mat.variant.InternalDescription
-  // const fields = mat.variant.InternalDescription.split(',')
-  // if (fields.length>=2) {
-  //   return fields[1]
-  // } else {
-  //   return fields[0]
-  // }
-})
-
-Vue.filter('firstmaterial', (pos, type) => {
-  if (!pos.materials) return null
-  const mats = pos.materials.filter(m=>m.type==type)
-  if (mats.length==0) return null
-  const mat = mats[0]
-  if (mat.variant==null) return mat.mat_no
-  if (mat.variant.InternalDescription==null) return mat.VariantCode
-  return mat.variant.InternalDescription
-  // const fields = mat.variant.InternalDescription.split(',')
-  // if (fields.length>=2) {
-  //   return fields[1]
-  // } else {
-  //   return fields[0]
-  // }
-})
-

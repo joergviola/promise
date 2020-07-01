@@ -64,6 +64,15 @@ export default {
       'profile': 'Mein Profil',
       'logout': 'Abmelden',
     },
+    'home': {
+      'welcome': 'Hallo {user}!',
+      'tasks': 'Aufgaben',
+      'today': 'Heute',
+      'upcoming': 'Demnächst',
+      'time': 'Zeit erfassen',
+      'notask': 'Wähle eine Aufgabe von heute',
+      'projects': 'Deine Projekte',
+    },
     'list': {
       'actions': 'Aktionen',
       'add': 'Neu',
