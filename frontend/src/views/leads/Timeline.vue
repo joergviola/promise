@@ -4,16 +4,16 @@
       <el-card v-loading="loading">
         <el-form>
           <el-form-item>
-            <el-input v-model="t.name" type="text" placeholder="New Task..."/>
+            <el-input v-model="t.name" type="text" :placeholder="$t('ui.leads.timeline.add')"/>
           </el-form-item>
           <el-form-item>
-            <el-input v-model="t.description" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" placeholder="Notes..." />
+            <el-input v-model="t.description" type="textarea" :rows="2" :autosize="{ minRows: 2, maxRows: 4}" :placeholder="$t('type.task.description')" />
           </el-form-item>
           <el-form-item>
             <el-date-picker
               v-model="t.due_at"
               type="date"
-              placeholder="Due"
+              :placeholder="$t('type.task.due_at')"
               value-format="yyyy-MM-dd"
             />
           </el-form-item>
@@ -24,13 +24,13 @@
           </el-form-item>
           <el-form-item>
             <el-button type="danger" @click="close(t)">
-              Done
+              {{$t('ui.leads.timeline.close')}}
             </el-button>
             <el-button type="primary" @click="save(t)">
-              Save
+              {{$t('ui.leads.timeline.save')}}
             </el-button>
             <el-button type="primary" @click="newTask">
-              New task
+              {{$t('ui.leads.timeline.add')}}
             </el-button>
           </el-form-item>
         </el-form>

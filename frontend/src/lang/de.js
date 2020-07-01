@@ -47,6 +47,11 @@ export default {
       'optional': 'Optional',
       'accepted': 'Beauftragt',
     },
+    'task': {
+      'name': 'Neue Aufgabe',
+      'description': 'Was ist zu tun?',
+      'due_at': 'Fällig am',
+    },
     'action': {
       'project': {
         'name': 'Name',
@@ -92,6 +97,11 @@ export default {
       'istemplate': 'Als Vorlage verwenden',
       'notemplate': 'Keine Vorlage mehr',
       'planned': 'Aktuell geplant',
+      'timeline': {
+        'add': 'Neue Vertriebsaufgabe',
+        'save': 'Speichern',
+        'close': 'Erledigt',
+      }
     },
     'timeline': {
       'younow': 'Du, jetzt',
@@ -113,10 +123,12 @@ export default {
     'Users': 'Benutzer',
     'User': 'Person',
     'Sales': 'Vertrieb',
+    'Leads': 'Anfragen',
     'Planning': 'Planung',
     'Projects': 'Projekte',
     'Roles': 'Rollen',
     'Lead-Detail': 'Detail',
+    'Timeline': 'Verlauf',
     'Lead-Timeline': 'Verlauf',
     'Lead-Tasks': 'Aufgaben',
     'Offers': 'Angebote',
