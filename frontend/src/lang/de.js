@@ -83,7 +83,19 @@ export default {
       'istemplate': 'Als Vorlage verwenden',
       'notemplate': 'Keine Vorlage mehr',
       'planned': 'Aktuell geplant',
-    }
+    },
+    'timeline': {
+      'younow': 'Du, jetzt',
+      'comment': 'Was hast Du erledigt?',
+      'save': 'Speichern',
+      'start': 'Beginnen',
+      'close': 'Erledigt',
+      'reopen': 'Fehlerhaft',
+      'tested': 'Getestet',
+      'deployed': 'Deployed',
+      'detail': 'Details',
+      'hours': 'Stunde | Stunden'
+    },
   },
   'route': {
     'All': 'Alle',

@@ -1,37 +1,37 @@
 <template>
   <el-timeline  v-loading="loading">
-    <el-timeline-item timestamp="You, Now" placement="top">
+    <el-timeline-item :timestamp="$t('ui.timeline.younow')" placement="top">
       <el-card>
         <el-form>
           <el-form-item>
-            <el-input v-model="action.comment" :rows="1" type="textarea" autosize placeholder="What did you do...?" />
+            <el-input v-model="action.comment" :rows="1" type="textarea" autosize :placeholder="$t('ui.timeline.comment')" />
           </el-form-item>
           <el-form-item  v-if="task.state != 'NEW'">
             <el-input v-model="duration" type="text" placeholder="hh:mm [hh:mm]" />
           </el-form-item>
           <el-form-item>
             <el-button type="secondary" @click="save(null)">
-              Save
+              {{$t('ui.timeline.save')}}
             </el-button>
             <el-button v-if="task.state == 'PLANNED'" type="danger" @click="save('STARTED')">
-              Start working
+              {{$t('ui.timeline.start')}}
             </el-button>
             <el-button v-if="task.state == 'STARTED'" type="danger" @click="save('IMPLEMENTED')">
-              Close
+              {{$t('ui.timeline.close')}}
             </el-button>
             <el-button v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('STARTED')">
-              Reopen
+              {{$t('ui.timeline.reopen')}}
             </el-button>
             <el-button v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('TESTED')">
-              Tested
+              {{$t('ui.timeline.tested')}}
             </el-button>
             <el-button v-if="task.state == 'TESTED'" type="danger" @click="save('DEPLOYED')">
-              Deployed
+              {{$t('ui.timeline.deployed')}}
             </el-button>
           </el-form-item>
         </el-form>
       </el-card>
-      <a class="detail" href="#" @click.prevent="toggleDetail">Show Detail</a>
+      <a class="detail" href="#" @click.prevent="toggleDetail">{{$t('ui.timeline.detail')}}</a>
     </el-timeline-item>
     <el-timeline-item v-for="(a,i) in actions" :key="i" :timestamp="timestamp(a)" placement="top">
       <p>{{a.comment}}</p>
@@ -124,7 +124,7 @@ export default {
           result += `, ${key}: ${action.diff[key]}`
         }
       } else if (action.used) {
-        result += ', ' + action.used + ' hours'
+        result += ', ' + action.used + ' ' +this.$tc('ui.timeline.hours', action.used)
       }
       return result
     },

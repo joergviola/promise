@@ -9,6 +9,7 @@ import _ from 'lodash'
 import elementLocale from 'element-ui/lib/locale/lang/de'
 import './util/filters' 
 import localeDE from './lang/de'
+import moment from 'moment'
 
 Vue.prototype._ = _
 
@@ -25,7 +26,7 @@ const i18n = new VueI18n({
     'de': localeDE
   }
 })
-
+moment.locale('de');
 
 Vue.config.productionTip = false
 
