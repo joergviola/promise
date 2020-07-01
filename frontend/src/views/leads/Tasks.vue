@@ -26,16 +26,6 @@
           <el-table-column type="expand"  width="25">
             <template slot-scope="{row}">
               <el-form label-position="left" label-width="120px" >
-                <el-form-item :label="$t('type.task.description')">
-                  <el-input 
-                    v-model="row.description" 
-                    type="textarea" 
-                    :rows="2" 
-                    :autosize="{ minRows: 2, maxRows: 4}"
-                    placeholder="More info..." 
-                    @change="saveWithEstimation(row, 'description')"
-                  />
-                </el-form-item>
                 <el-form-item :label="$t('type.task.percent')">
                   <el-checkbox
                     :label="$t('ui.leads.tasks.percent')"
@@ -69,7 +59,7 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('type.task.name')" min-width="200">
+          <el-table-column :label="$t('type.task.name')" min-width="150">
             <template slot-scope="{row, $index}">
               <el-input
                 class="no-border"
@@ -84,6 +74,22 @@
               />
             </template>
           </el-table-column>
+
+          <el-table-column :label="$t('type.task.description')" min-width="200">
+            <template slot-scope="{row, $index}">
+              <el-input
+                type="textarea"
+                :autosize="{minRows:1, maxRows:4}"
+                class="no-border"
+                v-model="row.description"
+                @change="saveWithEstimation(row, 'description')"
+                :ref="`field-${groupIndex}-${$index}-1`"
+                @keydown.up.native="onArrow(groupIndex, 1, $index, -1)"
+                @keydown.down.native="onArrow(groupIndex, 1, $index, +1)"
+              />
+            </template>
+          </el-table-column>
+
           <el-table-column :label="$t('type.task.position')" min-width="150">
             <template slot-scope="{row, $index}">
               <el-select class="no-border" v-model="row.position" filterable allow-create @change="save(row, 'position')" >
@@ -133,10 +139,10 @@
                 :disabled="row.position_id!=null"
                 @change="saveEstimation(row, 'planned')"
                 :placeholder="$t('type.estimation.planned')"
-                :ref="`field-${groupIndex}-${$index}-3`"
+                :ref="`field-${groupIndex}-${$index}-4`"
                 @keydown.enter.native="onEnter(row, groupIndex, 0, $index)"
-                @keydown.up.native="onArrow(groupIndex, 3, $index, -1)"
-                @keydown.down.native="onArrow(groupIndex, 3, $index, +1)"
+                @keydown.up.native="onArrow(groupIndex, 4, $index, -1)"
+                @keydown.down.native="onArrow(groupIndex, 4, $index, +1)"
               >
               <el-popover
                 v-if="row.position_id" 
@@ -161,9 +167,9 @@
                 class="no-border"
                 v-model="row.estimation.comment"
                 @change="saveEstimation(row, 'comment')"
-                :ref="`field-${groupIndex}-${$index}-4`"
-                @keydown.up.native="onArrow(groupIndex, 4, $index, -1)"
-                @keydown.down.native="onArrow(groupIndex, 4, $index, +1)"
+                :ref="`field-${groupIndex}-${$index}-5`"
+                @keydown.up.native="onArrow(groupIndex, 5, $index, -1)"
+                @keydown.down.native="onArrow(groupIndex, 5, $index, +1)"
               />
               <span v-if="row.purchased" class="no-border estimation el-input el-input--small">
                 Purchased from {{row.supplier || '??'}}
@@ -174,7 +180,7 @@
           <el-table-column align="right" label="" width="40">
             <template slot-scope="{row}">
               <i v-if="row.id && (row.estimations.length==0 || (row.estimations.length==1 && row.estimations[0].user_id==user.id))" class="action el-icon-remove-outline" @click="removeWithEstimation(groupIndex, row)" title="Delete this line"/> 
-              <i v-if="!row.id" class="action el-icon-circle-plus-outline" @click="createWithEstimation(groupIndex, row)"  title="Create a new line"/> 
+              <i v-if="!row.id" class="action el-icon-remove-outline" @click="remove(groupIndex, row, false)" title="Delete this line"/> 
             </template>
           </el-table-column>
 
@@ -332,7 +338,7 @@ export default {
       }
     },
     getTextAreaColumns() {
-      return [4]
+      return [1, 5]
     },
 
   },

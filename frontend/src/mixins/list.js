@@ -254,7 +254,9 @@ export default {
             return
           }
         }
-        await api.delete(this.type, row.id)
+        if (row.id) {
+          await api.delete(this.type, row.id)
+        }
         const list = this.lists[groupIndex].list
         const index = list.indexOf(row)
         list.splice(index, 1)
