@@ -11,7 +11,7 @@
               {{$t('ui.detail.cancel')}}
             </el-button>
             <el-button v-for="(button, i) in buttons" :key="i" type="danger" @click="click(button)">
-              {{ button.label }}
+              {{ $t('ui.button.'+button.label) }}
             </el-button>
             <el-button type="primary" @click="save">
               {{$t('ui.detail.save')}}

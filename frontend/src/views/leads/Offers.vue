@@ -28,7 +28,6 @@ export default {
         { name: 'price', label: 'Price', editable: false },
         { name: 'state', label: 'State', editable: false },
         { name: 'approved_at', label: 'Approved', editable: false },
-        { name: 'accepted_at', label: 'Accepted', editable: false },
       ]
     }
   }

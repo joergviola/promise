@@ -97,11 +97,10 @@ export default [
               with: { },
               type: 'accounting',
               columns: [
-                { name: 'name', label: 'Name', editable: true, placeholder: "New Offer..." },
-                { name: 'price', label: 'Price', editable: false },
-                { name: 'state', label: 'State', editable: false },
-                { name: 'approved_at', label: 'Approved', editable: false },
-                { name: 'accepted_at', label: 'Accepted', editable: false },
+                { name: 'name', editable: true, placeholder: "New Offer..." },
+                { name: 'price', editable: false },
+                { name: 'state', editable: false },
+                { name: 'approved_at', editable: false },
               ],
               createBy: "button",
               detail: 'offer'

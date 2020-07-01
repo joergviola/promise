@@ -50,7 +50,17 @@ export default {
     'task': {
       'name': 'Neue Aufgabe',
       'description': 'Was ist zu tun?',
+      'percent': 'Aufschlag',
+      'purchased': 'Eingekauft',
+      'price': 'Einkaufspreis',
+      'supplier': 'Lieferant',
+      'position': 'Angebotsposition',
+      'planned': 'Geplant',
       'due_at': 'Fällig am',
+    },
+    'estimation': {
+      'planned': 'Schätzung',
+      'comment': 'Kommentar',
     },
     'action': {
       'project': {
@@ -62,6 +72,15 @@ export default {
       'from': 'Begonnen',
       'used': 'Fortschritt',
       'comment': 'Kommentar',
+    },
+    'accounting': {
+      'name': 'Name',
+      'price': 'Preis',
+      'state': 'Zustand',
+      'approved_at': 'Angenommen/Abgelehnt',
+      'pricePerUnit': 'Preiseinheit',
+      'percentBuffer': 'Aufschlag',
+      'rounding': 'Gerundet',
     },
   },
   'ui': {
@@ -82,11 +101,18 @@ export default {
       'actions': 'Aktionen',
       'add': 'Neu',
       'addGroup': 'Neuer Abschnitt',
+      'create': 'Neue zeile',
+      'edit': 'Diese Zeile ändern',
+      'delete': 'Diese Zeile löschen',
     },
     'detail': {
       'cancel': 'Abbrechen',
       'save': 'Speichern',
       'details': 'Mehr',
+    },
+    'button': {
+      'Send': 'Senden',
+      'Copy': 'Kopieren',
     },
     'leads': {
       'open': 'In Arbeit',
@@ -101,7 +127,11 @@ export default {
         'add': 'Neue Vertriebsaufgabe',
         'save': 'Speichern',
         'close': 'Erledigt',
-      }
+      },
+      'tasks': {
+        'percent': 'Prozentualer Aufschlag, wird zu ALLEN Angebotspositionen addiert.',
+        'purchased': 'Dies ist ein Einkaufsartikel.',
+      },
     },
     'timeline': {
       'younow': 'Du, jetzt',
@@ -131,6 +161,7 @@ export default {
     'Timeline': 'Verlauf',
     'Lead-Timeline': 'Verlauf',
     'Lead-Tasks': 'Aufgaben',
+    'Tasks': 'Aufgaben',
     'Offers': 'Angebote',
     'Offer': 'Angebot',
     'Positions': 'Positionen',

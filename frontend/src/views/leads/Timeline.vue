@@ -40,7 +40,7 @@
       <el-card>
         <h4>{{t.name}}</h4>
         <p>{{t.description}}</p>
-        <p>{{t.due_at}}</p>
+        <p>{{t.due_at | date}}</p>
       </el-card>
     </el-timeline-item>
   </el-timeline>

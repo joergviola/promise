@@ -101,9 +101,9 @@
 
           <el-table-column align="right" :label="$t('ui.list.actions')" >
             <template slot-scope="{row}">
-              <i v-if="row.id && allowDelete" class="action el-icon-remove-outline" @click="remove(groupIndex, row)" title="Delete this line"/> 
-              <i v-if="row.id && detail" class="action el-icon-arrow-right" @click="detailClicked(row)"  title="Edit details"/> 
-              <i v-if="!row.id" class="action el-icon-circle-plus-outline" @click="create(row)"  title="Create a new line"/> 
+              <i v-if="row.id && allowDelete" class="action el-icon-remove-outline" @click="remove(groupIndex, row)" :title="$t('ui.list.delete')"/> 
+              <i v-if="row.id && detail" class="action el-icon-arrow-right" @click="detailClicked(row)"  :title="$t('ui.list.edit')"/> 
+              <i v-if="!row.id" class="action el-icon-circle-plus-outline" @click="create(row)"  :title="$t('ui.list.create')"/> 
             </template>
           </el-table-column>
         </el-table>

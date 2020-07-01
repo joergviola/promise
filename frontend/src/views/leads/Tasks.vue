@@ -26,7 +26,7 @@
           <el-table-column type="expand"  width="25">
             <template slot-scope="{row}">
               <el-form label-position="left" label-width="120px" >
-                <el-form-item label="Description">
+                <el-form-item :label="$t('type.task.description')">
                   <el-input 
                     v-model="row.description" 
                     type="textarea" 
@@ -36,30 +36,30 @@
                     @change="saveWithEstimation(row, 'description')"
                   />
                 </el-form-item>
-                <el-form-item label="Effort type">
+                <el-form-item :label="$t('type.task.percent')">
                   <el-checkbox
-                    label="Planned effort in %, added to ALL offer positions"
+                    :label="$t('ui.leads.tasks.percent')"
                     :value="!!row.percent"
                     @input="value => row.percent = value"
                     @change="saveWithEstimation(row, 'percent')"
                   />
                 </el-form-item>
-                <el-form-item label="Purchase">
+                <el-form-item :label="$t('type.task.purchased')">
                   <el-checkbox
-                    label="This is a purchased item"
+                    :label="$t('ui.leads.tasks.purchased')"
                     :value="!!row.purchased"
                     @input="value => row.purchased = value"
                     @change="saveWithEstimation(row, 'purchased')"
                   />
                 </el-form-item>
-                <el-form-item v-if="row.purchased" label="Purchase price">
+                <el-form-item v-if="row.purchased" :label="$t('type.task.price')">
                   <el-input
                     type="text"
                     v-model="row.price"
                     @change="saveWithEstimation(row, 'price')"
                   />
                 </el-form-item>
-                <el-form-item v-if="row.purchased" label="Supplier">
+                <el-form-item v-if="row.purchased" :label="$t('type.task.supplier')">
                   <el-input
                     type="text"
                     v-model="row.supplier"
@@ -69,13 +69,13 @@
               </el-form>
             </template>
           </el-table-column>
-          <el-table-column label="Name" min-width="200">
+          <el-table-column :label="$t('type.task.name')" min-width="200">
             <template slot-scope="{row, $index}">
               <el-input
                 class="no-border"
                 v-model="row.name"
                 @change="saveWithEstimation(row, 'name')"
-                placeholder="New task..."
+                :placeholder="$t('type.task.name')"
                 :ref="`field-${groupIndex}-${$index}-0`"
                 @keydown.enter.native="onEnter(row, groupIndex, 0, $index)"
                 @keydown.up.native="onArrow(groupIndex, 0, $index, -1)"
@@ -84,7 +84,7 @@
               />
             </template>
           </el-table-column>
-          <el-table-column label="Position" min-width="50">
+          <el-table-column :label="$t('type.task.position')" min-width="150">
             <template slot-scope="{row, $index}">
               <el-select class="no-border" v-model="row.position" filterable allow-create @change="save(row, 'position')" >
                 <el-option v-for="(name, i) in positionNames" :value="name" :key="i" :label="name" />
@@ -92,7 +92,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="Planned" align="right" min-width="50">
+          <el-table-column :label="$t('type.task.planned')" align="right" min-width="50">
             <template slot-scope="{row, $index}">
               <span v-if="!row.purchased" class="no-border estimation el-input el-input--small">
                 <el-popover
@@ -124,7 +124,7 @@
           </el-table-column>
 
 
-          <el-table-column label="Estimation" min-width="50">
+          <el-table-column :label="$t('type.estimation.planned')" min-width="60">
             <template slot-scope="{row, $index}">
               <el-input
                 v-if="!row.purchased"
@@ -132,7 +132,7 @@
                 v-model="row.estimation.planned"
                 :disabled="row.position_id!=null"
                 @change="saveEstimation(row, 'planned')"
-                placeholder="Your estimation..."
+                :placeholder="$t('type.estimation.planned')"
                 :ref="`field-${groupIndex}-${$index}-3`"
                 @keydown.enter.native="onEnter(row, groupIndex, 0, $index)"
                 @keydown.up.native="onArrow(groupIndex, 3, $index, -1)"
@@ -152,7 +152,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column label="Comment" min-width="200">
+          <el-table-column :label="$t('type.estimation.comment')" min-width="200">
             <template slot-scope="{row, $index}">
               <el-input
                 v-if="!row.purchased"
