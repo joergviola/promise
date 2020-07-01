@@ -22,7 +22,7 @@
         <el-table v-if="group.show" :data-group="group.group" ref="theTable" v-loading="loading" :show-header="groupIndex==0" :data="group.list" row-key="id" fit>
           <el-table-column v-if="sort" label="" width="25">
             <template slot-scope="{row, $index}">
-              <i class="handle grab el-icon-menu"></i>
+              <svg class="handle grab" focusable="false" viewBox="0 0 32 32"><path fill="#CCCCCC" d="M14,5.5c0,1.7-1.3,3-3,3s-3-1.3-3-3s1.3-3,3-3S14,3.8,14,5.5z M21,8.5c1.7,0,3-1.3,3-3s-1.3-3-3-3s-3,1.3-3,3S19.3,8.5,21,8.5z M11,12.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S12.7,12.5,11,12.5z M21,12.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S22.7,12.5,21,12.5z M11,22.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S12.7,22.5,11,22.5z M21,22.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S22.7,22.5,21,22.5z"></path></svg>
             </template>
           </el-table-column>
           <el-table-column v-for="(col,i) in columns" :key="i" :label="$t('type.'+type+'.'+ col.name)" :prop="col.name" :align="col.align" :minWidth="col.width" sortable>
@@ -165,14 +165,13 @@ i.action {
   margin-top: 10px;
   margin-left: 10px;
 }
-i.grab {
-  color: #EEEEEE;
+svg.grab {
   cursor: grab;
-  font-size: 17px;
+  height: 14px;
+  width: 14px;
   vertical-align: -3px;
 }
 .el-table .cell {
   text-overflow: clip;
 }
-
 </style>
