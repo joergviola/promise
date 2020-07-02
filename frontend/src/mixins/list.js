@@ -114,7 +114,7 @@ export default {
             cache[value].push(item)
           } else {
             cache[value] = [item]
-            result.push({group:value, list: cache[value], show: true, header: true, key:i})
+            result.push({group:value, list: cache[value], show: true, header: true, key:result.length})
           }
         })
         return result

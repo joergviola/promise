@@ -7,6 +7,7 @@
     :template="template"
     :query="query"
     createBy="button"
+    :allowDelete="true"
   />
 </template>
 

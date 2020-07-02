@@ -5,6 +5,7 @@ import List from '@/components/generic/List.vue'
 import Details from '@/components/generic/Details.vue'
 
 import ProjectTabs from '@/components/custom/ProjectTabs'
+import organisations from './organisations'
 
 
 export default [
@@ -16,6 +17,7 @@ export default [
       icon: 'el-icon-s-home',
     }
   },
+//  organisations,
   {
     path: '/users',
     component: Parent,
@@ -103,7 +105,8 @@ export default [
                 { name: 'approved_at', editable: false },
               ],
               createBy: "button",
-              detail: 'offer'
+              detail: 'offer',
+              allowDelete: true,
             }),
             name: 'Offers',
             meta: {
