@@ -8,14 +8,14 @@
       </el-col>
     </el-row>
     <div ref="groupedTable">
-      <div v-for="(group,groupIndex) in lists" :key="group.key" class="group">
+      <div v-for="(group,groupIndex) in lists" :key="group.key" class="group"  :data-list="group.group">
         <div v-if="group.header" class="grouped-header">
           <svg class="group-handle grab" focusable="false" viewBox="0 0 32 32"><path fill="#CCCCCC" d="M14,5.5c0,1.7-1.3,3-3,3s-3-1.3-3-3s1.3-3,3-3S14,3.8,14,5.5z M21,8.5c1.7,0,3-1.3,3-3s-1.3-3-3-3s-3,1.3-3,3S19.3,8.5,21,8.5z M11,12.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S12.7,12.5,11,12.5z M21,12.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S22.7,12.5,21,12.5z M11,22.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S12.7,22.5,11,22.5z M21,22.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S22.7,22.5,21,22.5z"></path></svg>
           <i v-if="group.show" class="el-icon-arrow-down"  @click="group.show = !group.show"/>
           <i v-if="!group.show" class="el-icon-arrow-right"  @click="group.show = !group.show"/>
           <el-input v-model="group.group" class="no-border heading" @change="groupChanged(group)"/>
         </div>
-        <el-table v-if="group.show" :data-group="group.group" ref="theTable" v-loading="loading" :show-header="groupIndex==0" :data="group.list" row-key="id" fit>
+        <el-table v-if="group.show" ref="theTable" v-loading="loading" :show-header="groupIndex==0" :data="group.list" row-key="id" fit>
           
           <el-table-column v-if="sort" label="" width="25">
             <template slot-scope="{row, $index}">
@@ -90,7 +90,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column :label="$t('type.task.position')" min-width="150">
+          <el-table-column :label="$t('type.task.position')" min-width="120">
             <template slot-scope="{row, $index}">
               <el-select class="no-border" v-model="row.position" filterable allow-create @change="save(row, 'position')" >
                 <el-option v-for="(name, i) in positionNames" :value="name" :key="i" :label="name" />
@@ -216,6 +216,7 @@ export default {
   },
   data() {
     return {
+      test: '',
       type: 'task',
       groupBy: {field: 'category'},
       user: api.user(),

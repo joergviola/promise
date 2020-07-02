@@ -179,8 +179,10 @@ export default {
           dataTransfer.setData('Text', '')
         },
         onEnd: async (evt) => {
-          const from = this.lists.find(l => l.group == evt.from.dataset.group)
-          const to = this.lists.find(l => l.group == evt.to.dataset.group)
+          const fromGroup = getGroup(evt.from)
+          const toGroup = getGroup(evt.to)
+          const from = this.lists.find(l => l.group == fromGroup)
+          const to = this.lists.find(l => l.group == toGroup)
           const row = from.list.splice(evt.oldIndex, 1)[0]
           if (this.groupBy) {
             row[this.groupBy.field] = to.group
@@ -189,6 +191,13 @@ export default {
           await this.updateSort()
         }
       })
+
+      function getGroup(el) {
+        while(el!=null) {
+          if (el.dataset.list) return el.dataset.list
+          el = el.parentElement
+        }
+      }
     },
     async updateSort() {
       if (!this.sort) return
