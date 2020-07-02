@@ -7,12 +7,13 @@
           <div slot="header" class="clearfix">
             New in current release
           </div>
-          <h4> 29.06.20</h4>
-          Release for ressource planning.
+          <h4> 02.07.20</h4>
+          Maintenance release.
           <small>
           <ul>
-            <li>New project fixed</li>
-            <li>Planning of unterminated projects</li>
+            <li>German translation</li>
+            <li>Nicer drag handle and group layout</li>
+            <li>Stabilized drag/drop</li>
           </ul>
           </small>
         </el-card>
@@ -32,8 +33,6 @@
           <h4>Done</h4>
           <small>
           <ul>
-            <li>German translation</li>
-            <li>Nicer drag handle and group layout</li>
           </ul>
           </small>
         </el-card>
@@ -43,6 +42,15 @@
           <div slot="header" class="clearfix">
             History
           </div>
+
+          <h4> 29.06.20</h4>
+          Release for ressource planning.
+          <small>
+          <ul>
+            <li>New project fixed</li>
+            <li>Planning of unterminated projects</li>
+          </ul>
+          </small>
 
           <h4> 28.06.20</h4>
           This release focusses around tasks and offers, trying to make input 

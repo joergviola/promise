@@ -124,8 +124,11 @@ export default {
     },
     addGroup() {
       if (this.groupBy) {
-        this.lists.splice(0, 0, {group:'New...', list: [], show: true, header: true, key:this.lists.length})
-        this.addNew(0)
+        const groupName = 'New...'
+        this.lists.splice(0, 0, {group:groupName, list: [], show: true, header: true, key:this.lists.length+1})
+        const row = this.addNew(0)
+        row[this.groupBy.field] = groupName
+        this.save(row, this.groupBy)
         this.$nextTick(() => {
           let tables = this.$refs.theTable
           this.createGroupSortable(tables[tables.length-1])
@@ -305,7 +308,9 @@ export default {
         const key = `field-${groupIndex}-${index-1}-${column}`
         let ref = this.$refs[key]
         if (Array.isArray(ref)) ref = ref[0]
+        if (ref) {
           ref.focus()
+        }
       })
       event.preventDefault()
     },
