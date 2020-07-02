@@ -61,7 +61,7 @@ export default {
         if (!this.showItem(route)) return false
       }
       let path = route.path
-      const attrs = this.attrs || this.$attrs
+      const attrs = this.attrs || this.$route.params
       for (let key in attrs) {
         path = path.replace(':'+key, attrs[key])
       }

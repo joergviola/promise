@@ -7,7 +7,7 @@ import ProjectTabs from '@/components/custom/ProjectTabs'
 
 export default {
   path: '/org',
-  component: Parent,
+  component: Tabs,
   name: 'Organisations',
   meta: {
     icon: 'el-icon-s-custom',
@@ -16,32 +16,77 @@ export default {
   redirect: '/org/all',
   children: [
     {
-      path: 'offers',
+      path: 'all',
       component: List,
       props: route => ({
-        type: 'accounting',
-        template: { project_id: route.params.id, type: 'QUOTE', state: 'NEW', pricePerUnit: 100, percentBuffer: 15, rounding: "10" },
-        query: { project_id: route.params.id, type: 'QUOTE' },
+        type: 'organisation',
+        template: {  },
+        query: {  },
         with: { },
-        type: 'accounting',
         columns: [
           { name: 'name', editable: true, placeholder: "New Offer..." },
-          { name: 'price', editable: false },
-          { name: 'state', editable: false },
-          { name: 'approved_at', editable: false },
         ],
         createBy: "button",
-        detail: 'offer'
+        detail: '.'
       }),
-      name: 'Offers',
+      name: 'Organisations',
       meta: {
         roles: ['Admin']
       },
-},
+    },
     {
       path: ':id/detail',
-      component: () => import('@/views/users/Form'),
+      component: Details,
+      name: 'Organisation',
+      props: route => ({
+        type: 'organisation',
+        id: route.params.id,
+        fields: [
+          {name: 'name'},
+          {name: 'email'},
+          {name: 'website'},
+          {name: 'phone'},
+        ]
+      })
+    },
+    {
+      path: ':id/users',
+      component: List,
+      props: route => ({
+        type: 'users',
+        template: {  },
+        query: { organisation_id: route.params.id },
+        with: { role: {one: 'role'} },
+        columns: [
+          { name: 'name', editable: true },
+          { name: 'role.name' },
+        ],
+        createBy: "button",
+        detail: '.'
+      }),
+      name: 'Users',
+      meta: {
+        roles: ['Admin']
+      },
+    },
+    {
+      path: ':id/:uid/detail',
+      component: Details,
       name: 'User',
+      props: route => ({
+        type: 'users',
+        id: route.params.id,
+        fields: [
+          {name: 'name'},
+          {name: 'email'},
+          {name: 'phone'},
+          {name: 'mobile'},
+          {name: 'comment', type: 'textarea'},
+          { name: 'password', label: 'Password', type: 'password' },
+          { name: 'role_id', label: 'Role', type: 'to-one', ref: 'role', display: 'name'},
+          { name: 'organisation_id', label: 'Organsisation', type: 'to-one', ref: 'organisation', display: 'name' },
+          ]
+      })
     },
   ]
 }

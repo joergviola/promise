@@ -201,5 +201,7 @@ export default {
     'Offers': 'Angebote',
     'Offer': 'Angebot',
     'Positions': 'Positionen',
+    'Organisations': 'Kunden',
+    'Organisation': 'Kunde',
   }
 }

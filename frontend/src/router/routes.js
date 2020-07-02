@@ -17,29 +17,7 @@ export default [
       icon: 'el-icon-s-home',
     }
   },
-//  organisations,
-  {
-    path: '/users',
-    component: Parent,
-    name: 'Users',
-    meta: {
-      icon: 'el-icon-s-custom',
-      roles: ['Admin']
-    },
-    redirect: '/users/all',
-    children: [
-      {
-        path: 'all',
-        component: () => import('@/views/users/List'),
-        name: 'All',
-      },
-      {
-        path: ':id/detail',
-        component: () => import('@/views/users/Form'),
-        name: 'User',
-      },
-    ]
-  },
+  organisations,
   {
     path: '/leads',
     component: Parent,
