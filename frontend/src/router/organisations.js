@@ -75,7 +75,7 @@ export default {
       name: 'User',
       props: route => ({
         type: 'users',
-        id: route.params.id,
+        id: route.params.uid,
         fields: [
           {name: 'name'},
           {name: 'email'},
