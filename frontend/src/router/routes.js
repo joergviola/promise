@@ -79,7 +79,7 @@ export default [
               columns: [
                 { name: 'name', editable: true, placeholder: "New Offer..." },
                 { name: 'price', editable: false },
-                { name: 'state', editable: false },
+                { name: 'state', editable: false, type: 'select', options: ['NEW', 'SENT', 'ACCEPTED', 'REJECTED' ] },
                 { name: 'approved_at', editable: false },
               ],
               createBy: "button",
@@ -102,7 +102,31 @@ export default [
             component: () => import('@/views/offer/Positions'),
             props: true,
             name: 'Positions',
-          }
+          },
+          {
+            path: 'invoices',
+            component: List,
+            props: route => ({
+              type: 'accounting',
+              template: { project_id: route.params.id, type: 'INVOICE', state: 'NEW' },
+              query: { project_id: route.params.id, type: 'INVOICE' },
+              with: { reference: {one: 'accounting', this: 'reference_id'} },
+              type: 'accounting',
+              columns: [
+                { name: 'name', editable: true },
+                { name: 'reference.name', editable: false },
+                { name: 'price', editable: true },
+                { name: 'state', editable: false, type: 'select', options: ['NEW', 'SENT', 'PAYED' ] },
+                { name: 'approved_at', type: "date", editable: true },
+              ],
+              createBy: "button",
+              allowDelete: true,
+            }),
+            name: 'Invoices',
+            meta: {
+              roles: ['Admin']
+            },
+          },
         ]
       },
     ]

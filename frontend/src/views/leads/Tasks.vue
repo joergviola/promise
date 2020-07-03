@@ -144,16 +144,16 @@
                 @keydown.up.native="onArrow(groupIndex, 4, $index, -1)"
                 @keydown.down.native="onArrow(groupIndex, 4, $index, +1)"
               >
-              <el-popover
-                v-if="row.position_id" 
-                slot="suffix" 
-                placement="bottom"
-                title="Offer already sent"
-                width="200"
-                trigger="click"
-                content="This task is already offered to the customer.">
-                <i slot="reference" class="el-icon-remove-outline"></i>
-              </el-popover>
+                <el-popover
+                  v-if="row.position_id" 
+                  slot="suffix" 
+                  placement="bottom"
+                  :title="$t('ui.leads.tasks.readonly')"
+                  width="200"
+                  trigger="click"
+                  :content="$t('ui.leads.tasks.alreadysent')">
+                  <i slot="reference" class="el-icon-question"></i>
+                </el-popover>
               </el-input>
             </template>
           </el-table-column>

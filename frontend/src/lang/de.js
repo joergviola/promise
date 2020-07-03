@@ -102,6 +102,13 @@ export default {
       'name': 'Name',
       'price': 'Preis',
       'state': 'Zustand',
+      'state-options': {
+        'NEW': 'Erstellt',
+        'SENT': 'Gesendet',
+        'ACCEPTED': 'Angenommen',
+        'REJECTED': 'Abgelehnt',
+        'PAYED': 'Vollständig bezahlt',
+      },
       'approved_at': 'Angenommen/Abgelehnt',
       'pricePerUnit': 'Preiseinheit',
       'percentBuffer': 'Aufschlag',
@@ -111,6 +118,9 @@ export default {
         'NONE': 'Nach Aufwand',
         'ONE': 'Eine Rechnung',
         '30-40-30': '30/40/30% Rechnungen',
+      },
+      'reference': {
+        'name' : 'Angebot'
       }
     },
   },
@@ -147,6 +157,8 @@ export default {
       'Closed': 'Installiert',
       'Reset': 'Zurücksetzen',
       'Ready': 'Fertig',
+      'Accept': 'Angenommen',
+      'Reject': 'Abgelehnt',
     },
     'leads': {
       'open': 'In Arbeit',
@@ -165,6 +177,8 @@ export default {
       'tasks': {
         'percent': 'Prozentualer Aufschlag, wird zu ALLEN Angebotspositionen addiert.',
         'purchased': 'Dies ist ein Einkaufsartikel.',
+        'readonly': 'Nicht mehr änderbar.',
+        'alreadysent': 'Angebot wurde dem Kunden bereits zugestellt.',
       },
     },
     'timeline': {
@@ -236,6 +250,8 @@ export default {
     'Tasks': 'Aufgaben',
     'Offers': 'Angebote',
     'Offer': 'Angebot',
+    'Invoices': 'Rechnungen',
+    'Invoice': 'Rechnung',
     'Positions': 'Positionen',
     'Organisations': 'Kunden',
     'Organisation': 'Kunde',

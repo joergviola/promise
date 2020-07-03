@@ -57,6 +57,9 @@ input, select, textarea {
 .el-input.is-disabled.no-border .el-input__inner {
   background-color: transparent;
 }
+.el-input.is-disabled .el-input__inner {
+  background-color: transparent!important;
+}
 #app .el-table th>.cell {
   padding-left: 25px;
 }

@@ -22,6 +22,7 @@ class Helper
 
         API::provider('position')
             ->where('accounting.project_id', $project_id)
+            ->where('accounting.type', 'QUOTE')
             ->where('accounting.state', 'NEW')
             ->join('accounting', 'accounting.id', '=', 'position.accounting_id')
             ->update([
@@ -43,6 +44,7 @@ class Helper
 
         API::provider('accounting')
             ->where('accounting.project_id', $project_id)
+            ->where('accounting.type', 'QUOTE')
             ->update([
                     'accounting.price' => DB::raw('(SELECT SUM(position.price) FROM position WHERE position.accounting_id=accounting.id AND position.accepted)'),
                 ]);
