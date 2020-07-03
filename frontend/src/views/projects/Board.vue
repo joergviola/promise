@@ -7,7 +7,7 @@
       :state="col.state" 
       :group="group" 
       class="kanban" 
-      :header-text="col.label" 
+      :header-text="$t('ui.kanban.'+col.state)" 
       @click="onClick" 
     />
   </div>

@@ -33,6 +33,9 @@ export default {
       'source': 'Quelle',
       'source': 'Quelle',
       'effort_unit': 'Aufwandseinheit',
+      'starts_at': 'Beginnt',
+      'ends_at': 'Endet',
+      'planned': 'Budget',
       'used': 'Fortschritt',
       'price': 'Preis',
       'state': 'Zustand',
@@ -45,6 +48,14 @@ export default {
       'last_offer': {
         'price': 'Aktuelles Angebot',
       },
+    },
+    'allocation': {
+      'user_id': 'Benutzer',
+      'role': 'Rolle',
+      'parttime': 'Zuordnung',
+      'from': 'Von',
+      'to': 'Bis',
+      'comment': 'Kommentar',
     },
     'position': {
       'no': 'Nr',
@@ -65,6 +76,9 @@ export default {
       'position': 'Angebotsposition',
       'planned': 'Geplant',
       'due_at': 'Fällig am',
+      'user_id': 'Verantwortlich',
+      'state': 'Zustand',
+      'used': 'Fortschritt',
     },
     'estimation': {
       'planned': 'Schätzung',
@@ -72,13 +86,16 @@ export default {
     },
     'action': {
       'project': {
-        'name': 'Name',
+        'name': 'Projekt',
       },
       'task': {
-        'name': 'Name',
+        'name': 'Aufgabe',
+      },
+      'user': {
+        'name': 'Benutzer',
       },
       'from': 'Begonnen',
-      'used': 'Fortschritt',
+      'used': 'Gebucht',
       'comment': 'Kommentar',
     },
     'accounting': {
@@ -121,6 +138,9 @@ export default {
     'button': {
       'Send': 'Senden',
       'Copy': 'Kopieren',
+      'Closed': 'Installiert',
+      'Reset': 'Zurücksetzen',
+      'Ready': 'Fertig',
     },
     'leads': {
       'open': 'In Arbeit',
@@ -149,7 +169,7 @@ export default {
       'close': 'Erledigt',
       'reopen': 'Fehlerhaft',
       'tested': 'Getestet',
-      'deployed': 'Deployed',
+      'deployed': 'Installiert',
       'detail': 'Details',
       'hours': 'Stunde | Stunden'
     },
@@ -181,6 +201,16 @@ export default {
     'gantt': {
       'date': 'Datum'
     },
+    'kanban': {
+      'NEW': 'Nicht freigegeben',
+      'APPROVED': 'Backlog',
+      'PLANNED': 'Sprint',
+      'STARTED': 'Heute',
+      'IMPLEMENTED': 'Umgesetzt',
+      'TESTED': 'Getestet',
+      'DEPLOYED': 'Installiert',
+
+    },
 },
   'route': {
     'All': 'Alle',
@@ -203,5 +233,13 @@ export default {
     'Positions': 'Positionen',
     'Organisations': 'Kunden',
     'Organisation': 'Kunde',
+    'Project-Detail': 'Detail',
+    'Project-Tasks': 'Aufgaben',
+    'Team': 'Team',
+    'Board': 'Board',
+    'State': 'Burndown',
+    'Project-Timeline': 'Arbeitszeit',
+    'Task': 'Aufgabe',
+    'Work': 'Protokoll',
   }
 }
