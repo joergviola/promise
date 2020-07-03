@@ -272,7 +272,9 @@ export default {
           task.estimation.id = result.id
         } else {
           // Wenn null, wird das nicht in data übernommen ???!
-          task.estimation[attr] = task.estimation[attr] || ''
+          if (task.estimation[attr]==null) {
+            task.estimation[attr] = ''
+          }
           const data = {}
           data[attr] = task.estimation[attr]
           await api.update('estimation', task.estimation.id, data)
