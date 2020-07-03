@@ -10,7 +10,7 @@
         :disabled="readonly"
       />
       <el-select v-else-if="field.type=='select'" v-model="item[field.name]" :disabled="readonly">
-        <el-option v-for="(o, i) in field.options" :key="i" :label="o" :value="o" />
+        <el-option v-for="(o, i) in field.options" :key="i" :label="$t('type.'+type+'.'+field.name+'-options.'+o)" :value="o" />
       </el-select>
       <el-date-picker
         v-else-if="field.type=='date'"

@@ -106,6 +106,12 @@ export default {
       'pricePerUnit': 'Preiseinheit',
       'percentBuffer': 'Aufschlag',
       'rounding': 'Gerundet',
+      'invoicing': 'Rechnungstellung',
+      'invoicing-options': {
+        'NONE': 'Nach Aufwand',
+        'ONE': 'Eine Rechnung',
+        '30-40-30': '30/40/30% Rechnungen',
+      }
     },
   },
   'ui': {

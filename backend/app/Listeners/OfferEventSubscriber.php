@@ -6,6 +6,7 @@ use App\API;
 use App\Events\ApiAfterUpdateEvent;
 use App\Events\ApiBeforeUpdateEvent;
 use App\Helper;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -49,6 +50,7 @@ class OfferEventSubscriber
                     ->update([
                         'task.position_id' => null
                     ]);
+                $this->deleteInvoices($event->id);
                 Helper::updatePlanned($old->project_id);
                 break;
 
@@ -60,10 +62,37 @@ class OfferEventSubscriber
                     ->update([
                         'task.state' => 'APPROVED'
                     ]);
+                $invoicing = @$event->item['invoicing'] ?: $old->invoicing;
+                $this->createInvoices($old, $invoicing);
                 API::update('project', $old->project_id, ['state' => 'ACCEPTED']);
                 break;
 
         }
+    }
+
+    private function deleteInvoices($accounting_id) {
+        // API::provider('accounting')
+        //     ->where('reference_id', $accounting_id)
+        //     ->where('state', 'NEW')
+        //     ->delete();
+    }
+
+    private function createInvoices($accounting, $invoicing) {
+        // switch($invoicing) {
+        //     case 'NONE':
+        //         break;
+        //     case 'ONE':
+        //         $this->createInvoice($accounting, 0, new DateTime());
+        //         break;
+        //     case '30-40-30':
+        //         $this->createInvoice($accounting, 0, new DateTime());
+        //         $this->createInvoice($accounting, 0, new DateTime());
+        //         $this->createInvoice($accounting, 0, new DateTime());
+        //         break;
+        // }
+    }
+
+    private function createInvoice($accounting, $seq, $date) {
     }
 
     public function handleAfterUpdate(ApiAfterUpdateEvent $event) {

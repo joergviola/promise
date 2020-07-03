@@ -41,7 +41,7 @@ class Base extends Migration
 
         StandardTable::create('accounting', 'Project quote or invoice.', function (Blueprint $table) {
             $table->string('type'); // QUOTE, INVOICE, PURCHASE
-            $table->string('state'); // OPEN, APPROVED, ACCEPTED, REJECTED, PAYED
+            $table->string('state'); // NEW, APPROVED, ACCEPTED, REJECTED, PAYED
             $table->string('name');
             $table->double('pricePerUnit')->nullable();
             $table->unsignedInteger('percentBuffer');

@@ -33,6 +33,7 @@ export default {
         { name: 'pricePerUnit', label: 'Rate', postfix: this.item ? '/ ' + this.item.project.effort_unit : ''},
         { name: 'percentBuffer', label: 'Buffer', postfix: '%' },
         { name: 'rounding', label: 'Rounding', type: 'select', options: ['0','1','2','3','-1', '-2' ] },
+        { name: 'invoicing', type: 'select', options: ['30-40-30','ONE','NONE' ] },
         { name: 'state', disabled: true, label: 'State' },
       ]
     },
