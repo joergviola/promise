@@ -96,6 +96,16 @@ export default {
         } else {
           const result = await api.create(this.type, this.item)
           this.item.id = result.id
+          const params = {}
+          for (var key in this.$route.params) {
+            const value = this.$route.params[key]
+            if (value=='new') params[key] = result.id
+            else params[key] = value
+          }
+          this.$router.push({
+            name: this.$route.name,
+            params: params
+          })
         }
         const upload = Object.keys(this.uploadDocs)
           .filter(key => this.uploadDocs[key].add)

@@ -77,6 +77,10 @@ export default {
           const right = role.rights.find(r => meta.rights.indexOf(r.actions)!=-1)
           if (!right) return false
       }
+      if (meta && meta.show) {
+        const attrs = this.attrs || this.$route.params
+        if (!meta.show(attrs)) return false
+      }
       return !meta.hidden
     }
   },

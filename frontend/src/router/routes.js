@@ -177,7 +177,8 @@ export default [
             props: true,
             name: 'Project-Tasks',
             meta: {
-              title: 'Tasks'
+              title: 'Tasks',
+              show: params => params.id!='new'
             },
           },
           {
@@ -197,18 +198,27 @@ export default [
             component: () => import('@/views/projects/Board'),
             props: true,
             name: 'Board',
+            meta: {
+              show: params => params.id!='new'
+            },
           },
           {
             path: 'team',
             component: () => import('@/views/projects/Team'),
             props: true,
             name: 'Team',
+            meta: {
+              show: params => params.id!='new'
+            },
           },
           {
             path: 'state',
             component: () => import('@/views/projects/Burndown'),
             props: true,
             name: 'State',
+            meta: {
+              show: params => params.id!='new'
+            },
           },
           {
             path: 'timeline',
@@ -216,7 +226,8 @@ export default [
             props: true,
             name: 'Project-Timeline',
             meta: {
-              title: 'Timeline'
+              title: 'Timeline',
+              show: params => params.id!='new'
             },
           },
         ]
