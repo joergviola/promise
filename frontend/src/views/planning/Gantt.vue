@@ -202,6 +202,7 @@ export default {
       const usertasks = tasks.filter(t => t.allocation)
       usertasks.forEach(t => {
         const simultan = usertasks
+          .filter(t => t.allocation.type=='PROJECT')
           .filter(o => t.allocation.user_id==o.allocation.user_id)
           .filter(o => this.overlap(t, o)) // Must be dates!
         let load = 0
@@ -432,13 +433,20 @@ export default {
       date.setTime(from.getTime())
       let result = 0
       while (date <= to) {
-        if (!isOff(date)) result += 1
+        if (!isOff(date, this.projects)) result += 1
         date.setDate(date.getDate()+1)
       }
       return result
 
-      function isOff(date) {
-        return date.getDay()==0 || date.getDay()==6
+
+      function isOff(date, projects) {
+        if (date.getDay()==0 || date.getDay()==6) return true
+        return off.some(a => {
+          const project = projects.find(p => p.id == a.project_id)
+          const start = a.from || p.starts_at
+          const end = a.to || p.ends_at
+          return start<=date && date<=end
+        })
       }
     }
   },
