@@ -2,16 +2,16 @@
   <div class="components-container">
     <h4>{{user.name}}</h4>
     <el-tabs v-model="activeTab">
-      <el-tab-pane lazy key="1" label="Details" name="1">
+      <el-tab-pane lazy key="1" :label="$t('ui.user.Details')" name="1">
         <user-details :id="$route.params.id" :tid="$route.params.tid" v-on:update="t => user = t" />
       </el-tab-pane>
-      <el-tab-pane v-if="employee" lazy key="2" label="Timeline" name="2">
+      <el-tab-pane v-if="employee" lazy key="2" :label="$t('ui.user.Timeline')" name="2">
         <user-timeline :user="user" />
       </el-tab-pane>
-      <el-tab-pane v-if="employee" lazy key="3" label="Contracts" name="3">
+      <el-tab-pane v-if="employee" lazy key="3" :label="$t('ui.user.Contracts')" name="3">
         <user-allocations :user="user" :types="['CONTRACT']" />
       </el-tab-pane>
-      <el-tab-pane v-if="employee" lazy key="4" label="Times off" name="4">
+      <el-tab-pane v-if="employee" lazy key="4" :label="$t('ui.user.TimesOff')" name="4">
         <user-allocations :user="user" :types="['HOLIDAY','ILL']" />
       </el-tab-pane>
     </el-tabs>

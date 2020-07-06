@@ -224,6 +224,29 @@ export default [
     ]
   },
   {
+    path: '/users',
+    component: Parent,
+    name: 'Users',
+    meta: {
+      icon: 'el-icon-s-custom',
+      bottom: true,
+      roles: ['Admin']
+    },
+    redirect: '/users/all',
+    children: [
+      {
+        path: 'all',
+        component: () => import('@/views/users/List'),
+        name: 'All',
+      },
+      {
+        path: ':id/detail',
+        component: () => import('@/views/users/Form'),
+        name: 'User',
+      },
+    ]
+  },
+  {
     path: '/roles',
     name: 'Roles',
     component: () => import('@/views/admin/roles/Index.vue'),

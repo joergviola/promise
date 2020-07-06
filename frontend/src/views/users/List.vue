@@ -4,6 +4,7 @@
       type="users"
       detail="/users"
       :columns="columns"
+      :query="query"
       :with="w"
       :template="template"
       create-by="button"
@@ -14,6 +15,7 @@
 
 <script>
 import GenericList from '@/components/generic/List'
+import api from '@/api'
 
 export default {
   name: 'UserList',
@@ -22,14 +24,13 @@ export default {
     return {
       template: {  },
       w: { 
-        organisation: { one: 'organisation' },
         role: { one: 'role' },
       },
+      query: { organisation_id: api.user().organisation_id },
       type: 'users',
       columns: [
         { name: 'name', label: 'Name', editable: true },
         { name: 'email', label: 'E-mail', editable: true },
-        { name: 'organisation.name', label: 'Company' },
         { name: 'role.name', label: 'Role' },
       ]
     }

@@ -53,6 +53,13 @@ export default {
       'user_id': 'Benutzer',
       'role': 'Rolle',
       'parttime': 'Zuordnung',
+      'salary': 'Gehalt',
+      'type': 'Typ',
+      'type-options': {
+        'ILL': 'Krankheit',
+        'HOLIDAY': 'Urlaub',
+        'CONTRACT': 'Arbeitsvertrag',
+      },
       'from': 'Von',
       'to': 'Bis',
       'comment': 'Kommentar',
@@ -230,6 +237,12 @@ export default {
       'TESTED': 'Getestet',
       'DEPLOYED': 'Installiert',
 
+    },
+    'user': {
+      'Details': 'Details',
+      'Timeline': 'Stundenzettel',
+      'Contracts': 'Vertrag',
+      'TimesOff': 'Krankheit/Urlaub',
     },
 },
   'route': {
