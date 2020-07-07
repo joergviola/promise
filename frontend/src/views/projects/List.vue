@@ -23,7 +23,7 @@ export default {
       w: { customer: { one: 'organisation', 'this': 'customer_id' }},
       type: 'project',
       columns: [
-        { name: 'name', label: 'Name', editable: true },
+        { name: 'name', label: 'Name' },
         { name: 'customer.name', label: 'Customer' },
         { name: 'state', label: 'State' },
         { name: 'used', budget: 'planned', label: 'Progress', type: 'progress' },

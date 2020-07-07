@@ -52,6 +52,13 @@ export default {
     'allocation': {
       'user_id': 'Benutzer',
       'role': 'Rolle',
+      'role-options': {
+        'Sales': 'Vertrieb',
+        'Mgmt': 'Projektmgmt',
+        'Dev': 'Entwicklung',
+        'QA': 'Test',
+        'Customer': 'Kunde',
+      },
       'parttime': 'Zuordnung',
       'salary': 'Gehalt',
       'type': 'Typ',
