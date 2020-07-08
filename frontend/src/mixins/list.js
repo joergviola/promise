@@ -40,6 +40,9 @@ export default {
     template() {
       this.getList()
     },
+    groupBy() {
+      this.getList()
+    },
     lists() {
       this.repairTextAreas()
     }

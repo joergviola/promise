@@ -200,6 +200,14 @@ export default {
         'alreadysent': 'Angebot wurde dem Kunden bereits zugestellt.',
       },
     },
+    'project': {
+      'tasks': {
+        'category': 'Kategorie',
+        'user': 'Verantwortlich',
+        'position': 'Angebot',
+        'none': 'Nicht gruppieren',
+      },
+    },
     'timeline': {
       'younow': 'Du, jetzt',
       'comment': 'Was hast Du erledigt?',

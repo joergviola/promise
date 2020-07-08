@@ -1,5 +1,11 @@
 <template>
   <div>
+    <el-radio-group v-model="groupBy">
+      <el-radio-button label="category">{{$t('ui.project.tasks.category')}}</el-radio-button>
+      <el-radio-button label="user">{{$t('ui.project.tasks.user')}}</el-radio-button>
+      <el-radio-button label="position">{{$t('ui.project.tasks.position')}}</el-radio-button>
+      <el-radio-button label="none">{{$t('ui.project.tasks.none')}}</el-radio-button>
+    </el-radio-group>
     <generic-list
       type="task"
       detail="task"
@@ -9,6 +15,8 @@
       :query="query"
       createBy="row"
       :allowDelete="true"
+      sort="sort_project"
+      :groupBy="groupBys[groupBy]"
     />
   </div>
 </template>
@@ -28,6 +36,7 @@ export default {
       w: {},
       query: { project_id: this.id, type: "DEV"  },
       type: 'task',
+      groupBy: 'category',
     }
   },
   computed: {
@@ -40,6 +49,14 @@ export default {
         { name: 'state', label: 'State' },
         { name: 'used', budget: 'planned', label: 'Progress', type: 'progress' },
       ]
+    },
+    groupBys() { 
+      return {
+        category: {field: 'category'},
+        user: {field: 'user_id', type: 'select', options: this.allocations, display: 'user.name', id: 'user.id'},
+        position: {field: 'position'},
+        none: null
+      }
     }
   },
   async created() {

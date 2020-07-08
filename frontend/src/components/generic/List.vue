@@ -12,16 +12,23 @@
       </el-col>
     </div>
     <div ref="groupedTable">
-      <div v-for="(group,groupIndex) in lists" :key="group.key" class="group">
-        <div v-if="group.header" class="grouped-header">
-          <i class="group-handle grab el-icon-menu"></i>
+      <div v-for="(group,groupIndex) in lists" :key="group.key" class="group"   :data-list="group.group">
+        <div v-if="groupBy && group.header" class="grouped-header">
+          <svg class="group-handle grab" focusable="false" viewBox="0 0 32 32"><path fill="#CCCCCC" d="M14,5.5c0,1.7-1.3,3-3,3s-3-1.3-3-3s1.3-3,3-3S14,3.8,14,5.5z M21,8.5c1.7,0,3-1.3,3-3s-1.3-3-3-3s-3,1.3-3,3S19.3,8.5,21,8.5z M11,12.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S12.7,12.5,11,12.5z M21,12.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S22.7,12.5,21,12.5z M11,22.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S12.7,22.5,11,22.5z M21,22.5c-1.7,0-3,1.3-3,3s1.3,3,3,3s3-1.3,3-3S22.7,22.5,21,22.5z"></path></svg>
           <i v-if="group.show" class="el-icon-caret-bottom"  @click="group.show = !group.show"/>
           <i v-if="!group.show" class="el-icon-caret-right"  @click="group.show = !group.show"/>
-          <el-input v-model="group.group" class="no-border heading" @change="groupChanged(group)"/>
+          <el-input v-if="!groupBy.type || groupBy.type=='text'" v-model="group.group" class="no-border heading" @change="groupChanged(group)"/>
+          <el-select v-else-if="groupBy.type=='select'" v-model="group.group" class="no-border heading" @change="groupChanged(group)">
+            <el-option 
+              v-for="(o, i) in groupBy.options" 
+              :key="i" 
+              :label="groupBy.display ? _.get(o, groupBy.display) : $t('type.'+type+'.'+groupBy.field+'-options.'+o)" 
+              :value="groupBy.id ? _.get(o, groupBy.id) :o" />
+          </el-select>
+
         </div>
         <el-table 
           v-if="group.show" 
-          :data-group="group.group" 
           ref="theTable" 
           v-loading="loading" 
           :show-header="groupIndex==0" 
@@ -166,7 +173,7 @@ export default {
 }
 </script>
 
-<style type="sass">
+<style>
 .input-disabled {
   padding: 0 15px;
 }
@@ -177,11 +184,40 @@ i.action {
   margin-top: 10px;
   margin-left: 10px;
 }
+i.grab {
+  color: #EEEEEE;
+  cursor: grab;
+  font-size: 17px;
+  vertical-align: -3px;
+}
 svg.grab {
   cursor: grab;
   height: 14px;
   width: 14px;
   vertical-align: -3px;
+}
+.group {
+  margin-top: 10px;
+}
+.group-handle {
+  margin-left: 10px;
+  margin-right: 8px;
+}
+.heading {
+  display: inline!important;
+  margin-left: 12px;
+}
+.heading.el-select>.el-input {
+  display: inline!important;
+}
+.heading input {
+  font-size: 120%;
+  font-weight: bold;
+  width: 30%;
+}
+.grouped-header .handle {
+  padding-left: 10px;
+  padding-right: 5px;
 }
 .el-table .cell {
   text-overflow: clip;
