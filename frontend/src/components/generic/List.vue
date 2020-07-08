@@ -35,6 +35,7 @@
           :data="group.list" 
           row-key="id" 
           fit
+          border
           @row-click="row => !hasEditable && detailClicked(row)">
           <el-table-column v-if="sort" label="" width="25">
             <template slot-scope="{row, $index}">
@@ -221,5 +222,16 @@ svg.grab {
 }
 .el-table .cell {
   text-overflow: clip;
+}
+
+.el-table--border {
+  border: none!important;
+}
+.el-table--border::after {
+  background-color: transparent!important;
+}
+.el-table--border td, .el-table--border th:not(:hover) {
+  border-left: none!important;
+  border-right: none!important;
 }
 </style>

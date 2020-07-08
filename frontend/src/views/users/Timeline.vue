@@ -31,7 +31,23 @@ export default {
         { name: 'from', label: 'Started', type: 'datetime', editable: true, width: 180 },
         { name: 'used', label: 'Duration', editable: true },
         { name: 'comment', label: 'Comment', editable: true, width: 200 },
-      ]
+      ],
+      // filter: {
+      //   search: [
+      //     {name: 'customer.id'},
+      //     {name: 'project.id'},
+      //     {name: 'user.id'},
+      //     {name: 'from'},
+      //     {name: 'task.state'},
+      //   ],
+      //   group: [
+      //     {name: 'date', select: {sum: 'used'}},
+      //     {name: 'customer.name', select: ['min(date)', 'max(date)', 'sum(used)']},
+      //     {name: 'project', select: ['project.name', {used: 'sum'}]},
+      //     {name: 'user'},
+      //     {name: 'task.state'},
+      //   ]
+      // },
     }
   },
   computed: {
