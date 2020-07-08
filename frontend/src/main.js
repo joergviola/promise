@@ -9,6 +9,7 @@ import _ from 'lodash'
 import elementLocale from 'element-ui/lib/locale/lang/de'
 import './util/filters' 
 import localeDE from './lang/de'
+import localeEN from './lang/en'
 import moment from 'moment'
 
 Vue.prototype._ = _
@@ -23,7 +24,8 @@ Vue.use(ElementUI, {
 const i18n = new VueI18n({
   locale: 'de',
   messages: {
-    'de': localeDE
+    'de': localeDE,
+    'en': localeEN,
   }
 })
 moment.locale('de');

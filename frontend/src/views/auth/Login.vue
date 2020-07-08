@@ -32,7 +32,8 @@ export default {
     async login() {
       try {
         this.loading = true
-        const result = await api.login(this.email, this.password)
+        const user = await api.login(this.email, this.password)
+        this.$root.$i18n.locale = user.lang
         this.$router.push("/")
       } catch (error) {
         this.$notify.error({

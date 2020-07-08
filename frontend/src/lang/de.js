@@ -25,6 +25,11 @@ export default {
       'role': {
         'name': 'Role',
       },
+      'lang': 'Sprache',
+      'lang-options': {
+        'de': 'Deutsch',
+        'en': 'Englisch',
+      }
     },
     'project': {
       'name': 'Name',
