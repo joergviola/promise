@@ -40,6 +40,9 @@ export default {
     template() {
       this.getList()
     },
+    columns() {
+      this.getList()
+    },
     groupBy() {
       this.getList()
     },

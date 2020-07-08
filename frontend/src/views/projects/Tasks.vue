@@ -45,7 +45,7 @@ export default {
     columns() {
       return [
         { name: 'name', label: 'Name', editable: true, placeholder: "New Task..." },
-        { name: 'user_id', label: 'Responsible', editable: true, type: 'select', options: this.allocations, display: 'user.name', id: 'user.id', placeholder: 'New member...' },
+        { name: 'user_id', label: 'Responsible', editable: true, type: 'select', options: this.team, display: 'name', id: 'id', placeholder: 'New member...' },
         { name: 'due_at', label: 'Due', type: 'date', editable: true },
         { name: 'planned', label: 'Planned', editable: task=>task.position_id==null },
         { name: 'state', label: 'State' },
@@ -55,16 +55,19 @@ export default {
     groupBys() { 
       return {
         category: {field: 'category'},
-        user: {field: 'user_id', type: 'select', options: this.allocations, display: 'user.name', id: 'user.id'},
+        user: {field: 'user_id', type: 'select', options: this.team, display: 'name', id: 'id'},
         state: {field: 'state', type: 'select', options: ['NEW', 'APPROVED', 'PLANNED', 'STARTED', 'IMPLEMENTED', 'TESTED', 'DEPLOYED']},
         position: {field: 'position'},
         none: null
       }
+    },
+    team() {
+      return _.uniqBy(this.allocations.map(a => a.user), 'id')
     }
   },
-  async created() {
+  async mounted() {
     this.allocations = await api.find('allocation', {
-      and: { project_id: this.id, role: 'Dev' },
+      and: { project_id: this.id },
       with: { user: { one: 'users', this: 'user_id' }}
     })
   }
