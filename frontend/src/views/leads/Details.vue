@@ -91,10 +91,7 @@
     </el-row>
     <el-row type="flex">
       <el-col :span="24">
-        <el-button v-if="item.state=='LEAD' && !readonly" type="success" @click="save('ACCEPTED')">{{$t('ui.leads.accepted')}}</el-button>
-        <el-button v-if="item.state=='LEAD' && !readonly" type="danger" @click="save('REJECTED')">{{$t('ui.leads.rejected')}}</el-button>
         <el-button v-if="!readonly" type="primary" @click="save()">{{$t('ui.detail.save')}}</el-button>
-        <el-button v-if="item.state!='LEAD' && !readonly" type="primary" @click="save('LEAD')">{{$t('ui.leads.reset')}}</el-button>
         <el-button v-if="!item.template && !readonly" type="secondary" @click="saveAsTemplate(true)">{{$t('ui.leads.istemplate')}}</el-button>
         <el-button v-if="item.template && !readonly" type="secondary" @click="saveAsTemplate(false)">{{$t('ui.leads.notemplate')}}</el-button>
       </el-col>
