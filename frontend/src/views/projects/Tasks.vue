@@ -1,11 +1,5 @@
 <template>
   <div>
-    <el-radio-group v-model="groupBy">
-      <el-radio-button label="category">{{$t('ui.project.tasks.category')}}</el-radio-button>
-      <el-radio-button label="user">{{$t('ui.project.tasks.user')}}</el-radio-button>
-      <el-radio-button label="position">{{$t('ui.project.tasks.position')}}</el-radio-button>
-      <el-radio-button label="none">{{$t('ui.project.tasks.none')}}</el-radio-button>
-    </el-radio-group>
     <generic-list
       type="task"
       detail="task"
@@ -17,7 +11,15 @@
       :allowDelete="true"
       sort="sort_project"
       :groupBy="groupBys[groupBy]"
-    />
+    >
+      <el-radio-group v-model="groupBy" slot="header">
+        <el-radio-button label="none">{{$t('ui.project.tasks.none')}}</el-radio-button>
+        <el-radio-button label="category">{{$t('ui.project.tasks.category')}}</el-radio-button>
+        <el-radio-button label="user">{{$t('ui.project.tasks.user')}}</el-radio-button>
+        <el-radio-button label="state">{{$t('ui.project.tasks.state')}}</el-radio-button>
+        <el-radio-button label="position">{{$t('ui.project.tasks.position')}}</el-radio-button>
+      </el-radio-group>
+    </generic-list>
   </div>
 </template>
 
@@ -36,7 +38,7 @@ export default {
       w: {},
       query: { project_id: this.id, type: "DEV"  },
       type: 'task',
-      groupBy: 'category',
+      groupBy: 'none',
     }
   },
   computed: {
@@ -54,6 +56,7 @@ export default {
       return {
         category: {field: 'category'},
         user: {field: 'user_id', type: 'select', options: this.allocations, display: 'user.name', id: 'user.id'},
+        state: {field: 'state', type: 'select', options: ['NEW', 'APPROVED', 'PLANNED', 'STARTED', 'IMPLEMENTED', 'TESTED', 'DEPLOYED']},
         position: {field: 'position'},
         none: null
       }

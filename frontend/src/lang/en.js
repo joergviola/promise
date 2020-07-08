@@ -198,6 +198,14 @@ export default {
         'alreadysent': 'Offer is already sent.',
       },
     },
+    'project': {
+      'tasks': {
+        'none': 'Group:',
+        'category': 'Category',
+        'user': 'Responsible',
+        'position': 'Offer',
+      },
+    },
     'timeline': {
       'younow': 'You, now',
       'comment': 'What have you done?',

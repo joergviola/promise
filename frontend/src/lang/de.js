@@ -97,6 +97,15 @@ export default {
       'due_at': 'Fällig am',
       'user_id': 'Verantwortlich',
       'state': 'Zustand',
+      'state-options': {
+        'NEW': 'Nicht freigegeben',
+        'APPROVED': 'Backlog',
+        'PLANNED': 'Sprint',
+        'STARTED': 'Heute',
+        'IMPLEMENTED': 'Umgesetzt',
+        'TESTED': 'Getestet',
+        'DEPLOYED': 'Installiert',
+      },
       'used': 'Fortschritt',
     },
     'estimation': {
@@ -202,10 +211,11 @@ export default {
     },
     'project': {
       'tasks': {
+        'none': 'Gruppieren nach:',
         'category': 'Kategorie',
         'user': 'Verantwortlich',
         'position': 'Angebot',
-        'none': 'Nicht gruppieren',
+        'state': 'Zustand',
       },
     },
     'timeline': {
@@ -256,7 +266,6 @@ export default {
       'IMPLEMENTED': 'Umgesetzt',
       'TESTED': 'Getestet',
       'DEPLOYED': 'Installiert',
-
     },
     'user': {
       'Details': 'Details',
