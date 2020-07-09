@@ -67,53 +67,62 @@ export default {
   },
   methods: {
     async reload() {
-      this.loading = true
-      const tasks = await api.find('task', {
-        and: {
-          id: this.tid
-        },
-        with: {
-          actions: {
-            many: 'action',
-            query: {
-              with: {
-                user: { one: 'users', this: 'user_id' }
-              },
-              order: {
-                to: 'DESC'
-              }
-            }
-          }
-        }
-      })
-      this.task = tasks[0]
-      this.actions = this.task.actions
-      if (this.detail) {
-        const logs = await api.log('task', this.tid)
-        if (logs.length>0) {
-          let state = {}
-          logs.forEach(l => {
-            const content = l.content
-            const diff = {}
-            for (let key in content) {
-              if (content[key] && content[key]!==state[key]) {
-                switch (key) {
-                  case 'name': diff.Name = content.name; break;
-                  case 'state': diff.State = content.state; break;
-                  case 'planned': diff.Planned = content.planned; break;
-                  case 'user_id': diff.Assigned = content.user_id; break;
+      try {
+        this.loading = true
+        const tasks = await api.find('task', {
+          and: {
+            id: this.tid
+          },
+          with: {
+            actions: {
+              many: 'action',
+              query: {
+                with: {
+                  user: { one: 'users', this: 'user_id' }
+                },
+                order: {
+                  to: 'DESC'
                 }
               }
             }
-            state = Object.assign(state, content)
-            if (_.isEmpty(diff)) return
-            const entry = {$log: true, user: l.user, to: l.created_at, diff: diff}
-            this.actions.push(entry)
-          })
+          }
+        })
+        this.task = tasks[0]
+        this.actions = this.task.actions
+        if (this.detail) {
+          const logs = await api.log('task', this.tid)
+          if (logs.length>0) {
+            let state = {}
+            logs.forEach(l => {
+              const content = l.content
+              const diff = {}
+              for (let key in content) {
+                if (content[key] && content[key]!==state[key]) {
+                  switch (key) {
+                    case 'name': diff.Name = content.name; break;
+                    case 'state': diff.State = content.state; break;
+                    case 'planned': diff.Planned = content.planned; break;
+                    case 'user_id': diff.Assigned = content.user_id; break;
+                  }
+                }
+              }
+              state = Object.assign(state, content)
+              if (_.isEmpty(diff)) return
+              const entry = {$log: true, user: l.user, to: l.created_at, diff: diff}
+              this.actions.push(entry)
+            })
+          }
+          this.actions.sort((a, b) => new Date(b.to) - new Date(a.to))
         }
-        this.actions.sort((a, b) => new Date(b.to) - new Date(a.to))
+        this.action =  { project_id: this.task.project_id, task_id: this.task.id }
+      } catch (error) {
+        this.$notify({
+          title: 'Error',
+          message: error.message,
+          type: 'error',
+          duration: 5000
+        })
       }
-      this.action =  { project_id: this.task.project_id, task_id: this.task.id }
       this.loading = false
     },
     timestamp(action) {

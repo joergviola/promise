@@ -146,7 +146,6 @@ export default [
     name: 'Projects',
     meta: {
       icon: 'el-icon-folder',
-      roles: ['Admin']
     },
     redirect: '/projects/all',
     children: [
