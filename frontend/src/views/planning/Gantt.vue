@@ -247,8 +247,8 @@ export default {
       }
 
       function overlap(off, allocation) {
-        const from = allocation.from || allocation.project.starts_at
-        const to = allocation.to || allocation.project.ends_at
+        const from = allocation.from || dates[0]
+        const to = allocation.to || dates[1]
         return {
           from: new Date(Math.max(off.from, from)),
           to: new Date(Math.min(off.to, to)),
