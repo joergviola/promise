@@ -14,6 +14,7 @@
         {{$t('ui.planning.save')}}
       </el-button>
     </div>
+
     <el-dialog
       :title="dialogTitle"
       :visible.sync="selected.task!=null"
@@ -50,6 +51,38 @@
         <el-button v-if="selected.isNew" type="primary" @click="saveSelected(true)">{{$t('ui.planning.create')}}</el-button>
       </span>
     </el-dialog>
+
+    <el-dialog
+      :title="selected.project ? selected.project.name : ''"
+      :visible.sync="selected.project!=null"
+      width="80%"
+      center>
+      <el-form label-position="top">
+        <el-form-item :label="$t('ui.planning.date')">
+          <el-date-picker
+            v-model="selected.date"
+            type="daterange"
+            value-format="yyyy-MM-dd"
+            :pickerOptions="{firstDayOfWeek: 1}"
+          />
+        </el-form-item>
+
+        {{$t('ui.planning.staffing')}}
+
+        <el-table :data="staffing" fit>
+          <el-table-column :label="$t('type.allocation.user_id')" prop="label" />
+          <el-table-column :label="$t('type.allocation.type')" prop="type" />
+          <el-table-column :label="$t('type.allocation.from')+' - '+$t('type.allocation.to')" prop="date" width="170"/>
+          <el-table-column :label="$t('type.allocation.parttime')" prop="parttime" align="right" />
+          <el-table-column :label="$t('ui.planning.workdays')" align="right" prop="workdays" />
+        </el-table>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="selected = {}">{{$t('ui.planning.cancel')}}</el-button>
+        <el-button type="primary" @click="saveProject">{{$t('ui.planning.save')}}</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -90,7 +123,6 @@ export default {
         let cl = 'gantt-normal'
         let title = p.name
         if (p.starts_at && p.ends_at) {
-          console.log(p.name)
           const buffer = this.calcBuffer(p)
           if (buffer>=0 && buffer<20) cl = 'gantt-warn'
           else if (buffer < 0) cl = 'gantt-critical'
@@ -152,6 +184,78 @@ export default {
 
       return {tasks, rows}
     },
+    staffing() {
+      if (!this.selected.project) return []
+
+      const project = this.selected.project
+      const dates = this.getSelectedDates()
+
+      const result = []
+      let total = 0
+      this.users.forEach(u => {
+        const off = u.allocations
+          .filter(a => a.type=='ILL' || a.type=='HOLIDAY')
+
+        u.allocations.forEach(a => {
+          if (a.project_id!=project.id || a.role!='Dev') return
+          const workdays = (a.parttime || 100)/100 * this.workdays(a.from || dates[0], a.to  || dates[1], [])
+          total += workdays
+          result.push({
+            label: a.user.name,
+            type: a.type,
+            date: dateRange(a),
+            parttime: (a.parttime || 100) + ' %',
+            workdays: workdays
+          })
+          off.forEach(o => {
+            const ov = overlap(o, a)
+            if (ov.from<ov.to) {
+              const workdays = -(a.parttime || 100)/100 * this.workdays(ov.from, ov.to, [])
+              total += workdays
+              result.push({
+                label: '',
+                type: o.type,
+                date: dateRange(o),
+                parttime: (o.parttime || 100) + ' %',
+                workdays: workdays
+              })
+            }
+          })
+        })
+      })
+      result.push({
+        label: this.$t('ui.planning.total'),
+        workdays: total
+      })
+      result.push({
+        label: this.$t('ui.planning.planned'),
+        workdays: project.planned + ' h = ' + Math.round(project.planned / 8)
+      })
+      result.push({
+        label: this.$t('ui.planning.buffer'),
+        workdays: Math.round((total * 8 / project.planned - 1) * 100) + ' %'
+      })
+      return result
+
+      const self = this
+
+      function dateRange(a) {
+        if (!a.from && !a.to) return ;
+        return (moment(a.from).format('L') || '') 
+          + ' - ' 
+          + (moment(a.to).format('L') || '')
+      }
+
+      function overlap(off, allocation) {
+        const from = allocation.from || allocation.project.starts_at
+        const to = allocation.to || allocation.project.ends_at
+        return {
+          from: new Date(Math.max(off.from, from)),
+          to: new Date(Math.min(off.to, to)),
+        }
+      } 
+
+    }
   },
   methods: {
     packTasks(rowname, tasks, firstRow, user=null) {
@@ -264,6 +368,31 @@ export default {
           type: task.allocation.type=='PROJECT' ? task.allocation.project_id : task.allocation.type
         }
       }
+      if (task.project) {
+        this.selected = {
+          project: task.project,
+          date: [task.project.starts_at || '', task.project.ends_at || ''],
+          staffing: this.staffing
+        }
+      }
+    },
+    getSelectedDates() {
+      const date = this.selected.date
+      const result = [null, null]
+      if (date[0]!='') result[0] = new Date(date[0])
+      if (date[1]!='') {
+        result[1] = new Date(date[1])
+        result[1].setDate(result[1].getDate() + 1);
+      }
+      return result
+    },
+    saveProject() {
+      let p = this.selected.project
+      console.log('save', p)
+      const dates = this.getSelectedDates()
+      p.starts_at = dates[0]
+      p.ends_at = dates[1]
+      this.selected = {}
     },
     saveSelected(create = false) {
       const a = this.selected.task.allocation

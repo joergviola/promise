@@ -239,6 +239,11 @@ export default {
       'save': 'Save',
       'delete': 'Delete',
       'create': 'Create',
+      'staffing': 'Staffing',
+      'workdays': 'Workdays',
+      'total': 'Total',
+      'planned': 'Planned',
+      'buffer': 'Buffer',
       'exit': {
         'title': 'You have unsaved changes.',
         'warning': 'Warning!',

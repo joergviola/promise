@@ -251,6 +251,11 @@ export default {
       'save': 'Speichern',
       'delete': 'Löschen',
       'create': 'Anlegen',
+      'staffing': 'Personalplanung',
+      'workdays': 'Arbeitstage',
+      'total': 'Gesamt',
+      'planned': 'Geplant',
+      'buffer': 'Puffer',
       'exit': {
         'title': 'Es sind nicht gespeicherte Änderungen vorhanden.',
         'warning': 'Warnung!',
