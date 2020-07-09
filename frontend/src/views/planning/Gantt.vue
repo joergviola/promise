@@ -392,6 +392,13 @@ export default {
       const dates = this.getSelectedDates()
       p.starts_at = dates[0]
       p.ends_at = dates[1]
+      if (!this.modified) this.modified = {}
+      if (!this.modified.projects) this.modified.projects = {}
+      this.modified.projects[p.id] = {
+        starts_at: api.date(p.starts_at),
+        ends_at: api.date(p.ends_at)
+      }
+
       this.selected = {}
     },
     saveSelected(create = false) {
