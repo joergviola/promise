@@ -10,9 +10,11 @@
             <el-button type="secondary" @click="$router.go(-1)">
               {{$t('ui.detail.cancel')}}
             </el-button>
-            <el-button v-for="(button, i) in buttons" :key="i" type="danger" @click="click(button)">
+            <span v-for="(button, i) in buttons" :key="i" >
+            <el-button v-if="!button.show || button.show(item)" type="danger" @click="click(button)">
               {{ $t('ui.button.'+button.label) }}
             </el-button>
+            </span>
             <el-button type="primary" @click="save">
               {{$t('ui.detail.save')}}
             </el-button>

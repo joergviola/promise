@@ -28,11 +28,10 @@ export default {
         { name: 'used', label: 'Used', disabled: true, postfix: this.item?this.item.effort_unit:'' },
         { name: 'state', disabled: true, label: 'State' },
       ],
-      allButtons: [
-        {label: 'start', action: item => item.state='STARTED', shown: item => item.state === 'ACCEPTED', andSave: true },
-        {label: 'Send', action: item => item.state='SENT', andSave: true },
-        {label: 'Accepted', action: item => item.state='ACCEPTED', andSave: true },
-        {label: 'Rejected', action: item => item.state='REJECTED', andSave: true }
+      buttons: [
+        {label: 'Maintenance', show: item=>item.state==='ACCEPTED', action: item => item.state='MAINTENANCE', andSave: true },
+        {label: 'Closed', show: item=>item.state==='ACCEPTED' || item.state==='MAINTENANCE', action: item => item.state='CLOSED', andSave: true },
+        {label: 'Reopen', show: item=>item.state==='CLOSE' || item.state==='MAINTENANCE', action: item => item.state='ACCEPT', andSave: true },
       ]
     }
   },
@@ -40,19 +39,6 @@ export default {
     item() {
       this.$route.matched[1].meta.title = this.item.name
       this.$emit('update', this.item)
-    }
-  },
-  computed: {
-    buttons() {
-      const workflow = {
-        'NEW': ['Send'],
-        'SENT': ['Accepted', 'Rejected', 'Reset'],
-        'ACCEPTED': ['Reset'],
-        'REJECTED': ['Reset'],
-      }
-      if (!this.item) return []
-      const valid = workflow[this.item.state]
-      return this.allButtons.filter(b => valid.indexOf(b.label)!=-1)
     }
   },
 }

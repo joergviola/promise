@@ -1,11 +1,11 @@
 
 <script>
-import { Line } from 'vue-chartjs'
+import { Scatter } from 'vue-chartjs'
 import api from '@/api'
 
 export default {
   name: 'Burndown',
-  extends: Line,
+  extends: Scatter,
   props: ['id', 'height'],
   data() {
       return {
@@ -15,6 +15,11 @@ export default {
           },
           options: {
             scales: {
+            xAxes: [{
+                type: 'time',
+                ticks: {source: 'data'},
+                bounds: 'ticks'
+            }]
             }
           },
           project: null,
@@ -62,27 +67,31 @@ export default {
         {
           label: 'Burndown',
           backgroundColor: '#00A4FF',
-          data: diffs.map(diff => diff.planned),
-					lineTension: 0,
+          data: diffs.map(diff => ({x: this.getDate(diff.day), y:diff.planned})),
+          lineTension: 0,
+          showLine: true,
         },
         {
           label: 'Used',
           backgroundColor: '#f87979',
-          data: diffs.map(diff => diff.check),
+          data: diffs.map(diff => ({x: this.getDate(diff.day), y:diff.check})),
 					lineTension: 0,
+          showLine: true,
         },
         {
           label: 'Effort',
           backgroundColor: '#DDDDDD',
-          data: diffs.map(diff => diff.used),
+          data: diffs.map(diff => ({x: this.getDate(diff.day), y:diff.used})),
           fill: false,
 					lineTension: 0,
+          showLine: true,
         },
         {
           label: 'Projection',
           backgroundColor: '#44DD88',
-          data: diffs.map(diff => diff.projection),
+          data: diffs.map(diff => ({x: this.getDate(diff.day), y:diff.projection})),
 					lineTension: 0,
+          showLine: true,
         },
       ]
     },
@@ -102,7 +111,8 @@ export default {
     calcPlannedDiff(days) {
       this.project.tasks.forEach(task => {
         const state = {}
-        task.log.forEach(log => {
+        this.lastOfDays(task.log)
+          .forEach(log => {
           const content = JSON.parse(log.content)
           if (content.state != null) {
             if (state[content.state]) return
@@ -112,7 +122,7 @@ export default {
             if (!days[day].planned) days[day].planned = 0
             if (!days[day].check) days[day].check = 0
             switch(content.state) {
-              case 'APPROVED': 
+              case 'NEW': 
                 days[day].planned += task.planned; 
                 days[day].check += task.planned
                 break;
@@ -129,10 +139,27 @@ export default {
         })
       })
     },
+    lastOfDays(logs) {
+      if (logs.length==0) return []
+      const result = []
+      let last = logs[0]
+      let lastDay = this.getDay(last.created_at)
+      logs.forEach(log => {
+        const day = this.getDay(log.created_at)
+        if (day==lastDay) {
+        } else {
+          result.push(last)
+          lastDay = this.getDay(log.created_at)
+        }
+        last = log
+      });
+      result.push(logs[logs.length-1])
+      return result;
+    },
     calcProjection(days) {
       const lastDay = days[days.length-1]
       const today = lastDay.day
-      let left = lastDay.planned
+      let left = lastDay.check
       lastDay.projection = left
       const allocations = this.project.allocations
         .filter(a => a.role=='Dev')
@@ -141,9 +168,9 @@ export default {
           to: this.getDay(a.to || this.project.ends_at),
           parttime: a.parttime
         }))
-      const end = Math.max(... allocations.map(a => a.to))
-      let day = today+1
-      while (day <= end) {
+      const end = this.getDay(this.project.ends_at)
+      let day = this.nextDay(today)
+      while (left>0 || day <= end) {
         const cont = allocations
           .filter(a => a.from <= day && a.to >= day)
           .reduce((cont, a) => cont += (a.parttime || 100), 0)
@@ -153,10 +180,13 @@ export default {
           day: day,
           projection: left
         })
+        day = this.nextDay(day)
+      }    
+    },
+    nextDay(day) {
         const date = this.getDate(day)
         date.setDate(date.getDate() + 1);
-        day = this.getDay(date)
-      }    
+        return this.getDay(date)
     },
     // 20200520
     getDay(date) {
@@ -164,13 +194,13 @@ export default {
         date = new Date(date)
       }
       return date.getDate()
-        + 100*date.getMonth()
+        + 100*(date.getMonth()+1)
         + 10000*date.getFullYear()
     },
 
     getDate(d) {
         const day = d % 100
-        const month = Math.floor(d/100) % 100
+        const month = Math.floor(d/100) % 100 - 1
         const year = Math.floor(d/10000)
         return new Date(year, month, day)
     },

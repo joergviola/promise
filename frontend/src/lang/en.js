@@ -179,6 +179,8 @@ export default {
       'Ready': 'Completed',
       'Accept': 'Accept',
       'Reject': 'Reject',
+      'Maintenance': 'Maintenance',
+      'Reopen': 'Reopen',
     },
     'leads': {
       'open': 'Open',
@@ -202,6 +204,9 @@ export default {
       },
     },
     'project': {
+      'accepted': 'In work',
+      'maintenance': 'In maintenance',
+      'closed': 'Closed',
       'tasks': {
         'none': 'Group:',
         'category': 'Category',

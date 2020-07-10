@@ -182,7 +182,7 @@ export default {
     'button': {
       'Send': 'Senden',
       'Copy': 'Kopieren',
-      'Closed': 'Installiert',
+      'Closed': 'Abgeschlossen',
       'Reset': 'Zurücksetzen',
       'Approve': 'Freigeben',
       'Plan': 'Bald erledigen',
@@ -190,6 +190,8 @@ export default {
       'Ready': 'Fertig',
       'Accept': 'Angenommen',
       'Reject': 'Abgelehnt',
+      'Maintenance': 'Wartung',
+      'Reopen': 'Wieder öffnen',
     },
     'leads': {
       'open': 'In Arbeit',
@@ -213,6 +215,9 @@ export default {
       },
     },
     'project': {
+      'accepted': 'In Arbeit',
+      'maintenance': 'In Wartung',
+      'closed': 'Abgeschlossen',
       'tasks': {
         'none': 'Gruppieren nach:',
         'category': 'Kategorie',
