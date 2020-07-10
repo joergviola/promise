@@ -163,8 +163,9 @@ export default {
       'today': 'Heute',
       'upcoming': 'Demnächst',
       'time': 'Zeit erfassen',
-      'notask': 'Wähle eine Aufgabe von heute',
+      'notask': 'Wähle eine Aufgabe',
       'projects': 'Deine Projekte',
+      'otherTasks' : 'Andere Aufgaben',
     },
     'list': {
       'actions': 'Aktionen',

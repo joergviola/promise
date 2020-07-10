@@ -10,6 +10,8 @@ use App\Events\ApiBeforeReadEvent;
 use App\Events\ApiAfterReadEvent;
 use App\Events\ApiBeforeUpdateEvent;
 use App\Events\ApiAfterUpdateEvent;
+use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -31,6 +33,7 @@ class API {
         $user = $access['user'];
         event(new ApiBeforeReadEvent($user, $type, $query));
         $q = self::provider($type);
+        $q = self::select($q, $query);
         $q = self::join($q, $query, $type);
         $q = self::where($q, $query);
         $q = self::order($q, $query);
@@ -39,7 +42,7 @@ class API {
             $q = self::where($q, ['and' => $access['where']]);
         }
         $q = self::page($q, $query);
-//        \Log::debug('API query SQL', ['query'=>$q->toSQL()]);
+        \Log::debug('API query SQL', ['query'=>$q->toSQL()]);
         $result = $q->get();
         if (isset($query['with'])) {
             foreach ($query['with'] as $field => $with) {
@@ -51,6 +54,45 @@ class API {
         $result = self::count($result, $query, $type, $user);
 
         return $result;
+    }
+
+    /*
+        'select' => [
+            'name',
+            'title',
+            ['sum' => 'cost', 'as'=>'c']
+        ],
+        'group' => ['name', 'title'],
+    */
+    private static function selectFunction($q, $column, $function, $tmpl) {
+        $field = $column[$function];
+        $sql = str_replace('#', $field, $tmpl);
+        if (isset($column['as'])) {
+            $sql .= ' ' . $column['as'];
+        }
+        return $q->selectRaw($sql);
+    }
+
+    private static function select($q, $query) {
+        if (isset($query['select'])) {
+            foreach($query['select'] as $column) {
+                if (is_array($column)) {
+                    if (isset($column['sum'])) {
+                        $q = self::selectFunction($q, $column, 'sum', "sum(`#`)");
+                    } else if (isset($column['max'])) {
+                        $q = self::selectFunction($q, $column, 'max', "max(`#`)");
+                    } else {
+                        throw new Exception('Unknown function: ' . json_encode($column));
+                    }
+                } else {
+                    $q = $q->addSelect($column);
+                }
+            }
+        }
+        if (isset($query['group'])) {
+            $q = $q->groupBy($query['group']);
+        }
+        return $q;
     }
 
     private static function count($result, $query, $type, $user) {

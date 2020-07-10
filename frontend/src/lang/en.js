@@ -152,8 +152,9 @@ export default {
       'today': 'Today',
       'upcoming': 'Upcoming',
       'time': 'Book time',
-      'notask': 'Select a task of today',
+      'notask': 'Select a task',
       'projects': 'Your projects',
+      'otherTasks' : 'Other tasks',
     },
     'list': {
       'actions': 'Actions',

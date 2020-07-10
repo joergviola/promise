@@ -3,11 +3,10 @@
     <h2>{{$t('ui.home.welcome', {user: user.name}) }}</h2>
     <el-row :gutter="20">
       <el-col :span="8">
-        <el-card>
-          <div slot="header" class="clearfix">
-            {{$t('ui.home.tasks')}}
+        <el-card class="mb-4">
+          <div slot="header" class="card-header">
+            <h4>{{$t('ui.home.today')}}</h4>
           </div>
-          <h4>{{$t('ui.home.today')}}</h4>
           <draggable class="list-group" :list="today" group="tasks" @change="dragToday">
             <div v-for="task in today" :class="['task', {selected: selected==task}]" :key="task.id" @click="selected = task">
               <div class="header">
@@ -34,9 +33,13 @@
               />
             </div>
           </draggable>
-          <h4>{{$t('ui.home.upcoming')}}</h4>
+        </el-card>
+        <el-card>
+          <div slot="header" class="card-header">
+            <h4>{{$t('ui.home.upcoming')}}</h4>
+          </div>
           <draggable class="list-group" :list="current" group="tasks" @change="dragCurrent">
-            <div v-for="task in current" :class="['task', {selected: selected==task}]" :key="task.id"  @click="selected = null">
+            <div v-for="task in current" :class="['task', {selected: selected==task}]" :key="task.id" @click="selected = task">
               <div class="header">
                 {{task.project.name}}
                 <router-link :to="`/projects/project/${task.project.id}/detail`">
@@ -63,18 +66,44 @@
       </el-col>
       <el-col :span="8">
         <el-card>
-          <div slot="header" class="clearfix">
-            {{$t('ui.home.time')}}
-          </div>
+          <div slot="header"class="card-header">
             <h4 v-if="selected">{{selected.name}}</h4>
             <h4 v-if="!selected">{{$t('ui.home.notask')}}</h4>
+          </div>
           <task-timeline v-if="selected" :tid="selected.id" />
         </el-card>
       </el-col>
       <el-col :span="8">
+        <el-card v-if="actions.length>0" class="mb-4">
+          <div slot="header" class="card-header">
+            <h4>{{$t('ui.home.otherTasks')}}</h4>
+          </div>
+          <div v-for="action in actions" class="task" :key="action.task.id"  @click="selected = action.task">
+            <div class="header">
+                {{action.task.project.name}}
+                <router-link :to="`/projects/project/${action.task.project_id}/detail`">
+                    &gt;
+                </router-link>
+              <span class="pull-right"> 
+                {{action.fr | date}}
+              </span>
+            </div>
+            <div class="body pull-clear">
+                {{action.task.name}} 
+                <router-link :to="`/projects/project/${action.task.project_id}/task/${action.task.id}/detail`">
+                    &gt;
+                </router-link>
+            </div>
+            <progress-bar
+              :used="action.task.used"
+              :planned="action.task.planned"
+              :width="2"
+            />
+          </div>
+        </el-card>
         <el-card>
-          <div slot="header" class="clearfix">
-            {{$t('ui.home.projects')}}
+          <div slot="header" class="card-header">
+            <h4>{{$t('ui.home.projects')}}</h4>
           </div>
           <div v-for="allocation in allocations" class="task" :key="allocation.id">
             <div class="header">
@@ -120,6 +149,7 @@ export default {
       today: [],
       current: [],
       allocations: [],
+      actions: [],
       selected: null,
     }
   },
@@ -174,10 +204,30 @@ export default {
       })
       this.allocations = allocations.filter(a => !a.project.template)
     },
+    async loadActions() {
+      const actions = await api.find('action', {
+        select: ['task_id', {max: 'from', as: 'fr'}],
+        group: ['task_id'],
+        and: { 'action.user_id': this.user.id },
+        with: {
+          task: { 
+            one: 'task',
+            query: {
+              with: {
+                project: { one: 'project' }
+              },
+            }
+          },
+        },
+        order: {'fr': 'DESC'},
+      })
+      this.actions = actions.filter(action => action.task.user_id!=this.user.id)
+    },
   },
   async mounted() {
     this.loadTasks()
     this.loadProjects()
+    this.loadActions()
   },
 }
 </script>
@@ -202,4 +252,10 @@ export default {
   a
     text-decoration: none
 
+.mb-4
+  margin-bottom: 20px
+
+.card-header
+  height: 20px 
+  margin-top: -20px 
 </style>
