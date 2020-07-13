@@ -6,7 +6,7 @@
   "scripts": {
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
-    "push": "vuepress build docs;sh docs/.vuepress/push.sh"
+    "push": "sh ./push.sh"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,7 @@
     "postcss-purgecss": "^2.0.3",
     "tailwindcss": "^1.4.6",
     "vuepress": "^1.5.0",
+    "vuepress-plugin-dehydrate": "^1.1.4",
     "vuepress-plugin-font-awesome": "^1.90.6"
   },
   "resolutions": {

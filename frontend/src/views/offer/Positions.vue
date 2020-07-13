@@ -1,6 +1,6 @@
 <template>
   <div>
-    <generic-list
+    <gl-table
       type="position"
       :columns="columns"
       :with="w"
@@ -57,12 +57,13 @@
 </template>
 
 <script>
+import glTable from 'gluon-frontend/gl-table'
 import GenericList from '@/components/generic/List'
 import api from '@/api'
 
 export default {
   name: 'OfferPositionList',
-  components: { GenericList },
+  components: { GenericList, glTable },
   props: ['id', 'oid'],
   computed: {
     positions() {

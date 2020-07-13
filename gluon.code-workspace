@@ -5,6 +5,18 @@
 		},
 		{
 			"path": "../applate"
+		},
+		{
+			"path": "../gluon-api"
+		},
+		{
+			"path": "../gluon-ui"
+		},
+		{
+			"path": "../gluon-frontend"
+		},
+		{
+			"path": "../gluon-backend"
 		}
 	],
 	"settings": {

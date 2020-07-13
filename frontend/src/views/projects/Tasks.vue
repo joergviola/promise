@@ -1,6 +1,6 @@
 <template>
   <div>
-    <generic-list
+    <gl-table
       type="task"
       detail="task"
       :columns="columns"
@@ -19,17 +19,18 @@
         <el-radio-button label="state">{{$t('ui.project.tasks.state')}}</el-radio-button>
         <el-radio-button label="position">{{$t('ui.project.tasks.position')}}</el-radio-button>
       </el-radio-group>
-    </generic-list>
+    </gl-table>
   </div>
 </template>
 
 <script>
+import glTable from 'gluon-frontend/gl-table'
 import GenericList from '@/components/generic/List'
 import api from '@/api'
 
 export default {
   name: 'ProjectTaskList',
-  components: { GenericList },
+  components: { GenericList, glTable },
   props: ['id'],
   data() {
     return {

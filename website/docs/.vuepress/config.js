@@ -10,7 +10,17 @@ module.exports = {
     base: '/gluon-project.com/',
     title: "gluon-project",
     description: "Project lifecycle management software for service companies",
-    plugins:  ['@limdongjin/vuepress-plugin-simple-seo', {}],
+    plugins:  {
+      '@limdongjin/vuepress-plugin-simple-seo': {},
+      dehydrate: {
+        // disable SSR
+        noSSR: [],
+        // remove scripts
+        noScript: [
+          '**/*.html',
+        ],
+      },
+    },
     themeConfig: {
       nav: [
         {
