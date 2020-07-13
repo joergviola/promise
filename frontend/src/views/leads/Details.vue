@@ -28,8 +28,8 @@
           </el-form-item>
           <el-form-item :label="$t('type.project.customer_id')">
             <el-select v-model="item.customer_id" @change="customerChanged" placeholder="New ..." :disabled="readonly">
-              <el-option v-for="(o, i) in customers" :key="i" :label="o.name" :value="o.id" />
               <el-option key="new" :label="$t('ui.list.add')" :value="null" />
+              <el-option v-for="(o, i) in customers" :key="i" :label="o.name" :value="o.id" />
             </el-select>
             <el-button class="default" @click="showCustomer=!showCustomer">
               {{$t('ui.detail.details')}}
@@ -55,8 +55,8 @@
           </el-collapse-transition>
           <el-form-item :label="$t('type.project.contact')">
             <el-select v-model="item.contact.user_id" @change="contactChanged" placeholder="New ..." :disabled="readonly">
-              <el-option v-for="(o, i) in contacts" :key="i" :label="o.name" :value="o.id" />
               <el-option key="new" :label="$t('ui.list.add')" :value="null" />
+              <el-option v-for="(o, i) in contacts" :key="i" :label="o.name" :value="o.id" />
             </el-select>
             <el-button class="default" @click="showContact=!showContact">
               {{$t('ui.detail.details')}}
