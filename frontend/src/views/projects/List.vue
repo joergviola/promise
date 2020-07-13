@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <generic-list
+    <gl-table
       type="project"
       detail="/projects/project"
       :columns="columns"
@@ -16,16 +16,16 @@
           <el-option value="CLOSED" :label="$t('ui.project.closed')" />
         </el-select>
       </span>
-    </generic-list>
+    </gl-table>
   </div>
 </template>
 
 <script>
-import GenericList from '@/components/generic/List'
+import GlTable from 'gluon-frontend/gl-table'
 
 export default {
   name: 'ProjectList',
-  components: { GenericList },
+  components: { GlTable },
   data() {
     return {
       show: 'ACCEPTED',
