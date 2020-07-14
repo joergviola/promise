@@ -1,19 +1,26 @@
 <template>
   <div class="components-container">
-    <generic-details type="users" :id="$route.params.id" :fields="fields" :with="w" :image="image" @update="onUpdate"/>
+    <gl-editor 
+      type="users" 
+      :id="$route.params.id" 
+      :fields="fields" 
+      :with="w" 
+      :image="image" 
+      @update="onUpdate"
+    />
   </div>
 </template>
 
 <script>
 
-import GenericDetails from '@/components/generic/Details'
+import GlEditor from 'gluon-frontend/gl-editor'
 import image from '@/assets/img/undraw_people_tax5.svg'
 import api from '@/api'
 import Vue from 'vue'
 
 export default {
   name: 'UserForm',
-  components: { GenericDetails },
+  components: { GlEditor },
   data() {
     return {
       image: image,

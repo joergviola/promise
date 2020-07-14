@@ -1,17 +1,25 @@
 <template>
   <div class="components-container">
-    <generic-details type="project" :id="id" :fields="fields" :buttons="buttons" :template="template" :image="image" @update="i => item=i"/>
+    <gl-editor 
+      type="project" 
+      :id="id" 
+      :fields="fields" 
+      :buttons="buttons" 
+      :template="template" 
+      :image="image" 
+      @update="i => item=i"
+    />
   </div>
 </template>
 
 <script>
 
-import GenericDetails from '@/components/generic/Details'
+import GlEditor from 'gluon-frontend/gl-editor'
 import image from '@/assets/img/undraw_maker_launch_crhe.svg'
 
 export default {
   name: 'ProjectDetails',
-  components: { GenericDetails },
+  components: { GlEditor },
   props: ['id'],
   data() {
     return {
