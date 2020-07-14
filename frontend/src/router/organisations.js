@@ -2,7 +2,7 @@ import Home from '@/views/Home.vue'
 import Parent from '@/router/view.vue'
 import Tabs from '@/components/layout/Tabs.vue'
 import GlTable from 'gluon-frontend/gl-table'
-import Details from '@/components/generic/Details.vue'
+import GlEditor from 'gluon-frontend/gl-editor'
 import ProjectTabs from '@/components/custom/ProjectTabs'
 
 export default {
@@ -36,7 +36,7 @@ export default {
     },
     {
       path: ':id/detail',
-      component: Details,
+      component: GlEditor,
       name: 'Organisation',
       props: route => ({
         type: 'organisation',
@@ -71,7 +71,7 @@ export default {
     },
     {
       path: ':id/:uid/detail',
-      component: Details,
+      component: GlEditor,
       name: 'User',
       props: route => ({
         type: 'users',

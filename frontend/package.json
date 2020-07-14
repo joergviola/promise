@@ -13,6 +13,7 @@
     "element-ui": "^2.13.1",
     "gluon-api": "file:../../gluon-api",
     "gluon-frontend": "file:../../gluon-frontend",
+    "gluon-ui": "file:../../gluon-ui",
     "loadash": "^1.0.0",
     "moment": "^2.25.3",
     "register-service-worker": "^1.7.1",

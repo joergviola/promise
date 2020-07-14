@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import LinkEditor from '@/components/generic/LinkEditor'
+import LinkEditor from 'gluon-ui/gl-linkEditor'
 import image from '@/assets/img/undraw_unboxing_pbmf.svg'
 import api from '@/api'
 

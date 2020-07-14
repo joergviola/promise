@@ -1,19 +1,28 @@
 <template>
   <div class="components-container">
-    <generic-details type="accounting" :id="oid" :fields="fields" :buttons="buttons" :with="w" :template="template" :image="image" @update="i => item=i" :reload="true"/>
+    <gl-editor 
+      type="accounting" 
+      :id="oid" 
+      :fields="fields" 
+      :buttons="buttons" 
+      :with="w" 
+      :template="template" 
+      :image="image" 
+      @update="i => item=i" 
+      :reload="true"
+    />
   </div>
 </template>
 
 <script>
-
-import GenericDetails from '@/components/generic/Details'
+import GlEditor from 'gluon-frontend/gl-editor'
 import image from '@/assets/img/undraw_discount_d4bd.svg'
 import api from '@/api'
 
 export default {
   name: 'OfferDetails',
   props: ['id', 'oid'],
-  components: { GenericDetails },
+  components: { GlEditor },
   computed: {
     buttons() {
       const workflow = {

@@ -1,17 +1,24 @@
 <template>
   <div class="components-container">
-    <generic-details type="task" :id="tid" :fields="fields" :buttons="buttons" :template="template" @update="update"/>
+    <gl-editor 
+      type="task" 
+      :id="tid" 
+      :fields="fields" 
+      :buttons="buttons" 
+      :template="template" 
+      @update="update"
+    />
   </div>
 </template>
 
 <script>
 
-import GenericDetails from '@/components/generic/Details'
+import GlEditor from 'gluon-frontend/gl-editor'
 
 export default {
   name: 'OfferDetails',
   props: ['id', 'tid'],
-  components: { GenericDetails },
+  components: { GlEditor },
   computed: {
     buttons() {
       const workflow = {

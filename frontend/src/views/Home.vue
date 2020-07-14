@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import ProgressBar from '@/components/generic/Progress'
+import ProgressBar from 'gluon-ui/gl-progress'
 import TaskTimeline from '@/components/custom/Timeline'
 import Draggable from 'vuedraggable'
 import api from '@/api'
