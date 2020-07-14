@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import Avatar from '@/components/generic/Avatar'
+import Avatar from 'gluon-ui/gl-avatar'
 import api from '@/api'
 import store from '@/util/Store.js'
 

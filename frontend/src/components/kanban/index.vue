@@ -24,7 +24,7 @@
 <script>
 import draggable from 'vuedraggable'
 import api from '@/api'
-import Avatar from '@/components/generic/Avatar'
+import Avatar from 'gluon-ui/gl-avatar'
 
 export default {
   name: 'DragKanbanDemo',
