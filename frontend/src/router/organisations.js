@@ -1,7 +1,7 @@
 import Home from '@/views/Home.vue'
 import Parent from '@/router/view.vue'
 import Tabs from '@/components/layout/Tabs.vue'
-import List from '@/components/generic/List.vue'
+import GlTable from 'gluon-frontend/gl-table'
 import Details from '@/components/generic/Details.vue'
 import ProjectTabs from '@/components/custom/ProjectTabs'
 
@@ -17,7 +17,7 @@ export default {
   children: [
     {
       path: 'all',
-      component: List,
+      component: GlTable,
       props: route => ({
         type: 'organisation',
         template: {  },
@@ -51,7 +51,7 @@ export default {
     },
     {
       path: ':id/users',
-      component: List,
+      component: GlTable,
       props: route => ({
         type: 'users',
         template: {  },

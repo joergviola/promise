@@ -3,7 +3,7 @@
   <div class="components-container">
     <el-tabs v-model="activeTab">
       <el-tab-pane key="1" label="Roles" name="1">
-        <generic-list
+        <gl-table
             type="role"
             :detail="showRole"
             :columns="roles.columns"
@@ -13,7 +13,7 @@
         />
       </el-tab-pane>
       <el-tab-pane v-if="role" key="2" label="Rights" name="2">
-        <generic-list
+        <gl-table
             type="right"
             :columns="rights.columns"
             :with="rights.w"
@@ -26,11 +26,11 @@
 </template>
 
 <script>
-import GenericList from '@/components/generic/List'
+import GlTable from 'gluon-frontend/gl-table'
 
 export default {
   name: 'Roles',
-  components: { GenericList },
+  components: { GlTable },
   data() {
     return {
       activeTab: "1",

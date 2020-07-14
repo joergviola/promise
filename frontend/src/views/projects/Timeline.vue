@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <generic-list
+    <gl-table
       type="action"
       :columns="columns"
       :with="w"
@@ -11,11 +11,11 @@
 </template>
 
 <script>
-import GenericList from '@/components/generic/List'
+import GlTable from 'gluon-frontend/gl-table'
 
 export default {
   name: 'ProjectTimeline',
-  components: { GenericList },
+  components: { GlTable },
   props: ['id'],
   data() {
     return {

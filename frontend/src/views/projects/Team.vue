@@ -1,5 +1,5 @@
 <template>
-  <generic-list
+  <gl-table
     type="allocation"
     :columns="columns"
     :with="w"
@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import GenericList from '@/components/generic/List'
+import GlTable from 'gluon-frontend/gl-table'
 import api from '@/api'
 
 export default {
   name: 'ProjectAllocationList',
-  components: { GenericList },
+  components: { GlTable },
   props: ['id'],
   data() {
     return {

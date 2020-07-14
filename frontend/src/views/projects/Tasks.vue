@@ -25,12 +25,11 @@
 
 <script>
 import glTable from 'gluon-frontend/gl-table'
-import GenericList from '@/components/generic/List'
 import api from '@/api'
 
 export default {
   name: 'ProjectTaskList',
-  components: { GenericList, glTable },
+  components: { glTable },
   props: ['id'],
   data() {
     return {

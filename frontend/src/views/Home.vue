@@ -134,7 +134,6 @@
 </template>
 
 <script>
-import GenericList from '@/components/generic/List'
 import ProgressBar from '@/components/generic/Progress'
 import TaskTimeline from '@/components/custom/Timeline'
 import Draggable from 'vuedraggable'
@@ -142,7 +141,7 @@ import api from '@/api'
 
 export default {
   name: 'Dashboard',
-  components: { GenericList, TaskTimeline, Draggable, ProgressBar },
+  components: { TaskTimeline, Draggable, ProgressBar },
   data() {
     return {
       user: api.user(),

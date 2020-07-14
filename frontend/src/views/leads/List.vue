@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <generic-list
+    <gl-table
       type="project"
       detail="/leads/lead"
       :query="query"
@@ -27,17 +27,17 @@
             </el-dropdown-menu>
           </el-dropdown>
       </span>
-    </generic-list>
+    </gl-table>
   </div>
 </template>
 
 <script>
-import GenericList from '@/components/generic/List'
+import GlTable from 'gluon-frontend/gl-table'
 import api from '@/api'
 
 export default {
   name: 'LeadList',
-  components: { GenericList },
+  components: { GlTable },
   data() {
     return {
       show: 'OPEN',

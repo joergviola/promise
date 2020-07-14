@@ -1,6 +1,6 @@
 <template>
   <div class="components-container">
-    <generic-list
+    <gl-table
       type="allocation"
       :columns="columns"
       :with="w"
@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import GenericList from '@/components/generic/List'
+import GlTable from 'gluon-frontend/gl-table'
 
 export default {
   name: 'UserList',
-  components: { GenericList },
+  components: { GlTable },
   props: ['id', 'user', 'types'],
   data() {
     return {

@@ -57,13 +57,12 @@
 </template>
 
 <script>
-import glTable from 'gluon-frontend/gl-table'
-import GenericList from '@/components/generic/List'
+import GlTable from 'gluon-frontend/gl-table'
 import api from '@/api'
 
 export default {
   name: 'OfferPositionList',
-  components: { GenericList, glTable },
+  components: { GlTable },
   props: ['id', 'oid'],
   computed: {
     positions() {
