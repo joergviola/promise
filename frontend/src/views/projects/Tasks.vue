@@ -54,7 +54,7 @@ export default {
     },
     groupBys() { 
       return {
-        category: {field: 'category'},
+        category: {field: 'category', reduce:[{name:'planned', method:'sum'}]},
         user: {field: 'user_id', type: 'select', options: this.team, display: 'name', id: 'id'},
         state: {field: 'state', type: 'select', options: ['NEW', 'APPROVED', 'PLANNED', 'STARTED', 'IMPLEMENTED', 'TESTED', 'DEPLOYED']},
         position: {field: 'position'},

@@ -1,6 +1,6 @@
 import Home from '@/views/Home.vue'
 import Parent from '@/router/view.vue'
-import Tabs from '@/components/layout/Tabs.vue'
+import Tabs from 'gluon-frontend/gl-tabs.vue'
 import GlTable from 'gluon-frontend/gl-table'
 import GlEditor from 'gluon-frontend/gl-editor'
 import ProjectTabs from '@/components/custom/ProjectTabs'

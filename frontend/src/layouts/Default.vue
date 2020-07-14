@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import Header from '@/components/layout/Header'
-import Sidebar from '@/components/layout/Sidebar'
+import Header from 'gluon-frontend/gl-header'
+import Sidebar from 'gluon-frontend/gl-sidebar'
 
 export default {
   name: 'default-layout',

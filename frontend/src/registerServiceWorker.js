@@ -2,6 +2,8 @@
 
 import { register } from 'register-service-worker'
 
+const UpdatedEvent = new CustomEvent('swUpdated', { detail: null });
+
 if (process.env.NODE_ENV === 'production') {
   register(`${process.env.BASE_URL}service-worker.js`, {
     ready () {
@@ -21,6 +23,7 @@ if (process.env.NODE_ENV === 'production') {
     },
     updated () {
       console.log('New content is available; please refresh.')
+      document.dispatchEvent(UpdatedEvent);
     },
     offline () {
       console.log('No internet connection found. App is running in offline mode.')

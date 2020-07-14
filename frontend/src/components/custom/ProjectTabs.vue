@@ -7,7 +7,7 @@
 <script>
 
 import api from '@/api'
-import Tabs from '@/components/layout/Tabs'
+import Tabs from 'gluon-frontend/gl-tabs'
 import store from '@/util/Store.js'
 
 export default {

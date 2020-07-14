@@ -3,6 +3,7 @@
     <component :is="layout">
       <router-view />
     </component>
+
   </div>
 </template>
 
@@ -16,6 +17,26 @@ export default {
   computed: {
     layout() {
       return (this.$route.meta.layout || 'default') + '-layout'
+    }
+  },
+  mounted () {
+    document.addEventListener('swUpdated', this.showRefreshUI);
+  },
+  beforeDestroy () {
+    document.removeEventListener('swUpdated', this.showRefreshUI);
+  },
+  methods: {
+    async showRefreshUI() {
+      try {
+        await this.$confirm('New version is available', 'Reload?', {
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No',
+          type: 'warning'
+        })
+      } catch (cancel) {
+        return
+      }
+      window.location.reload(true)
     }
   }
 }
