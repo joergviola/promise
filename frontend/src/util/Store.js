@@ -1,3 +1,4 @@
 export default {
-  breadcrumbs: []
+  breadcrumbs: [],
+  action: null,
 }

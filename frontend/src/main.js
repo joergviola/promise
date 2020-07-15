@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import _ from 'lodash'
 import elementLocale from 'element-ui/lib/locale/lang/de'
 import './util/filters' 
+import init from './util/init' 
 import localeDE from './lang/de'
 import localeEN from './lang/en'
 import moment from 'moment'
@@ -37,3 +38,5 @@ new Vue({
   i18n,
   render: h => h(App)
 }).$mount('#app')
+
+init()

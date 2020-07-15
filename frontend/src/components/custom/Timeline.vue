@@ -4,28 +4,35 @@
       <el-card>
         <el-form>
           <el-form-item>
-            <el-input v-model="action.comment" :rows="1" type="textarea" autosize :placeholder="$t('ui.timeline.comment')" />
+            <el-input v-model="action.comment" :rows="1" type="textarea" :autosize="{minRows: 2}" :placeholder="$t('ui.timeline.comment')" />
           </el-form-item>
           <el-form-item  v-if="task.state != 'NEW'">
-            <el-input v-model="duration" type="text" placeholder="hh:mm [hh:mm]" />
+            <el-input v-model="duration" type="text" placeholder="hh:mm [hh:mm]" >
+              <el-button v-if="!action.id && duration==''" type="secondary" slot="append" @click="save(null)">
+                <i class="el-icon-arrow-right"/>
+              </el-button>
+              <el-button v-if="action.id && isStarted(action)" type="secondary" slot="append" @click="save(null)">
+                <i class="el-icon-check"/>
+              </el-button>
+            </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="secondary" @click="save(null)">
+            <el-button :disabled="duration==''" type="secondary" @click="save(null)">
               {{$t('ui.timeline.save')}}
             </el-button>
-            <el-button v-if="task.state == 'PLANNED'" type="danger" @click="save('STARTED')">
+            <el-button :disabled="duration==''" v-if="task.state == 'PLANNED'" type="danger" @click="save('STARTED')">
               {{$t('ui.timeline.start')}}
             </el-button>
-            <el-button v-if="task.state == 'STARTED'" type="danger" @click="save('IMPLEMENTED')">
+            <el-button :disabled="duration==''" v-if="task.state == 'STARTED'" type="danger" @click="save('IMPLEMENTED')">
               {{$t('ui.timeline.close')}}
             </el-button>
-            <el-button v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('STARTED')">
+            <el-button :disabled="duration==''" v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('STARTED')">
               {{$t('ui.timeline.reopen')}}
             </el-button>
-            <el-button v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('TESTED')">
+            <el-button :disabled="duration==''" v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('TESTED')">
               {{$t('ui.timeline.tested')}}
             </el-button>
-            <el-button v-if="task.state == 'TESTED'" type="danger" @click="save('DEPLOYED')">
+            <el-button :disabled="duration==''" v-if="task.state == 'TESTED'" type="danger" @click="save('DEPLOYED')">
               {{$t('ui.timeline.deployed')}}
             </el-button>
           </el-form-item>
@@ -42,6 +49,7 @@
 <script>
 import api from '@/api'
 import moment from 'moment'
+import store from '@/util/Store.js'
 
 export default {
   name: 'TaskTimeline',
@@ -54,7 +62,9 @@ export default {
       logs: [],
       duration: "",
       loading: null,
-      detail: false
+      detail: false,
+      timerId: null,
+      store: store,
     }
   },
   async created() {
@@ -114,7 +124,14 @@ export default {
           }
           this.actions.sort((a, b) => new Date(b.to) - new Date(a.to))
         }
-        this.action =  { project_id: this.task.project_id, task_id: this.task.id }
+        const started = this.actions.filter(action => this.isStarted(action))
+        if (started.length>0) {
+          this.action = started[0]
+          this.actions = this.actions.filter(action => !this.isStarted(action))
+          this.startTimer(this.action)
+        } else {
+          this.action =  { project_id: this.task.project_id, task_id: this.task.id }
+        }
       } catch (error) {
         this.$notify({
           title: 'Error',
@@ -125,6 +142,24 @@ export default {
       }
       this.loading = false
     },
+    isStarted(action) {
+      return action.from && !action.to
+    },
+    startTimer(action = null) {
+      if (action) this.timerId = action.id
+      else if (this.timerId!=this.action.id || !this.isStarted(this.action)) {
+        this.store.action = null
+        // Timer stops
+        console.log('timer is stopped')
+        return
+      }
+      const now = moment()
+      const duration = moment.duration(moment().diff(moment(this.action.from)))
+      this.duration = moment.utc(duration.asMilliseconds()).format("HH:mm")
+      this.timer = setTimeout(this.startTimer, 10*1000)
+      this.store.action = this.action
+      console.log('timer is running')
+    },
     timestamp(action) {
       const fromNow = moment(action.to).fromNow()
       let result = `${action.user.name}, ${fromNow}`
@@ -132,48 +167,69 @@ export default {
         for (let key in action.diff) {
           result += `, ${key}: ${action.diff[key]}`
         }
-      } else if (action.used) {
-        result += ', ' + action.used + ' ' +this.$tc('ui.timeline.hours', action.used)
+      } else if (action.used && action.user_id==api.user().id) {
+        result += ', ' + this.hours(action.used) + ' ' +this.$tc('ui.timeline.hours', action.used)
       }
       return result
     },
+    hours(h) {
+      const hours = Math.floor(h)
+      const minutes = Math.round(h*60 % 60)
+
+      return (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes)    
+    },
+    /*
+    Supported time entry formats:
+    "1" 1 hour until now
+    "1.5" 1.5 hours until now
+    "1:20" 1 hour 20 minutes until now
+    "" start timer
+    "08:10 10:20" from until to
+    */
     prepare(action) {
-      const fromTo = this.duration.split(' ')
+      let from = null
+      let to = null
+      let duration = null
 
-      let to = moment()
-      let duration = moment.duration(fromTo[0]).asHours()
-      if (fromTo[0].indexOf(':') === -1) duration = parseInt(fromTo[0])
-      let from = to.clone().subtract(duration, 'hours')
+      if (!this.duration) {
+        from = moment()
+      } else {
+        const fromTo = this.duration.split(' ')
 
-      if (fromTo.length === 2) {
-        from = moment(fromTo[0], 'H:m')
-        to = moment(fromTo[1], 'H:m')
-        duration = moment.duration(to.diff(from)).asHours()
+        to = moment()
+        duration = moment.duration(fromTo[0]).asHours()
+        if (fromTo[0].indexOf(':') === -1) duration = parseInt(fromTo[0])
+        from = to.clone().subtract(duration, 'hours')
+
+        if (fromTo.length === 2) {
+          from = moment(fromTo[0], 'H:m')
+          to = moment(fromTo[1], 'H:m')
+          duration = moment.duration(to.diff(from)).asHours()
+        }
       }
 
-      action.to = to.format('YYYY-MM-DD HH:mm:ss')
-      action.from = from.format('YYYY-MM-DD HH:mm:ss')
+      action.to = to ? to.format('YYYY-MM-DD HH:mm:ss') : null
+      action.from = from ? from.format('YYYY-MM-DD HH:mm:ss') : null
       action.used = duration
       action.user_id = api.user().id
     },
     async save(state=null) {
-      console.log('Saving', this.action)
       this.loading = true
       try {
         if (state) {
           this.task.state = state
           await api.update('task', this.task.id, {state: state})
         }
+        this.prepare(this.action)
         if (this.action.id) {
           await api.update('action', this.action.id, this.action)
         } else {
-          this.prepare(this.action)
-
           const result = await api.create('action', this.action)
           this.action.id = result.id
           this.task.used = parseFloat(this.task.used) + this.action.used
         }
         this.reload()
+        this.duration = ''
       } catch (error) {
         this.$notify({
           title: 'Error',
