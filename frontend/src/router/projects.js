@@ -52,7 +52,10 @@ export default   {
         {
           path: 'task/:tid/timeline',
           component: () => import('@/components/custom/Timeline'),
-          props: true,
+          props: route => ({
+            tid: route.params.tid,
+            history: true,
+          }),
           name: 'Work',
         },
         {

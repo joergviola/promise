@@ -16,23 +16,27 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button :disabled="duration==''" type="secondary" @click="save(null)">
+          <el-dropdown 
+            split-button 
+            type="primary" 
+            @command="save"
+            @click="save('IMPLEMENTED')">
+            {{$t('type.task.state-options.IMPLEMENTED')}}
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item
+                v-for="(state, i) in ['NEW', 'APPROVED', 'PLANNED', 'STARTED', 'IMPLEMENTED', 'TESTED', 'DEPLOYED']" 
+                :key="i" 
+                :command="state"
+              >
+                {{$t('type.task.state-options.'+state)}}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+          <el-button v-if="duration!=''" class="pull-right" type="primary" @click="save(null)">
             {{$t('ui.timeline.save')}}
           </el-button>
-          <el-button :disabled="duration==''" v-if="task.state == 'PLANNED'" type="danger" @click="save('STARTED')">
+          <el-button v-if="duration==''" class="pull-right" type="primary" @click="save(null)">
             {{$t('ui.timeline.start')}}
-          </el-button>
-          <el-button :disabled="duration==''" v-if="task.state == 'STARTED'" type="danger" @click="save('IMPLEMENTED')">
-            {{$t('ui.timeline.close')}}
-          </el-button>
-          <el-button :disabled="duration==''" v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('STARTED')">
-            {{$t('ui.timeline.reopen')}}
-          </el-button>
-          <el-button :disabled="duration==''" v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('TESTED')">
-            {{$t('ui.timeline.tested')}}
-          </el-button>
-          <el-button :disabled="duration==''" v-if="task.state == 'TESTED'" type="danger" @click="save('DEPLOYED')">
-            {{$t('ui.timeline.deployed')}}
           </el-button>
         </el-form-item>
       </el-form>
@@ -245,6 +249,7 @@ export default {
           this.action.id = result.id
           this.task.used = parseFloat(this.task.used) + this.action.used
         }
+        this.$emit('save', this.action)
         this.reload()
         this.duration = ''
       } catch (error) {

@@ -65,12 +65,43 @@
         </el-card>
       </el-col>
       <el-col :span="8">
-        <el-card>
+        <el-card class="mb-4">
           <div slot="header"class="card-header">
-            <h4 v-if="selected">{{selected.name}}</h4>
+            <h4 v-if="selected">
+              <router-link :to="`/projects/project/${selected.project_id}/task/${selected.id}/detail`">
+                {{selected.name}}
+              </router-link>
+            </h4>
             <h4 v-if="!selected">{{$t('ui.home.notask')}}</h4>
           </div>
-          <task-timeline v-if="selected" :tid="selected.id" />
+          <task-timeline v-if="selected" :tid="selected.id" @save="onSaveAction" />
+        </el-card>
+        <el-card class="mb-4">
+          <div slot="header"class="card-header">
+            <h4>{{$t('ui.home.today')}}</h4>
+          </div>
+          <div v-for="action in todaysActions" class="task" :key="action.id" @click="selected = action.task">
+            <div class="header">
+              <router-link :to="`/projects/project/${action.task.project_id}/detail`">
+                {{action.task.project.name}}
+              </router-link>
+              <span class="pull-right"> 
+                {{action.from | time}} - {{action.to | time}}
+              </span>
+            </div>
+            <div class="body pull-clear">
+              <router-link :to="`/projects/project/${action.task.project_id}/task/${action.task.id}/detail`">
+                {{action.task.name}} 
+              </router-link>
+              <span class="pull-right"> 
+                {{action.used | duration}}
+              </span>
+            </div>
+            <div class="header">
+             {{action.comment}} 
+            </div>
+          </div>
+          
         </el-card>
       </el-col>
       <el-col :span="8">
@@ -78,7 +109,7 @@
           <div slot="header" class="card-header">
             <h4>{{$t('ui.home.otherTasks')}}</h4>
           </div>
-          <div v-for="action in actions" class="task" :key="action.task.id"  @click="selected = action.task">
+          <div v-for="action in actions" class="task" :key="action.id"  @click="selected = action.task">
             <div class="header">
                 {{action.task.project.name}}
                 <router-link :to="`/projects/project/${action.task.project_id}/detail`">
@@ -139,6 +170,7 @@ import TaskTimeline from '@/components/custom/Timeline'
 import Draggable from 'vuedraggable'
 import api from '@/api'
 import store from '@/util/Store.js'
+import moment from 'moment'
 
 export default {
   name: 'Dashboard',
@@ -150,6 +182,7 @@ export default {
       current: [],
       allocations: [],
       actions: [],
+      todaysActions: [],
       selected: null,
       store: store,
     }
@@ -184,6 +217,10 @@ export default {
       const offset = this.today.length
       this.current.forEach((task, i) => data[task.id] = {sort_user: offset + i})
       await api.updateBulk('task', data)
+    },
+    onSaveAction() {
+      this.loadTodaysActions()
+      this.loadTasks()
     },
     async loadTasks() {
       const tasks = await api.find('task', {
@@ -227,11 +264,35 @@ export default {
       })
       this.actions = actions.filter(action => action.task.user_id!=this.user.id)
     },
+    async loadTodaysActions() {
+      const midnight = moment().utcOffset(0);
+      midnight.set({hour:0,minute:0,second:0,millisecond:0})
+      this.todaysActions = await api.find('action', {
+        and: { 
+          'user_id': this.user.id,
+          'to': {">=": midnight.format('YYYY-MM-DD HH:mm:ss')}
+        },
+        with: {
+          task: { 
+            one: 'task',
+            query: {
+              with: {
+                project: { one: 'project' }
+              },
+            }
+          },
+        },
+        order: {
+          to: 'DESC'
+        }
+      })
+    },
   },
   async mounted() {
     this.loadTasks()
     this.loadProjects()
     this.loadActions()
+    this.loadTodaysActions()
   },
 }
 </script>
@@ -253,8 +314,13 @@ export default {
     color: #AAAAAA
     font-size: 80%
 
-  a
-    text-decoration: none
+    a
+      color: #AAAAAA
+      text-decoration: none
+  .body
+    a
+      color: #303133
+      text-decoration: none
 
 .mb-4
   margin-bottom: 20px

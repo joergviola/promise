@@ -8,7 +8,7 @@
             <task-details :id="$route.params.id" :tid="$route.params.tid" v-on:update="t => task = t" />
           </el-tab-pane>
           <el-tab-pane lazy key="2" label="Timeline" name="2">
-            <task-timeline :id="$route.params.id" :task="task" />
+            <task-timeline :id="$route.params.id" :task="task" :history="true" />
           </el-tab-pane>
         </el-tabs>
       </el-col>
