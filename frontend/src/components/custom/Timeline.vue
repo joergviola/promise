@@ -17,6 +17,7 @@
         </el-form-item>
         <el-form-item>
           <el-dropdown 
+            v-if="duration!=''"
             split-button 
             type="primary" 
             @command="save"

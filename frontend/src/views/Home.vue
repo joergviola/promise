@@ -148,7 +148,7 @@
                 <router-link v-if="allocation.project.state=='LEAD'" :to="`/leads/lead/${allocation.project.id}/detail`">
                   &gt;
                 </router-link>
-                <router-link v-else :to="`/projects/project/${allocation.project.id}/detail`">
+                <router-link v-else :to="projectLink(allocation.project)">
                   &gt;
                 </router-link>
             </div>
@@ -207,6 +207,10 @@ export default {
          await this.saveTaskState(task)
        }
        await this.saveTaskOrder()
+    },
+    projectLink(project) {
+      if (project.state=='LEAD') return `/leads/lead/${project.id}/detail`
+      else return `/projects/project/${project.id}/detail`
     },
     async saveTaskState(task) {
       await api.update('task', task.id, {state: task.state})
