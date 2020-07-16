@@ -30,7 +30,7 @@ export default {
         { name: 'task.name', label: 'Task', width: 200 },
         { name: 'from', label: 'Started', type: 'datetime', editable: true, width: 180 },
         { name: 'used', label: 'Duration', editable: true },
-        { name: 'comment', label: 'Comment', editable: true, width: 200 },
+        { name: 'comment', type: 'textarea', editable: true, width: 200 },
       ],
       // filter: {
       //   search: [

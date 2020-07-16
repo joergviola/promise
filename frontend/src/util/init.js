@@ -21,7 +21,6 @@ async function getRunningAction() {
 }
 
 export default async function init() {
-  console.log ('initialising...', api.user())
   if (!api.user()) return;
 
   const action = await getRunningAction()

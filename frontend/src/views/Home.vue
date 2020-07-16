@@ -138,6 +138,7 @@ import ProgressBar from 'gluon-ui/gl-progress'
 import TaskTimeline from '@/components/custom/Timeline'
 import Draggable from 'vuedraggable'
 import api from '@/api'
+import store from '@/util/Store.js'
 
 export default {
   name: 'Dashboard',
@@ -150,6 +151,7 @@ export default {
       allocations: [],
       actions: [],
       selected: null,
+      store: store,
     }
   },
   methods: {
@@ -193,6 +195,9 @@ export default {
       })
       this.today = tasks.filter(t => t.state=='STARTED' && !t.project.template)
       this.current = tasks.filter(t => (t.state=='APPROVED' || t.state=='PLANNED') && !t.project.template)
+      if (store.action) {
+        this.selected = tasks.find(t => t.id==store.action.task_id)
+      }
     },
     async loadProjects() {
       const allocations = await api.find('allocation', {

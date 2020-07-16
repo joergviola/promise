@@ -28,7 +28,7 @@ export default {
         'STARTED': ['Ready', 'Reset'],
         'IMPLEMENTED': ['Tested', 'Started',  'Reset'],
         'TESTED': ['Closed', 'Reset'],
-        'CLOSEDD': ['Reset'],
+        'CLOSED': ['Reset'],
       }
       if (!this.item) return []
       const valid = workflow[this.item.state]

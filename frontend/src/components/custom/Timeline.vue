@@ -41,7 +41,7 @@
       <a class="detail" href="#" @click.prevent="toggleDetail">{{$t('ui.timeline.detail')}}</a>
     </el-timeline-item>
     <el-timeline-item v-for="(a,i) in actions" :key="i" :timestamp="timestamp(a)" placement="top">
-      <p>{{a.comment}}</p>
+      <pre class="comment">{{ a.comment }}</pre>
     </el-timeline-item>
   </el-timeline>
 </template>
@@ -79,6 +79,7 @@ export default {
     async reload() {
       try {
         this.loading = true
+        this.duration = null
         const tasks = await api.find('task', {
           and: {
             id: this.tid
@@ -148,7 +149,6 @@ export default {
     startTimer(action = null) {
       if (action) this.timerId = action.id
       else if (this.timerId!=this.action.id || !this.isStarted(this.action)) {
-        this.store.action = null
         // Timer stops
         console.log('timer is stopped')
         return
@@ -156,7 +156,7 @@ export default {
       const now = moment()
       const duration = moment.duration(moment().diff(moment(this.action.from)))
       this.duration = moment.utc(duration.asMilliseconds()).format("HH:mm")
-      this.timer = setTimeout(this.startTimer, 10*1000)
+      this.timer = setTimeout(this.startTimer, 1*1000)
       this.store.action = this.action
       console.log('timer is running')
     },
@@ -213,9 +213,21 @@ export default {
       action.used = duration
       action.user_id = api.user().id
     },
+    async stopRunning() {
+      if (store.action && this.action.id != store.action.id) {
+        const from = moment(store.action.from)
+        const to = moment()
+        await api.update('action', store.action.id, {
+          to: to.format('YYYY-MM-DD HH:mm:ss'),
+          used: moment.duration(to.diff(from)).asHours()
+        })
+        store.action = null
+      }
+    },
     async save(state=null) {
       this.loading = true
       try {
+        await this.stopRunning()
         if (state) {
           this.task.state = state
           await api.update('task', this.task.id, {state: state})
@@ -255,5 +267,9 @@ a.detail {
   float: right;
   color: #CCCCCC;
   padding-bottom: 10px;
+}
+
+pre.comment {
+  font-family: inherit;
 }
 </style>

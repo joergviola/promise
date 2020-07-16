@@ -7,7 +7,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import _ from 'lodash'
 import elementLocale from 'element-ui/lib/locale/lang/de'
-import './util/filters' 
+import 'gluon-ui/gl-filters' 
 import init from './util/init' 
 import localeDE from './lang/de'
 import localeEN from './lang/en'

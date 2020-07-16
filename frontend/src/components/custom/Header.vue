@@ -1,6 +1,6 @@
 <template>
   <gl-header>
-    <span slot="custom">
+    <span slot="custom" class="timer">
       <router-link v-if="store.action" :to="route">{{duration}}</router-link>
     </span>
   </gl-header>
@@ -36,3 +36,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.timer a {
+  text-decoration: none;
+}
+</style>
