@@ -236,6 +236,7 @@ export default {
       'reopen': 'Fehlerhaft',
       'tested': 'Getestet',
       'deployed': 'Installiert',
+      'history': 'Verlauf',
       'detail': 'Details',
       'hours': 'Stunde | Stunden'
     },

@@ -225,6 +225,7 @@ export default {
       'tested': 'Tested',
       'deployed': 'Installed',
       'detail': 'Details',
+      'history': 'History',
       'hours': 'Hour | Hours'
     },
     'planning': {

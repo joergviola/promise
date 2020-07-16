@@ -1,49 +1,53 @@
 <template>
-  <el-timeline  v-loading="loading">
-    <el-timeline-item :timestamp="$t('ui.timeline.younow')" placement="top">
-      <el-card>
-        <el-form>
-          <el-form-item>
-            <el-input v-model="action.comment" :rows="1" type="textarea" :autosize="{minRows: 2}" :placeholder="$t('ui.timeline.comment')" />
-          </el-form-item>
-          <el-form-item  v-if="task.state != 'NEW'">
-            <el-input v-model="duration" type="text" placeholder="hh:mm [hh:mm]" >
-              <el-button v-if="!action.id && duration==''" type="secondary" slot="append" @click="save(null)">
-                <i class="el-icon-arrow-right"/>
-              </el-button>
-              <el-button v-if="action.id && isStarted(action)" type="secondary" slot="append" @click="save(null)">
-                <i class="el-icon-check"/>
-              </el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button :disabled="duration==''" type="secondary" @click="save(null)">
-              {{$t('ui.timeline.save')}}
+  <div>
+    <el-card>
+      <el-form>
+        <el-form-item>
+          <el-input v-model="action.comment" :rows="1" type="textarea" :autosize="{minRows: 2}" :placeholder="$t('ui.timeline.comment')" />
+        </el-form-item>
+        <el-form-item  v-if="task.state != 'NEW'">
+          <el-input v-model="duration" type="text" placeholder="hh:mm [hh:mm]" >
+            <el-button v-if="!action.id && duration==''" type="secondary" slot="append" @click="save(null)">
+              <i class="el-icon-arrow-right"/>
             </el-button>
-            <el-button :disabled="duration==''" v-if="task.state == 'PLANNED'" type="danger" @click="save('STARTED')">
-              {{$t('ui.timeline.start')}}
+            <el-button v-if="action.id && isStarted(action)" type="secondary" slot="append" @click="save(null)">
+              <i class="el-icon-check"/>
             </el-button>
-            <el-button :disabled="duration==''" v-if="task.state == 'STARTED'" type="danger" @click="save('IMPLEMENTED')">
-              {{$t('ui.timeline.close')}}
-            </el-button>
-            <el-button :disabled="duration==''" v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('STARTED')">
-              {{$t('ui.timeline.reopen')}}
-            </el-button>
-            <el-button :disabled="duration==''" v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('TESTED')">
-              {{$t('ui.timeline.tested')}}
-            </el-button>
-            <el-button :disabled="duration==''" v-if="task.state == 'TESTED'" type="danger" @click="save('DEPLOYED')">
-              {{$t('ui.timeline.deployed')}}
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </el-card>
-      <a class="detail" href="#" @click.prevent="toggleDetail">{{$t('ui.timeline.detail')}}</a>
-    </el-timeline-item>
-    <el-timeline-item v-for="(a,i) in actions" :key="i" :timestamp="timestamp(a)" placement="top">
-      <pre class="comment">{{ a.comment }}</pre>
-    </el-timeline-item>
-  </el-timeline>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button :disabled="duration==''" type="secondary" @click="save(null)">
+            {{$t('ui.timeline.save')}}
+          </el-button>
+          <el-button :disabled="duration==''" v-if="task.state == 'PLANNED'" type="danger" @click="save('STARTED')">
+            {{$t('ui.timeline.start')}}
+          </el-button>
+          <el-button :disabled="duration==''" v-if="task.state == 'STARTED'" type="danger" @click="save('IMPLEMENTED')">
+            {{$t('ui.timeline.close')}}
+          </el-button>
+          <el-button :disabled="duration==''" v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('STARTED')">
+            {{$t('ui.timeline.reopen')}}
+          </el-button>
+          <el-button :disabled="duration==''" v-if="task.state == 'IMPLEMENTED'" type="danger" @click="save('TESTED')">
+            {{$t('ui.timeline.tested')}}
+          </el-button>
+          <el-button :disabled="duration==''" v-if="task.state == 'TESTED'" type="danger" @click="save('DEPLOYED')">
+            {{$t('ui.timeline.deployed')}}
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+    <div class="detail">
+    <a v-if="showHistory" href="#" @click.prevent="toggleDetail">{{$t('ui.timeline.detail')}}</a>
+    <span v-if="showHistory"> | </span>
+    <a href="#" @click.prevent="showHistory=!showHistory">{{$t('ui.timeline.history')}}</a>
+    </div>
+    <el-timeline v-if="showHistory" class="timeline" v-loading="loading">
+      <el-timeline-item v-for="(a,i) in actions" :key="i" :timestamp="timestamp(a)" placement="top">
+        <pre class="comment">{{ a.comment }}</pre>
+      </el-timeline-item>
+    </el-timeline>
+  </div>
 </template>
 
 <script>
@@ -53,7 +57,7 @@ import store from '@/util/Store.js'
 
 export default {
   name: 'TaskTimeline',
-  props: ['tid'],
+  props: ['tid', 'history'],
   data() {
     return {
       task: {},
@@ -63,6 +67,7 @@ export default {
       duration: "",
       loading: null,
       detail: false,
+      showHistory: this.history,
       timerId: null,
       store: store,
     }
@@ -79,7 +84,7 @@ export default {
     async reload() {
       try {
         this.loading = true
-        this.duration = null
+        this.duration = ''
         const tasks = await api.find('task', {
           and: {
             id: this.tid
@@ -156,7 +161,7 @@ export default {
       const now = moment()
       const duration = moment.duration(moment().diff(moment(this.action.from)))
       this.duration = moment.utc(duration.asMilliseconds()).format("HH:mm")
-      this.timer = setTimeout(this.startTimer, 1*1000)
+      this.timer = setTimeout(this.startTimer, 10*1000)
       this.store.action = this.action
       console.log('timer is running')
     },
@@ -262,11 +267,18 @@ export default {
 </script>
 
 <style scoped type="sass">
-a.detail {
+.detail {
   font-size: 80%;
   float: right;
   color: #CCCCCC;
-  padding-bottom: 10px;
+}
+
+.detail a {
+  color: #CCCCCC;
+}
+
+.timeline {
+  margin-top: 30px;
 }
 
 pre.comment {
