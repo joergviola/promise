@@ -3,7 +3,13 @@
     <div class="board-column-header">
       {{ headerText }}
     </div>
+    <div v-if="nodrag" class="board-column-content">
+      <div v-for="element in items" :key="element.id" class="board-item" @click="$emit('click', element)">
+        <slot :element="element"></slot>
+      </div>
+    </div>
     <draggable
+      v-else
       :list="items"
       v-bind="$attrs"
       class="board-column-content"
@@ -11,11 +17,7 @@
       @change="onChange"
     >
       <div v-for="element in items" :key="element.id" class="board-item" @click="$emit('click', element)">
-        <div>
-          <avatar :user="element.user" :size="25"/>
-          <span class="due">{{element.due_at | dateHuman}}</span>
-        </div>
-        <div>{{ element.name }}</div>
+        <slot :element="element"></slot>
       </div>
     </draggable>
   </div>
@@ -24,12 +26,11 @@
 <script>
 import draggable from 'vuedraggable'
 import api from '@/api'
-import Avatar from 'gluon-ui/gl-avatar'
 
 export default {
   name: 'DragKanbanDemo',
   components: {
-    draggable, Avatar
+    draggable
   },
   props: {
     headerText: {
@@ -51,7 +52,11 @@ export default {
     state: {
       type: String,
       default: null
-    }
+    },
+    nodrag: {
+      type: Boolean,
+      default: false
+    },
   },
   computed: {
     items() {return this.list.filter(t => t.state === this.state)}
@@ -78,6 +83,27 @@ export default {
   font-size: 80%;
   vertical-align: 60%;
   margin-left: 10px;
+}
+
+.board {
+  width: 100%;
+  margin-left: 0px;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: flex-start;
+  overflow-x: scroll;
+}
+.board-column.kanban {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 500px;
+  min-width: 150px;
+  max-width: 500px;
+  font-size: 14px;
+
+  .board-column-header {
+  }
 }
 
 .board-column {

@@ -9,18 +9,27 @@
       class="kanban" 
       :header-text="$t('ui.kanban.'+col.state)" 
       @click="onClick" 
-    />
+    >
+      <template slot-scope="{element}">
+        <div>
+          <avatar :user="element.user" :size="25"/>
+          <span class="due">{{element.due_at | dateHuman}}</span>
+        </div>
+        <div>{{ element.name }}</div>
+      </template>
+    </Kanban>
   </div>
 </template>
 
 <script>
 import api from '@/api'
 import Kanban from '@/components/kanban'
+import Avatar from 'gluon-ui/gl-avatar'
 
 export default {
   name: 'ProjectBoard',
   props: ['id'],
-  components: { Kanban },
+  components: { Kanban, Avatar },
   data() {
     return {
       columns: [

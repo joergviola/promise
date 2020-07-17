@@ -1,5 +1,6 @@
 import Parent from '@/router/view.vue'
 import ProjectTabs from '@/components/custom/ProjectTabs'
+import GlTabs from 'gluon-frontend/gl-tabs'
 import GlTable from 'gluon-frontend/gl-table'
 
 export default   {
@@ -13,8 +14,22 @@ export default   {
   children: [
     {
       path: 'all',
-      component: () => import('@/views/leads/List'),
+      component: GlTabs,
       name: 'Leads',
+      props: true,
+      redirect: 'all/list',
+      children: [
+        {
+          path: 'list',
+          component: () => import('@/views/leads/List'),
+          name: 'List',
+        },
+        {
+          path: 'funnel',
+          component: () => import('@/views/leads/Funnel'),
+          name: 'Funnel',
+        },
+      ]
     },
     {
       path: 'lead/:id',

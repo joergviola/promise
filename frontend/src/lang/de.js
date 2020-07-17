@@ -297,6 +297,8 @@ export default {
     'User': 'Person',
     'Sales': 'Vertrieb',
     'Leads': 'Anfragen',
+    'List': 'Alle',
+    'Funnel': 'Funnel',
     'Planning': 'Planung',
     'Projects': 'Projekte',
     'Roles': 'Rollen',
