@@ -5,13 +5,17 @@
       :key="i" 
       :list="projects" 
       :state="state" 
+      group="group" 
+      sum="last_offer.price:€"
       class="kanban" 
-      :header-text="$t('ui.kanban.'+state)" 
+      :header-text="$t('type.project.state-options.'+state)" 
       @click="onClick" 
+      @change="save"
     >
       <template slot-scope="{element}">
         <div>
           <span v-if="element.customer" class="customer">{{element.customer.name}}</span>
+          <span v-if="element.last_offer.price" class="customer pull-right">{{element.last_offer.price}} €</span>
         </div>
         <div>{{ element.name }}</div>
       </template>
@@ -22,6 +26,7 @@
 
 <script>
 import Kanban from '@/components/kanban'
+import states from '@/util/states'
 import api from '@/api'
 
 export default {
@@ -30,7 +35,7 @@ export default {
   data() {
     return {
       projects: [],
-      states: ['NEW', 'LEAD'],
+      states: states.project.filter(s=>s.lead).map(s=>s.state),
     }
   },
   computed: {
@@ -57,11 +62,16 @@ export default {
   },
   methods: {
     projectLink(project) {
-      if (project.state=='LEAD') return `/leads/lead/${project.id}/detail`
+      const state = states.project.find(s => s.state==project.state)
+      if (state.lead) return `/leads/lead/${project.id}/detail`
       else return `/projects/project/${project.id}/detail`
     },
     onClick(project) {
       this.$router.push(this.projectLink(project))
+    },
+    save(project, state) {
+      project.state = state
+      api.update('project', project.id, { state: state })
     }
   }
 }

@@ -5,10 +5,12 @@
       :key="i" 
       :list="tasks" 
       :state="col.state" 
-      :group="group" 
+      sum="planned:h"
+      group="group" 
       class="kanban" 
       :header-text="$t('ui.kanban.'+col.state)" 
       @click="onClick" 
+      @change="save"
     >
       <template slot-scope="{element}">
         <div>
@@ -41,7 +43,6 @@ export default {
         { state: 'TESTED', label: 'Tested' },
         { state: 'DEPLOYED', label: 'Deployed' },
       ],
-      group: 'mission',
       tasks: [],
       list1: [
         { name: 'Mission', id: 1 },
@@ -96,32 +97,9 @@ export default {
         }
       })
     },
-    close(task) {
-      task.state = 'CLOSED'
-      task.finished_at = api.datetime(new Date())
-      task.finished_by = api.user().id
-      this.save(task)
-    },
-    async save(task) {
-      console.log('Saving', task)
-      this.loading = true
-      try {
-        if (task.id) {
-          await api.update('task', task.id, task)
-        } else {
-          const result = await api.create('task', task)
-          task.id = result.id
-        }
-        this.reload()
-      } catch (error) {
-        this.$notify({
-          title: 'Error',
-          message: error.message,
-          type: 'error',
-          duration: 5000
-        })
-      }
-      this.loading = false
+    save(task, state) {
+      task.state = state
+      api.update('task', task.id, { state: state })
     },
     onClick(task) {
       this.$router.push(`task/${task.id}/detail`)

@@ -20,6 +20,7 @@
         <slot :element="element"></slot>
       </div>
     </draggable>
+    <span class="sum pull-right" v-if="sum">{{sumResult}}</span>
   </div>
 </template>
 
@@ -28,7 +29,7 @@ import draggable from 'vuedraggable'
 import api from '@/api'
 
 export default {
-  name: 'DragKanbanDemo',
+  name: 'KanbanColumn',
   components: {
     draggable
   },
@@ -53,13 +54,27 @@ export default {
       type: String,
       default: null
     },
+    sum: {
+      type: String,
+      default: null
+    },
     nodrag: {
       type: Boolean,
       default: false
     },
   },
   computed: {
-    items() {return this.list.filter(t => t.state === this.state)}
+    items() {return this.list.filter(t => t.state === this.state)},
+    sumResult() { 
+      const sum = this.sum.split(':')
+      return this.items.reduce((result, element) => {
+        const value = _.get(element, sum[0])
+        if (typeof value=='number')
+          return result+value
+          else return result
+      }, 0) 
+      + (sum.length>1 ? ' ' + sum[1] : '')
+    },
   },
   methods: {
     setData(dataTransfer) {
@@ -69,20 +84,19 @@ export default {
     },
     onChange(event) {
       if (!event.added) return
-      console.log('XXX', event)
-      const task = event.added.element
-      task.state = this.state
-      api.update('task', task.id, { state: task.state })
+      const element = event.added.element
+      this.$emit('change', element, this.state)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.due {
+.sum {
   color: #BBBBBB;
   font-size: 80%;
-  vertical-align: 60%;
-  margin-left: 10px;
+  padding-right: 10px;
+  margin-top: -10px;
+  margin-bottom: 5px;
 }
 
 .board {

@@ -34,6 +34,7 @@
 <script>
 import GlTable from 'gluon-frontend/gl-table'
 import api from '@/api'
+import states from '@/util/states'
 
 export default {
   name: 'LeadList',
@@ -55,12 +56,16 @@ export default {
           }
         },
       },
-      query: {state: 'LEAD', template: false},
+      query: {
+        state: {in: states.project.filter(s=>s.lead).map(s=>s.state)}, 
+        template: false
+      },
       type: 'project',
       columns: [
-        { name: 'name', label: 'Name', editable: true },
-        { name: 'customer.name', label: 'Customer', editable: false },
-        { name: 'last_offer.price', label: 'Last Offer', editable: false },
+        { name: 'name', editable: true },
+        { name: 'customer.name' },
+        { name: 'state'},
+        { name: 'last_offer.price' },
       ]
     }
   },
