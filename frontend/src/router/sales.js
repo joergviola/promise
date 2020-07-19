@@ -17,17 +17,17 @@ export default   {
       component: GlTabs,
       name: 'Leads',
       props: true,
-      redirect: 'all/list',
+      redirect: 'all/funnel',
       children: [
-        {
-          path: 'list',
-          component: () => import('@/views/leads/List'),
-          name: 'List',
-        },
         {
           path: 'funnel',
           component: () => import('@/views/leads/Funnel'),
           name: 'Funnel',
+        },
+        {
+          path: 'list',
+          component: () => import('@/views/leads/List'),
+          name: 'List',
         },
       ]
     },

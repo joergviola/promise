@@ -12,6 +12,7 @@ import init from './util/init'
 import localeDE from './lang/de'
 import localeEN from './lang/en'
 import moment from 'moment'
+import api from 'gluon-api'
 
 Vue.prototype._ = _
 
@@ -22,14 +23,17 @@ Vue.use(ElementUI, {
   size: 'small'
 });
 
+const user = api.user()
+const locale = user ? user.lang : 'de'
+
 const i18n = new VueI18n({
-  locale: 'de',
+  locale: locale,
   messages: {
     'de': localeDE,
     'en': localeEN,
   }
 })
-moment.locale('de');
+moment.locale(locale);
 
 Vue.config.productionTip = false
 

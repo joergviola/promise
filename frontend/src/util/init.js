@@ -2,7 +2,6 @@
 import api from 'gluon-api'
 import store from '@/util/Store.js'
 
-
 async function getRunningAction() {
   const actions = await api.find('action', {
     and: {

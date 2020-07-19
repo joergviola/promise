@@ -15,7 +15,7 @@
 
 import GlEditor from 'gluon-frontend/gl-editor'
 import image from '@/assets/img/undraw_people_tax5.svg'
-import api from '@/api'
+import api from 'gluon-api'
 import Vue from 'vue'
 
 export default {
@@ -52,6 +52,9 @@ export default {
       this.$emit('update', user)
       if (user.id === api.user().id) {
         this.$root.$i18n.locale = user.lang
+        const u = api.user()
+        u.lang = user.lang
+        api.user(u)
       }
     }
   }
