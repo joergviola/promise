@@ -8,7 +8,7 @@
       createBy="row"
       :allowDelete="true"
       sort="no"
-      @loaded="data => lists = data"
+      @loaded="data => list = data"
     />
     <el-row type="flex" >
       <el-col :span="24" class="text-right">
@@ -66,8 +66,7 @@ export default {
   props: ['id', 'oid'],
   computed: {
     positions() {
-      if (this.lists.length==0) return []
-      return this.lists[0].list
+      return this.list
     },
     total() {
       return 0
@@ -75,7 +74,6 @@ export default {
   },
   data() {
     return {
-      lists: [],
       showExport: false,
       template: { accounting_id: this.oid  },
       w: { },
@@ -89,7 +87,8 @@ export default {
         { name: 'optional', type: 'checkbox', label: 'Optional', editable: true },
         { name: 'accepted', type: 'checkbox', label: 'Accepted', editable: row => row.optional },
       ],
-      planned: {}
+      planned: {},
+      list: [],
     }
   }
 }
