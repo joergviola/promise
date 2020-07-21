@@ -7,14 +7,14 @@
           <div slot="header" class="clearfix">
             New in current release
           </div>
-          <h4> 08.07.20</h4>
-          Maintenance release.
+          <h4> 21.07.20</h4>
+          Task management and time tracking.
           <small>
           <ul>
-            <li>Project team selection</li>
-            <li>Project task grouping</li>
-            <li>Table column resize</li>
-            <li>Language selection de/en</li>
+            <li>Sales: Sales funnel visualisation</li>
+            <li>Home: Time booking on home, Timer, other tasks</li>
+            <li>Planning: Enhanced dialogs and project overview</li>
+            <li>UI: Enhanced grouping, changeable column width, language fixes</li>
           </ul>
           </small>
         </el-card>
@@ -43,6 +43,17 @@
           <div slot="header" class="clearfix">
             History
           </div>
+
+          <h4> 08.07.20</h4>
+          Maintenance release.
+          <small>
+          <ul>
+            <li>Project team selection</li>
+            <li>Project task grouping</li>
+            <li>Table column resize</li>
+            <li>Language selection de/en</li>
+          </ul>
+          </small>
 
           <h4> 02.07.20</h4>
           Maintenance release.
