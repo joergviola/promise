@@ -122,7 +122,7 @@ export default {
     },
     'estimation': {
       'planned': 'Schätzung',
-      'comment': 'Kommentar',
+      'comment': 'Kommentar zur Schätzung',
     },
     'action': {
       'project': {

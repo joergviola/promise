@@ -130,7 +130,7 @@
           </el-table-column>
 
 
-          <el-table-column :label="$t('type.estimation.planned')" min-width="60">
+          <el-table-column :label="$t('type.estimation.planned')" min-width="60" label-class-name="indie" class-name="indie">
             <template slot-scope="{row, $index}">
               <el-input
                 v-if="!row.purchased"
@@ -158,7 +158,7 @@
             </template>
           </el-table-column>
 
-          <el-table-column :label="$t('type.estimation.comment')" min-width="200">
+          <el-table-column :label="$t('type.estimation.comment')" min-width="200" label-class-name="indie" class-name="indie">
             <template slot-scope="{row, $index}">
               <el-input
                 v-if="!row.purchased"
@@ -414,5 +414,8 @@ i.grab {
 }
 .el-table .cell {
   text-overflow: clip;
+}
+.indie {
+  background-color: #EEEEEE;
 }
 </style>

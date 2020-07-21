@@ -111,7 +111,7 @@ export default {
     },
     'estimation': {
       'planned': 'Estimation',
-      'comment': 'Comment',
+      'comment': 'Estimation comment',
     },
     'action': {
       'project': {
