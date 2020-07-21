@@ -226,6 +226,11 @@ export default {
         'readonly': 'Nicht mehr änderbar.',
         'alreadysent': 'Angebot wurde dem Kunden bereits zugestellt.',
       },
+      'offer': {
+        'export': 'Export nach Word',
+        'total': 'Gesamt',
+        'close': 'Schliessen',
+      }
     },
     'project': {
       'accepted': 'In Arbeit',

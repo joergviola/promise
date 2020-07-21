@@ -26,7 +26,7 @@
         </p>
         <input type="email" placeholder="Your e-mail address" class="md:text-xl text-black w-64 -mr-2 py-2 pl-4 rounded-l-full outline-none shadow-lg">
         <button class="rounded-r-full bg-secondary hover:underline text-white md:text-xl text-bold py-2 pl-4 pr-6  shadow-lg">Apply</button>
-        <div class="text-xs text-gray-800 mt-2 mx-32">
+        <div class="text-xs text-gray-800 mt-2">
           (We are from germany and underly GDPR. 
           So we certainly will not spam you and remove your address on request immediately.)
         </div>

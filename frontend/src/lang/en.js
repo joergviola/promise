@@ -215,6 +215,11 @@ export default {
         'readonly': 'Readonly.',
         'alreadysent': 'Offer is already sent.',
       },
+      'offer': {
+        'export': 'Export to Word',
+        'total': 'Total',
+        'close': 'Close',
+      }
     },
     'project': {
       'accepted': 'In work',
