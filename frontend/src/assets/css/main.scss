@@ -46,6 +46,11 @@ input, select, textarea {
   clear: both;
 }
 
+.mb-4 {
+  margin-bottom: 20px
+}
+
+
 .no-border .el-input__inner, .no-border .el-textarea__inner {
   border: none;
 }

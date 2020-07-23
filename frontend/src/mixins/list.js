@@ -291,7 +291,8 @@ export default {
     },
     async onEnter(row, groupIndex, column, index) {
       if (!row.id) {
-        await this.create(row)
+        // This will be done by onChange
+        // await this.create(row)
         return
       } else {
         const newItem = this.addNew(groupIndex, index+1)

@@ -326,9 +326,6 @@ export default {
       color: #303133
       text-decoration: none
 
-.mb-4
-  margin-bottom: 20px
-
 .card-header
   height: 20px 
   margin-top: -20px 

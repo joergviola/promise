@@ -416,6 +416,5 @@ i.grab {
   text-overflow: clip;
 }
 .indie {
-  background-color: #EEEEEE;
 }
 </style>

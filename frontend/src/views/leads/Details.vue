@@ -38,7 +38,7 @@
             </el-button>
           </el-form-item>
           <el-collapse-transition>
-            <el-card v-show="showCustomer">
+            <el-card v-show="showCustomer" class="mb-4">
               <el-form-item :label="$t('type.organisation.name')">
                 <el-input v-model="item.customer.name" type="text"  :disabled="readonly"/>
               </el-form-item>
@@ -65,7 +65,7 @@
             </el-button>
           </el-form-item>
           <el-collapse-transition>
-            <el-card v-show="showContact">
+            <el-card v-show="showContact" class="mb-4">
               <el-form-item :label="$t('type.users.name')">
                 <el-input v-model="item.contact.user.name" type="text" :disabled="readonly"/>
               </el-form-item>

@@ -63,7 +63,7 @@ export default {
           mask: {
             name: tmpl.name + ' (Copy)',
             template: false,
-//            customer_id: null
+            customer_id: null
           },
           refs: {
             tasks: {
