@@ -107,6 +107,15 @@ export default {
       'due_at': 'Due',
       'user_id': 'Responsible',
       'state': 'State',
+      'state-options': {
+        'NEW': 'Not approved',
+        'APPROVED': 'Backlog',
+        'PLANNED': 'Sprint',
+        'STARTED': 'Today',
+        'IMPLEMENTED': 'Implemented',
+        'TESTED': 'Testet',
+        'DEPLOYED': 'Installed',
+      },
       'used': 'Progress',
     },
     'estimation': {
@@ -189,6 +198,7 @@ export default {
       'Plan': 'Upcoming',
       'Start': 'Today',
       'Reset': 'Reset',
+      'Tested': 'Tested',
       'Ready': 'Completed',
       'Accept': 'Accept',
       'Reject': 'Reject',

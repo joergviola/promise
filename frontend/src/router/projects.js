@@ -44,21 +44,6 @@ export default   {
           },
         },
         {
-          path: 'task/:tid/detail',
-          component: () => import('@/views/task/Details'),
-          props: true,
-          name: 'Task',
-        },
-        {
-          path: 'task/:tid/timeline',
-          component: () => import('@/components/custom/Timeline'),
-          props: route => ({
-            tid: route.params.tid,
-            history: true,
-          }),
-          name: 'Work',
-        },
-        {
           path: 'board',
           component: () => import('@/views/projects/Board'),
           props: true,
@@ -66,6 +51,12 @@ export default   {
           meta: {
             show: params => params.id!='new'
           },
+        },
+        {
+          path: 'task/:tid/detail',
+          component: () => import('@/views/task/Details'),
+          props: true,
+          name: 'Task',
         },
         {
           path: 'team',

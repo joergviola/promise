@@ -200,6 +200,7 @@ export default {
       'Approve': 'Freigeben',
       'Plan': 'Bald erledigen',
       'Start': 'Heute erledigen',
+      'Tested': 'Getestet',
       'Ready': 'Fertig',
       'Accept': 'Angenommen',
       'Reject': 'Abgelehnt',
