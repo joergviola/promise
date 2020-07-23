@@ -34,4 +34,5 @@ Route::group(['prefix' => 'v1.0' , 'middleware' => ['auth:api']], function() {
     Route::get('/notifications', 'NotificationController@index');
     Route::delete('/notifications', 'NotificationController@clear');
 
+    Route::get('/checkLogin', "UserController@checkLogin");
 });

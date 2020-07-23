@@ -14,33 +14,37 @@ import localeEN from './lang/en'
 import moment from 'moment'
 import api from 'gluon-api'
 
-Vue.prototype._ = _
+async function start() {
+  Vue.prototype._ = _
 
-Vue.use(VueI18n)
+  Vue.use(VueI18n)
+  
+  Vue.use(ElementUI, {
+    locale: elementLocale,
+    size: 'small'
+  });
+  
+  const user = await api.checkLogin()
+  const locale = user ? user.lang : 'de'
+  
+  const i18n = new VueI18n({
+    locale: locale,
+    messages: {
+      'de': localeDE,
+      'en': localeEN,
+    }
+  })
+  moment.locale(locale);
+  
+  Vue.config.productionTip = false
+  
+  new Vue({
+    router,
+    i18n,
+    render: h => h(App)
+  }).$mount('#app')
+  
+  init()
+}
 
-Vue.use(ElementUI, {
-  locale: elementLocale,
-  size: 'small'
-});
-
-const user = api.user()
-const locale = user ? user.lang : 'de'
-
-const i18n = new VueI18n({
-  locale: locale,
-  messages: {
-    'de': localeDE,
-    'en': localeEN,
-  }
-})
-moment.locale(locale);
-
-Vue.config.productionTip = false
-
-new Vue({
-  router,
-  i18n,
-  render: h => h(App)
-}).$mount('#app')
-
-init()
+start()

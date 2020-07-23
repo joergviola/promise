@@ -27,6 +27,17 @@ class UserController extends Controller
                 return redirect("/login");
             }
         }
+        return $this->checkLogin($request);
+    }
+    public function checkLogin(Request $request) {
+        if (!Auth::check()) {
+            \Log::info('Not logged in');
+            if ($request->isJson()) {
+                return response()->json(['message'=>'Access denied'], 403);
+            } else {
+                return redirect("/login");
+            }
+        }
         $user = Auth::user();
         $user->token = $user->createToken('Personal')->accessToken;
         $roles = API::query('role', [
