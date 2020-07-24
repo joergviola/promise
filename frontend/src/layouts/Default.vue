@@ -1,13 +1,17 @@
 <template>
-    <el-container style="height: 100%">
-        <el-header  style="border-bottom: 1px solid #DDDDDD; padding: 0">
+    <el-container class="grid">
+        <el-header class="header">
             <app-header />
         </el-header>
         <el-container>
-            <el-aside width="150px">
-                <app-sidebar />
+            <el-aside class="sidebar" width="150px">
+                <router-menu />
+                <router-menu :bottom="true" />
+                <div style="text-align: center; font-size: 70%; padding-bottom: 10px">
+                    <router-link to="/version"><span>gluon 21.07.20</span></router-link>
+                </div>
             </el-aside>
-            <el-main>
+            <el-main class="content">
                 <transition name="content">
                     <router-view ></router-view>
                 </transition>
@@ -18,12 +22,38 @@
 
 <script>
 import Header from '@/components/custom/Header'
-import Sidebar from 'gluon-frontend/gl-sidebar'
+import RouterMenu from 'gluon-frontend/gl-routerMenu'
 
 export default {
   name: 'default-layout',
   components: {
     'app-header': Header,
-    'app-sidebar': Sidebar
+    RouterMenu
   }
-}</script>
+}
+</script>
+
+<style scoped>
+.grid {
+  grid-template-columns: 150px auto;
+  grid-template-rows: 60px auto;
+  grid-template-areas: 
+    "header header"
+    "sidebar content";
+}
+
+.grid .header {
+    grid-area: header;
+    border-bottom: 1px solid #DDDDDD; padding: 0
+}
+
+.grid .sidebar {
+    grid-area: sidebar;
+    background-color:#666666;
+}
+
+.grid .content {
+    grid-area: content;
+}
+
+</style>

@@ -290,15 +290,10 @@ export default {
       }
     },
     async onEnter(row, groupIndex, column, index) {
-      if (!row.id) {
-        // This will be done by onChange
-        // await this.create(row)
-        return
-      } else {
-        const newItem = this.addNew(groupIndex, index+1)
-        if (this.copyOnEnter) this.copyOnEnter.forEach(name => newItem[name] = row[name])
-      }
-      const i = this.firstFocusable || column
+      const newItem = this.addNew(groupIndex, index+1)
+      if (this.copyOnEnter) this.copyOnEnter.forEach(name => newItem[name] = row[name])
+
+        const i = this.firstFocusable || column
       if (i==null) return
       this.$nextTick(() => {
         const key = `field-${groupIndex}-${index+1}-${i}`

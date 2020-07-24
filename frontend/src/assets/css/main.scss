@@ -30,6 +30,11 @@ input, select, textarea {
 
 }
   
+
+a {
+  text-decoration: none;
+}
+
 .text-right {
   text-align: right;
 }
@@ -49,7 +54,6 @@ input, select, textarea {
 .mb-4 {
   margin-bottom: 20px
 }
-
 
 .no-border .el-input__inner, .no-border .el-textarea__inner {
   border: none;

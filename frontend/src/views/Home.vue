@@ -68,8 +68,9 @@
         <el-card class="mb-4">
           <div slot="header"class="card-header">
             <h4 v-if="selected">
+              {{selected.name}}
               <router-link :to="`/projects/project/${selected.project_id}/task/${selected.id}/detail`">
-                {{selected.name}}
+                &gt;  
               </router-link>
             </h4>
             <h4 v-if="!selected">{{$t('ui.home.notask')}}</h4>
