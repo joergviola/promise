@@ -76,16 +76,6 @@ export default   {
             show: params => params.id!='new'
           },
         },
-        {
-          path: 'timeline',
-          component: () => import('@/views/projects/Timeline'),
-          props: true,
-          name: 'Project-Timeline',
-          meta: {
-            title: 'Timeline',
-            show: params => params.id!='new'
-          },
-        },
       ]
     }
   ]

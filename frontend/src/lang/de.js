@@ -340,5 +340,7 @@ export default {
     'Project-Timeline': 'Arbeitszeit',
     'Task': 'Aufgabe',
     'Work': 'Protokoll',
+    'Backoffice': 'Backoffice',
+    'Hours': 'Arbeitsstunden',
   }
 }

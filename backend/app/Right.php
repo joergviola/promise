@@ -9,7 +9,7 @@ class Right extends Model
 {
     protected $table = 'right';
 
-    static function canUser($user, $type, $action) {
+    public static function canUser($user, $type, $action) {
         self::role($user);
         $filter = [
             'columns' => null,

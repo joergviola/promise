@@ -34,7 +34,7 @@ import Timeline from '@/components/custom/Timeline'
 import api from 'gluon-api'
 
 export default {
-  name: 'OfferDetails',
+  name: 'TaskDetails',
   props: ['id', 'tid'],
   components: { GlEditor, Timeline },
   computed: {
@@ -50,6 +50,7 @@ export default {
       }
       if (!this.item) return []
       const valid = workflow[this.item.state]
+      if (!valid) return []
       return this.allButtons.filter(b => valid.indexOf(b.label)!=-1)
     },
     team() {

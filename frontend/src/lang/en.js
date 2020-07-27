@@ -338,5 +338,7 @@ export default {
     'Project-Timeline': 'Timesheet',
     'Task': 'Task',
     'Work': 'Work',
+    'Backoffice': 'Backoffice',
+    'Hours': 'Working hours',
   }
 }

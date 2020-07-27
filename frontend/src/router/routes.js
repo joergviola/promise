@@ -5,6 +5,7 @@ import organisations from './organisations'
 import sales from './sales'
 import planning from './planning'
 import projects from './projects'
+import backoffice from './backoffice'
 
 
 export default [
@@ -20,6 +21,7 @@ export default [
   sales,
   planning,
   projects,
+  backoffice,
   {
     path: '/users',
     component: Parent,
