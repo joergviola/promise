@@ -125,14 +125,27 @@ export default {
     'action': {
       'project': {
         'name': 'Project',
+        'customer_id': 'Customer',
+        'id': 'Project',
       },
       'task': {
         'name': 'Task',
+        'state': 'State',
+        'project': {
+          'name': 'Project',
+          'customer': {
+            'name': 'Customer',
+          }
+        },
       },
       'user': {
         'name': 'User',
       },
+      'action': {
+        'user_id': 'User',
+      },
       'from': 'Date',
+      'fromCustom': 'Custom date',
       'used': 'Booked',
       'comment': 'Comment',
     },
@@ -185,7 +198,9 @@ export default {
       'edit': 'Edit row',
       'delete': 'Delete row',
       'showFilter': 'Filter',
-      'cancel': 'Cancel',
+      'close': 'Close',
+      'search': 'Search',
+      'empty': 'Choose'
     },
     'detail': {
       'cancel': 'Cancel',

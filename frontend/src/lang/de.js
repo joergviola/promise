@@ -127,14 +127,27 @@ export default {
     'action': {
       'project': {
         'name': 'Projekt',
+        'customer_id': 'Kunde',
+        'id': 'Projekt',
       },
       'task': {
         'name': 'Aufgabe',
+        'state': 'Zustand',
+        'project': {
+          'name': 'Projekt',
+          'customer': {
+            'name': 'Kunde',
+          }
+        },
       },
       'user': {
         'name': 'Benutzer',
       },
+      'action': {
+        'user_id': 'Benutzer',
+      },
       'from': 'Begonnen',
+      'fromCustom': 'Begonnen',
       'used': 'Gebucht',
       'comment': 'Kommentar',
     },
@@ -187,7 +200,9 @@ export default {
       'edit': 'Diese Zeile ändern',
       'delete': 'Diese Zeile löschen',
       'showFilter': 'Filtern',
-      'cancel': 'Abbrechen',
+      'close': 'Schliessen',
+      'search': 'Suchen',
+      'empty': 'Wählen'
     },
     'detail': {
       'cancel': 'Abbrechen',

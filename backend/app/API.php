@@ -137,7 +137,7 @@ class API {
     private static function join($q, $query, $type) {
         if (isset($query['join'])) {
             foreach($query['join'] as $table => $join) {
-                $q = $q->join($table, $type.'.'.$join['this'], @$join['operator'] ?: '=', $table.'.'.$join['that']);
+                $q = $q->join($table, (@$join['from']?:$type).'.'.$join['this'], @$join['operator'] ?: '=', $table.'.'.$join['that']);
             }
             return $q->select($type . '.*');
         } else {
