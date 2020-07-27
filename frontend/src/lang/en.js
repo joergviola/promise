@@ -184,6 +184,8 @@ export default {
       'create': 'New row',
       'edit': 'Edit row',
       'delete': 'Delete row',
+      'showFilter': 'Filter',
+      'cancel': 'Cancel',
     },
     'detail': {
       'cancel': 'Cancel',

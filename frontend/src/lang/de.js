@@ -186,6 +186,8 @@ export default {
       'create': 'Neue zeile',
       'edit': 'Diese Zeile ändern',
       'delete': 'Diese Zeile löschen',
+      'showFilter': 'Filtern',
+      'cancel': 'Abbrechen',
     },
     'detail': {
       'cancel': 'Abbrechen',

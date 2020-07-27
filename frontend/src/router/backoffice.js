@@ -33,7 +33,23 @@ export default {
         ],
         createBy: "row",
         allowDelete: true,
-      }),
+        filter: {
+          search: [
+            {name: 'customer_id', type: 'to-one', ref:'organisation', id:'id', display:'name'},
+            {name: 'project.id'},
+            {name: 'user_id', type: 'to-one', ref:'users', id:'id', display:'name'},
+            {name: 'from'},
+            {name: 'task.state'},
+          ],
+          group: [
+            {name: 'date', select: {sum: 'used'}},
+            {name: 'customer.name', select: ['min(date)', 'max(date)', 'sum(used)']},
+            {name: 'project', select: ['project.name', {used: 'sum'}]},
+            {name: 'user'},
+            {name: 'task.state'},
+          ]
+        },
+    }),
       name: 'Hours',
       meta: {
         roles: ['Admin'],
