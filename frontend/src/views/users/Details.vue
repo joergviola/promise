@@ -25,15 +25,15 @@ export default {
     return {
       image: image,
       w: {
-        documents: {
-          many: 'document',
-          that: 'item_id',
-          query: {
-            and: {
-              type: 'users',
-            },
-          }
-        }
+        avatar: { many: 'document' },
+        //   many: 'document',
+        //   that: 'item_id',
+        //   query: {
+        //     and: {
+        //       type: 'users',
+        //     },
+        //   }
+        // }
       },
       fields: [
         { name: 'name', label: 'Name' },
@@ -43,7 +43,7 @@ export default {
         { name: 'password', label: 'Password', type: 'password' },
         { name: 'role_id', label: 'Role', type: 'to-one', ref: 'role', display: 'name'},
         { name: 'organisation_id', label: 'Organsisation', type: 'to-one', ref: 'organisation', display: 'name' },
-        { name: 'avatar', label: 'Avatar', type: 'doc'},
+        { name: 'avatar', type: 'doc'},
       ],
     }
   },

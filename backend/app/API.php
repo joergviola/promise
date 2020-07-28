@@ -78,9 +78,9 @@ class API {
             foreach($query['select'] as $column) {
                 if (is_array($column)) {
                     if (isset($column['sum'])) {
-                        $q = self::selectFunction($q, $column, 'sum', "sum(`#`)");
+                        $q = self::selectFunction($q, $column, 'sum', "sum(#)");
                     } else if (isset($column['max'])) {
-                        $q = self::selectFunction($q, $column, 'max', "max(`#`)");
+                        $q = self::selectFunction($q, $column, 'max', "max(#)");
                     } else {
                         throw new Exception('Unknown function: ' . json_encode($column));
                     }
@@ -139,10 +139,11 @@ class API {
             foreach($query['join'] as $table => $join) {
                 $q = $q->join($table, (@$join['from']?:$type).'.'.$join['this'], @$join['operator'] ?: '=', $table.'.'.$join['that']);
             }
-            return $q->select($type . '.*');
-        } else {
-            return $q;
+            if (!isset($query['select'])) {
+                $q = $q->select($type . '.*');
+            }
         }
+        return $q;
     }
 
     private static function where($q, $query) {
@@ -225,13 +226,18 @@ class API {
             $thisField = @$with['this'] ?: 'id';
             $thatField = @$with['that'] ?: $thisType.'_id';
         }
+        $query = @$with['query'] ?: ['and' => []];
+        if ($type=='document') {
+            $thatField = 'item_id';
+            $query['and']['type'] = @$query['type'] ?: $thisType;
+            $query['and']['path'] = @$query['path'] ?: $field;
+        }
 
         $ids = [];
         foreach ($result as &$item) {
             $ids[] = $item->$thisField;
         }
         $ids = array_unique($ids);
-        $query = @$with['query'] ?: ['and' => []];
         $query['and'][$thatField] = ['in' => $ids];
         $found = self::query($type, $query);
         $refs = $found->groupBy($thatField);

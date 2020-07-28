@@ -40,7 +40,7 @@ export default {
           { name: 'user.name', label: 'User', width: 100 },
           { name: 'task.name', label: 'Task', width: 200 },
           { name: 'task.project.name', width: 200 },
-          { name: 'task.project.customer.name', label: 'Task', width: 200 },
+          { name: 'task.project.customer.name', width: 200 },
           { name: 'from', label: 'Started', type: 'datetime', editable: true, width: 180 },
           { name: 'used', label: 'Duration', editable: true },
           { name: 'comment', label: 'Comment', editable: true, width: 200 },
@@ -56,11 +56,31 @@ export default {
             {name: 'task.state', type: 'select', options: states.task.map(s => s.state)},
           ],
           group: [
-            {name: 'from', select: {sum: 'used'}},
-            {name: 'project.customer_id', select: ['min(date)', 'max(date)', 'sum(used)']},
-            {name: 'project.id', select: ['project.name', {used: 'sum'}]},
-            {name: 'action.user_id'},
-            {name: 'task.state'},
+            {
+              name: 'project.customer_id', 
+              columns: [
+                { name: 'customer.name', width: 200 },
+              ],
+              with: {
+                customer: {one: 'organisation', this: 'customer_id'}
+              }
+            },
+            {
+              name: 'task.project_id', 
+              columns: [
+                { name: 'project.name', width: 200 },
+              ],
+              with: {
+                project: {one: 'project'}
+              }
+            },
+            // {name: 'from', select: {sum: 'used'}},
+            // {name: 'project.id', select: ['project.name', {used: 'sum'}]},
+            // {name: 'action.user_id'},
+            // {name: 'task.state'},
+          ],
+          reducedColumns: [
+            {name: 'used', select: {sum: 'action.used'}},
           ]
         },
     }),
