@@ -224,6 +224,17 @@ export default {
       'Maintenance': 'Wartung',
       'Reopen': 'Wieder öffnen',
     },
+    'daterange': {
+      'today': 'Heute',
+      'yesterday': 'Gestern',
+      'this-week': 'Diese Woche',
+      'last-week': 'Letzte Woche',
+      'this-month': 'Dieser Monat',
+      'last-month': 'Letzter Monat',
+      'this-year': 'Dieses Jahr',
+      'last-year': 'Letztes Jahr',
+      'custom': 'Freie Eingabe'
+    },
     'leads': {
       'open': 'In Arbeit',
       'accepted': 'Angenommen',

@@ -52,8 +52,7 @@ export default {
             {name: 'project.customer_id', type: 'to-one', ref:'organisation', id:'id', display:'name'},
             {name: 'project.id', type: 'to-one', ref:'project', id:'id', display:'name'},
             {name: 'action.user_id', type: 'to-one', ref:'users', id:'id', display:'name'},
-            {name: 'from', type: 'select', options: ['currentMonth', 'lastMonth']},
-            {name: 'fromCustom', type: 'daterange'},
+            {name: 'from', to:'to', type: 'daterange'},
             {name: 'task.state', type: 'select', options: states.task.map(s => s.state)},
           ],
           group: [

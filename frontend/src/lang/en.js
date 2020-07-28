@@ -222,6 +222,17 @@ export default {
       'Maintenance': 'Maintenance',
       'Reopen': 'Reopen',
     },
+    'daterange': {
+      'today': 'Today',
+      'yesterday': 'Yesterday',
+      'this-week': 'This week',
+      'last-week': 'Last week',
+      'this-month': 'This month',
+      'last-month': 'Last month',
+      'this-year': 'This year',
+      'last-year': 'Last year',
+      'custom': 'Custom'
+    },
     'leads': {
       'open': 'Open',
       'accepted': 'Accepted',
