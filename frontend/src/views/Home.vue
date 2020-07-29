@@ -252,7 +252,7 @@ export default {
     },
     async loadActions() {
       const actions = await api.find('action', {
-        select: ['task_id', {max: 'from', as: 'fr'}],
+        select: ['task_id', {max: '`from`', as: 'fr'}],
         group: ['task_id'],
         and: { 'action.user_id': this.user.id },
         with: {

@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => 'v1.0' , 'middleware' => ['auth:api']], function() {
     Route::get('/schema', 'SchemaController@schema');
 
+    Route::get('/checkLogin', "UserController@checkLogin");
+
     Route::get('/{type}', 'APIController@readAll');
     Route::get('/{type}/{id}/{reference}', 'APIController@readReference');
     Route::post('/{type}/query', 'APIController@query');
@@ -35,6 +37,4 @@ Route::group(['prefix' => 'v1.0' , 'middleware' => ['auth:api']], function() {
 
     Route::get('/notifications', 'NotificationController@index');
     Route::delete('/notifications', 'NotificationController@clear');
-
-    Route::get('/checkLogin', "UserController@checkLogin");
 });
