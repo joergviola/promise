@@ -17,6 +17,16 @@ class APIController extends Controller
         return response()->json($items);
     }
 
+    public function readAll(Request $request, $type) {
+        $items = API::query($type, []);
+        return response()->json($items);
+    }
+
+    public function readReference(Request $request, $type, $id, $reference) {
+        $items = API::query($reference, ['and' => [ "${type}_id" => $id ]]);
+        return response()->json($items);
+    }
+
     public function read(Request $request, $type, $id) {
         $item = API::read($type, $id);
         if (is_null($item)) return response()->json("", 404);

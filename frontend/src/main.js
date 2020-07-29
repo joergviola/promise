@@ -27,6 +27,9 @@ async function start() {
   const user = await api.checkLogin()
   const locale = user ? user.lang : 'de'
   
+  api.all('role')
+  api.getReference('role', 1, 'right')
+
   const i18n = new VueI18n({
     locale: locale,
     messages: {

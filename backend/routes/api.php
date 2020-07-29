@@ -16,6 +16,8 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => 'v1.0' , 'middleware' => ['auth:api']], function() {
     Route::get('/schema', 'SchemaController@schema');
 
+    Route::get('/{type}', 'APIController@readAll');
+    Route::get('/{type}/{id}/{reference}', 'APIController@readReference');
     Route::post('/{type}/query', 'APIController@query');
     Route::get('/{type}/{id}', 'APIController@read');
     Route::post('/{type}', 'APIController@create');
