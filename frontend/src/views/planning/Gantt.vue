@@ -89,7 +89,7 @@
 <script>
 import Gantt from '@/components/gantt/Index'
 import moment from 'moment'
-import api from '@/api'
+import api from 'gluon-api'
 
 export default {
   name: 'Planning',

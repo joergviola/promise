@@ -27,7 +27,7 @@
 <script>
 import Kanban from '@/components/kanban'
 import states from '@/util/states'
-import api from '@/api'
+import api from 'gluon-api'
 
 export default {
   name: 'LeadFunnel',

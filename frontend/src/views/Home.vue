@@ -169,7 +169,7 @@
 import ProgressBar from 'gluon-ui/gl-progress'
 import TaskTimeline from '@/components/custom/Timeline'
 import Draggable from 'vuedraggable'
-import api from '@/api'
+import api from 'gluon-api'
 import store from '@/util/Store.js'
 import moment from 'moment'
 

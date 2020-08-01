@@ -1,5 +1,5 @@
 
-import api from '@/api'
+import api from 'gluon-api'
 import Sortable from 'sortablejs'
 
 export default {

@@ -24,7 +24,7 @@
 
 <script>
 import GlTable from 'gluon-frontend/gl-table'
-import api from '@/api'
+import api from 'gluon-api'
 import states from '@/util/states'
 
 export default {

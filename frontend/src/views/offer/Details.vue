@@ -17,7 +17,7 @@
 <script>
 import GlEditor from 'gluon-frontend/gl-editor'
 import image from '@/assets/img/undraw_discount_d4bd.svg'
-import api from '@/api'
+import api from 'gluon-api'
 
 export default {
   name: 'OfferDetails',

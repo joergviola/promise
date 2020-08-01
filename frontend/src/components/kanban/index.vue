@@ -26,7 +26,7 @@
 
 <script>
 import draggable from 'vuedraggable'
-import api from '@/api'
+import api from 'gluon-api'
 
 export default {
   name: 'KanbanColumn',

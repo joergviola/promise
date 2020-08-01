@@ -1,7 +1,7 @@
 
 <script>
 import { Scatter } from 'vue-chartjs'
-import api from '@/api'
+import api from 'gluon-api'
 
 export default {
   name: 'Burndown',

@@ -25,7 +25,7 @@
 
 <script>
 import glTable from 'gluon-frontend/gl-table'
-import api from '@/api'
+import api from 'gluon-api'
 
 export default {
   name: 'ProjectTaskList',

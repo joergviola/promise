@@ -4,9 +4,6 @@
 			"path": "."
 		},
 		{
-			"path": "../applate"
-		},
-		{
 			"path": "../gluon-api"
 		},
 		{
@@ -17,6 +14,12 @@
 		},
 		{
 			"path": "../gluon-backend"
+		},
+		{
+			"path": "../gluon-sample"
+		},
+		{
+			"path": "../fer-app"
 		}
 	],
 	"settings": {

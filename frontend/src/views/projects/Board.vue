@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import api from '@/api'
+import api from 'gluon-api'
 import Kanban from '@/components/kanban'
 import Avatar from 'gluon-ui/gl-avatar'
 

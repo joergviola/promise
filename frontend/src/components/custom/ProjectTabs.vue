@@ -6,7 +6,7 @@
 
 <script>
 
-import api from '@/api'
+import api from 'gluon-api'
 import Tabs from 'gluon-frontend/gl-tabs'
 import store from '@/util/Store.js'
 

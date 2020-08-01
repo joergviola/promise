@@ -199,7 +199,7 @@
 
 <script>
 import list from '@/mixins/list'
-import api from '@/api'
+import api from 'gluon-api'
 
 export default {
   name: 'LeadTaskList',

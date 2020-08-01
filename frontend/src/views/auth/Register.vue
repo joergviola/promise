@@ -26,7 +26,7 @@
 
 <script>
 
-import api from '@/api'
+import api from 'gluon-api'
 
 export default {
   name: 'Login',

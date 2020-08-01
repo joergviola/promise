@@ -24,7 +24,7 @@
 import UserDetails from './Details'
 import UserTimeline from './Timeline'
 import UserAllocations from './Allocations'
-import api from '@/api'
+import api from 'gluon-api'
 
 export default {
   name: 'UserForm',

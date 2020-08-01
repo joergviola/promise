@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import api from '@/api'
+import api from 'gluon-api'
 import moment from 'moment'
 import store from '@/util/Store.js'
 

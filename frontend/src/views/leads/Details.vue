@@ -102,7 +102,7 @@
 <script>
 import LinkEditor from 'gluon-ui/gl-linkEditor'
 import image from '@/assets/img/undraw_unboxing_pbmf.svg'
-import api from '@/api'
+import api from 'gluon-api'
 
 export default {
   name: 'LeadDetails',
