@@ -20,6 +20,9 @@
 		},
 		{
 			"path": "../fer-app"
+		},
+		{
+			"path": "../gluon-project"
 		}
 	],
 	"settings": {
