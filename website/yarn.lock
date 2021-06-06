@@ -1138,6 +1138,21 @@
     semver "^6.0.0"
     upath "^1.1.0"
 
+"@vuepress/shared-utils@^1.2.0":
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/@vuepress/shared-utils/-/shared-utils-1.8.2.tgz#5ec1601f2196aca34ad82eed7c9be2d7948f705b"
+  integrity sha512-6kGubc7iBDWruEBUU7yR+sQ++SOhMuvKWvWeTZJKRZedthycdzYz7QVpua0FaZSAJm5/dIt8ymU4WQvxTtZgTQ==
+  dependencies:
+    chalk "^2.3.2"
+    escape-html "^1.0.3"
+    fs-extra "^7.0.1"
+    globby "^9.2.0"
+    gray-matter "^4.0.1"
+    hash-sum "^1.0.2"
+    semver "^6.0.0"
+    toml "^3.0.0"
+    upath "^1.1.0"
+
 "@vuepress/theme-default@1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@vuepress/theme-default/-/theme-default-1.5.0.tgz#8df53c77c6f464452867bdd80c2037b1f715343c"
@@ -7674,6 +7689,13 @@ vuepress-plugin-container@^2.0.2:
   dependencies:
     markdown-it-container "^2.0.0"
 
+vuepress-plugin-dehydrate@^1.1.4:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/vuepress-plugin-dehydrate/-/vuepress-plugin-dehydrate-1.1.5.tgz#c29f08b85f337d3bc7c0ba09fe58cd9ed2f6e6c1"
+  integrity sha512-9F2x1vLCK4poPUMkLupD4HsgWdbZ68Escvma+DE1Dk6aAJdH5FGwmfOMxj4sMCBwz7S4s6bTMna+QQgD3+bzBA==
+  dependencies:
+    "@vuepress/shared-utils" "^1.2.0"
+
 vuepress-plugin-font-awesome@^1.90.6:
   version "1.90.6"
   resolved "https://registry.yarnpkg.com/vuepress-plugin-font-awesome/-/vuepress-plugin-font-awesome-1.90.6.tgz#fe569c02a68654f5a45ceb96d4d75ddf13b49c2e"
@@ -7928,9 +7950,9 @@ write-file-atomic@^3.0.0:
     typedarray-to-buffer "^3.1.5"
 
 ws@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-6.2.1.tgz#442fdf0a47ed64f59b6a5d8ff130f4748ed524fb"
-  integrity sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-6.2.2.tgz#dd5cdbd57a9979916097652d78f1cc5faea0c32e"
+  integrity sha512-zmhltoSR8u1cnDsD43TX59mzoMZsLKqUweyYBAIvTngR3shc0W6aOZylZmq/7hqyVxPdi+5Ud2QInblgyE72fw==
   dependencies:
     async-limiter "~1.0.0"
 
