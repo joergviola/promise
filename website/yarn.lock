@@ -1138,6 +1138,21 @@
     semver "^6.0.0"
     upath "^1.1.0"
 
+"@vuepress/shared-utils@^1.2.0":
+  version "1.9.7"
+  resolved "https://registry.yarnpkg.com/@vuepress/shared-utils/-/shared-utils-1.9.7.tgz#f1203c7f48e9d546078f5f9b2ec5200b29da481b"
+  integrity sha512-lIkO/eSEspXgVHjYHa9vuhN7DuaYvkfX1+TTJDiEYXIwgwqtvkTv55C+IOdgswlt0C/OXDlJaUe1rGgJJ1+FTw==
+  dependencies:
+    chalk "^2.3.2"
+    escape-html "^1.0.3"
+    fs-extra "^7.0.1"
+    globby "^9.2.0"
+    gray-matter "^4.0.1"
+    hash-sum "^1.0.2"
+    semver "^6.0.0"
+    toml "^3.0.0"
+    upath "^1.1.0"
+
 "@vuepress/theme-default@1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@vuepress/theme-default/-/theme-default-1.5.0.tgz#8df53c77c6f464452867bdd80c2037b1f715343c"
@@ -6168,9 +6183,9 @@ querystring@0.2.0:
   integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
 
 querystringify@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.1.tgz#60e5a5fd64a7f8bfa4d2ab2ed6fdf4c85bad154e"
-  integrity sha512-w7fLxIRCRT7U8Qu53jQnJyPkYZIaR4n5151KMfcJlO/A9397Wxb1amJvROTK6TOnp7PfoAmg/qXiNHI+08jRfA==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
+  integrity sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==
 
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
   version "2.1.0"
@@ -7497,9 +7512,9 @@ url-parse-lax@^3.0.0:
     prepend-http "^2.0.0"
 
 url-parse@^1.4.3:
-  version "1.4.7"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.4.7.tgz#a8a83535e8c00a316e403a5db4ac1b9b853ae278"
-  integrity sha512-d3uaVyzDB9tQoSXFvuSUNFibTd9zxd2bkVrDRvF5TmvWWQwqE4lgYJ5m+x1DbecWkw+LK4RNl2CU1hHuOKPVlg==
+  version "1.5.7"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.7.tgz#00780f60dbdae90181f51ed85fb24109422c932a"
+  integrity sha512-HxWkieX+STA38EDk7CE9MEryFeHCKzgagxlGvsdS7WBImq9Mk+PGwiT56w82WI3aicwJA8REp42Cxo98c8FZMA==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
@@ -7673,6 +7688,13 @@ vuepress-plugin-container@^2.0.2:
   integrity sha512-l+EkeL+rC6DJch1wAZUFIkNDaz2TNOg4NQTHa3yMAsYkC+QaSRubGdN6YwOSmfjxVmM9s9D3gwBWw0O7OBhqRg==
   dependencies:
     markdown-it-container "^2.0.0"
+
+vuepress-plugin-dehydrate@^1.1.4:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/vuepress-plugin-dehydrate/-/vuepress-plugin-dehydrate-1.1.5.tgz#c29f08b85f337d3bc7c0ba09fe58cd9ed2f6e6c1"
+  integrity sha512-9F2x1vLCK4poPUMkLupD4HsgWdbZ68Escvma+DE1Dk6aAJdH5FGwmfOMxj4sMCBwz7S4s6bTMna+QQgD3+bzBA==
+  dependencies:
+    "@vuepress/shared-utils" "^1.2.0"
 
 vuepress-plugin-font-awesome@^1.90.6:
   version "1.90.6"
